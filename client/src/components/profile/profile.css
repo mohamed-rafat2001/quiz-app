@@ -1,0 +1,28 @@
+.Profile .Profile-images {
+	position: relative;
+	height: 150px;
+	background-image: url("../../images/authBackGround.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.Profile .Profile-images div {
+	position: absolute;
+	width: 15%;
+	top: 70%;
+	left: 2%;
+}
+.Profile .Profile-images img {
+	width: 110px;
+	height: 110px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+}
+.Profile ul li {
+	cursor: pointer;
+}
+.Profile .active {
+	border-bottom: 2px solid blue;
+}
