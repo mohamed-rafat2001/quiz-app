@@ -71,13 +71,13 @@ const Landing = () => {
 					</div>
 					<div className="flex items-center gap-8">
 						<Link
-							to="/login"
+							to="/welcome"
 							className="text-sm font-bold text-gray-600 hover:text-indigo-600 transition-colors"
 						>
 							Login
 						</Link>
 						<Link
-							to="/login"
+							to="/welcome"
 							className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95"
 						>
 							Get Started
