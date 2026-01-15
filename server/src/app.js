@@ -12,7 +12,12 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 export const app = express();
 // share api with frontEnd
-app.use(cors());
+app.use(
+	cors({
+		origin: ["http://localhost:5173", "http://localhost:3000"],
+		credentials: true,
+	})
+);
 // set security http headers
 app.use(helmet());
 

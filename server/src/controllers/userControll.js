@@ -56,6 +56,15 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 	response({ user, token }, 200, res);
 });
 
+// logout func
+export const logout = (req, res) => {
+	res.cookie("jwt", "loggedout", {
+		expires: new Date(Date.now() + 10 * 1000),
+		httpOnly: true,
+	});
+	res.status(200).json({ status: "success" });
+};
+
 // filter func
 const filterObj = (obj, ...data) => {
 	const newObj = {};

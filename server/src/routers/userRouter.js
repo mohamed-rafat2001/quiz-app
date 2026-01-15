@@ -4,6 +4,7 @@ import fileUpload from "../utils/multer.js";
 import {
 	createUser,
 	loginFunc,
+	logout,
 	updateMe,
 	getMe,
 	deleteMe,
@@ -19,6 +20,7 @@ import { allowTo, protect } from "../middelwars/authMiddelwar.js";
 //auth
 userRouter.route("/signUp").post(createUser);
 userRouter.route("/login").post(loginFunc);
+userRouter.get("/logout", logout);
 userRouter.post("/forgetPassword", forgetPass);
 userRouter.patch("/resetPassword", resetPass);
 
