@@ -31,8 +31,8 @@ export default function NotFound() {
 					Page Not Found
 				</h2>
 				<p className="text-gray-500 font-medium mb-10 leading-relaxed">
-					Oops! The page you're looking for doesn't exist or has been moved to
-					another galaxy.
+					Oops! The page you&apos;re looking for doesn&apos;t exist or has been
+					moved to another galaxy.
 				</p>
 
 				<div className="flex flex-col sm:flex-row gap-4">

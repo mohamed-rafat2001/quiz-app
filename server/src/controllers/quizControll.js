@@ -80,6 +80,30 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 	}
 
 	const quizzes = await query.populate("teacherId", "name email");
+
+	// If student, attach their result for each quiz
+	if (req.user.role === "student") {
+		const results = await quizResultModel.find({ studentId: req.user._id });
+
+		const quizzesWithResults = quizzes.map((quiz) => {
+			const result = results.find(
+				(r) => r.quizId.toString() === quiz._id.toString()
+			);
+			return {
+				...quiz.toObject(),
+				userResult: result
+					? {
+							status: result.status,
+							totalScore: result.totalScore,
+							createdAt: result.createdAt,
+							_id: result._id,
+					  }
+					: null,
+			};
+		});
+		return response(quizzesWithResults, 200, res);
+	}
+
 	response(quizzes, 200, res);
 });
 // admin get all quizs
