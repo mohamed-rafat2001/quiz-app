@@ -65,7 +65,7 @@ export default function SingleQuiz() {
 								? "Answers submitted automatically!"
 								: "Quiz submitted successfully!"
 						);
-						navigate("/QuizAnswers", { replace: true });
+						navigate("/app/QuizAnswers", { replace: true });
 					},
 					onError: (err) => {
 						toast.error(err.message || "Failed to submit answers");

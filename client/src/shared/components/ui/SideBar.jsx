@@ -16,21 +16,21 @@ export default function SideBar() {
 	const logout = useLogout();
 
 	const navItems = [
-		{ to: "/dashboard", icon: HiChartBar, label: "Dashboard" },
-		{ to: "/home", icon: HiHome, label: "Home" },
-		{ to: "/profile", icon: HiUser, label: "Profile" },
+		{ to: "/app/dashboard", icon: HiChartBar, label: "Dashboard" },
+		{ to: "/app/home", icon: HiHome, label: "Home" },
+		{ to: "/app/profile", icon: HiUser, label: "Profile" },
 	];
 
 	if (user?.role === "admin") {
 		navItems.push(
-			{ to: "/admin/users", icon: HiUsers, label: "Users" },
-			{ to: "/admin/quizzes", icon: HiAcademicCap, label: "All Quizzes" }
+			{ to: "/app/admin/users", icon: HiUsers, label: "Users" },
+			{ to: "/app/admin/quizzes", icon: HiAcademicCap, label: "All Quizzes" }
 		);
 	} else {
 		navItems.push(
-			{ to: "/Quizs", icon: HiListBullet, label: "Quizzes" },
+			{ to: "/app/Quizs", icon: HiListBullet, label: "Quizzes" },
 			{
-				to: "/QuizAnswers",
+				to: "/app/QuizAnswers",
 				icon: HiClipboardDocumentCheck,
 				label: "My Answers",
 			}
@@ -39,7 +39,7 @@ export default function SideBar() {
 
 	// Adjust labels for teacher
 	if (user?.role === "teacher") {
-		const quizItem = navItems.find((item) => item.to === "/Quizs");
+		const quizItem = navItems.find((item) => item.to === "/app/Quizs");
 		if (quizItem) quizItem.label = "Manage Quizzes";
 	}
 
