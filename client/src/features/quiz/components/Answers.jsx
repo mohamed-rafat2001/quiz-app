@@ -56,13 +56,16 @@ const SubmissionRow = ({ answer, index }) => (
 				>
 					<HiEye className="text-xl" />
 				</Link>
-				<Link
-					to={`/app/quizzes/${answer.quizId?._id}`}
-					className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all"
-					title="Retake Quiz"
-				>
-					<HiArrowPath className="text-xl" />
-				</Link>
+				{answer.quizId &&
+					answer.attemptCount < (answer.quizId.tries || 1) && (
+						<Link
+							to={`/app/quizzes/${answer.quizId._id}`}
+							className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all"
+							title="Retake Quiz"
+						>
+							<HiArrowPath className="text-xl" />
+						</Link>
+					)}
 			</div>
 		</td>
 	</motion.tr>

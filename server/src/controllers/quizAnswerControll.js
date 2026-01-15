@@ -7,6 +7,7 @@ import appError from "../utils/appError.js";
 import response from "../utils/handelResponse.js";
 import Email from "../utils/Email.js";
 import * as factory from "../utils/handlerFactory.js";
+import ApiFeatures from "../utils/apiFeatures.js";
 
 // questions answer
 export const quesAnswer = errorHandling(async (req, res, next) => {
@@ -21,13 +22,22 @@ export const quesAnswer = errorHandling(async (req, res, next) => {
 	const quiz = await quizModel.findById(_id).populate("questions");
 	if (!quiz) return next(new appError("Quiz not found", 404));
 
-	// check if student already answered the quiz
-	const existingResult = await quizResultModel.findOne({
+	// check if student already reached max tries
+	const attemptCount = await quizResultModel.countDocuments({
 		quizId: _id,
 		studentId: req.user._id,
 	});
-	if (existingResult)
-		return next(new appError("You have already answered this quiz", 400));
+
+	if (attemptCount >= (quiz.tries || 1)) {
+		return next(
+			new appError(
+				`You have reached the maximum number of attempts (${
+					quiz.tries || 1
+				}) for this quiz`,
+				400
+			)
+		);
+	}
 
 	if (!questions || questions.length === 0)
 		return next(new appError("Please provide answers", 400));
@@ -94,11 +104,45 @@ export const getQuizAnswer = factory.getOne(quizResultModel, {
 });
 
 // get all quiz results for student
-export const studentquizAnswers = factory.getAllOwner(
-	quizResultModel,
-	"studentId",
-	{ path: "quizId", select: "quizName" }
-);
+export const studentquizAnswers = errorHandling(async (req, res, next) => {
+	// 1. Get attempt counts for ALL quizzes for this student to ensure accuracy across pages
+	const allResults = await quizResultModel
+		.find({ studentId: req.user._id })
+		.select("quizId");
+	const quizAttemptCounts = {};
+	allResults.forEach((r) => {
+		const qId = r.quizId?.toString();
+		if (qId) {
+			quizAttemptCounts[qId] = (quizAttemptCounts[qId] || 0) + 1;
+		}
+	});
+
+	// 2. Apply ApiFeatures for the paginated/filtered results
+	const features = new ApiFeatures(
+		quizResultModel.find({ studentId: req.user._id }),
+		req.query
+	)
+		.filter()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	const results = await features.query.populate({
+		path: "quizId",
+		select: "quizName tries",
+	});
+
+	// 3. Attach attemptCount to each result
+	const resultsWithCounts = results.map((r) => {
+		const qId = r.quizId?._id?.toString();
+		return {
+			...r.toObject(),
+			attemptCount: qId ? quizAttemptCounts[qId] : 0,
+		};
+	});
+
+	response(resultsWithCounts, 200, res);
+});
 
 // get all quiz results for teacher's specific quiz
 export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
@@ -107,18 +151,28 @@ export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
 		quizId: req.params.id,
 	};
 
-	const docs = await quizResultModel
-		.find(filter)
-		.populate("studentId")
-		.populate("quizId");
+	const features = new ApiFeatures(quizResultModel.find(filter), req.query)
+		.filter()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	const docs = await features.query.populate("studentId").populate("quizId");
 
 	response(docs, 200, res);
 });
 
 // get individual question answers for a specific result
 export const getResultDetails = errorHandling(async (req, res, next) => {
-	const answers = await questionAnswerModel
-		.find({ resultId: req.params.id })
-		.populate("questionId");
+	const features = new ApiFeatures(
+		questionAnswerModel.find({ resultId: req.params.id }),
+		req.query
+	)
+		.filter()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	const answers = await features.query.populate("questionId");
 	response(answers, 200, res);
 });

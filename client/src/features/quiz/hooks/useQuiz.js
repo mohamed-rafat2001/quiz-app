@@ -18,10 +18,10 @@ import {
 } from "../services/quizAnswerApi";
 
 // Quiz Hooks
-export function useQuizzes() {
+export function useQuizzes(params) {
 	return useQuery({
-		queryKey: ["quizzes"],
-		queryFn: getAllQuizzes,
+		queryKey: ["quizzes", params],
+		queryFn: () => getAllQuizzes(params),
 	});
 }
 
@@ -100,18 +100,18 @@ export function useAddAnswer() {
 	});
 }
 
-export function useTeacherQuizAnswers(id) {
+export function useTeacherQuizAnswers(id, params) {
 	return useQuery({
-		queryKey: ["teacherQuizAnswers", id],
-		queryFn: () => getTeacherQuizAnswers(id),
+		queryKey: ["teacherQuizAnswers", id, params],
+		queryFn: () => getTeacherQuizAnswers(id, params),
 		enabled: !!id,
 	});
 }
 
-export function useStudentQuizAnswers() {
+export function useStudentQuizAnswers(params) {
 	return useQuery({
-		queryKey: ["studentQuizAnswers"],
-		queryFn: getStudentQuizAnswers,
+		queryKey: ["studentQuizAnswers", params],
+		queryFn: () => getStudentQuizAnswers(params),
 	});
 }
 
@@ -123,10 +123,10 @@ export function useQuizAnswer(id) {
 	});
 }
 
-export function useResultDetails(id) {
+export function useResultDetails(id, params) {
 	return useQuery({
-		queryKey: ["resultDetails", id],
-		queryFn: () => getResultDetails(id),
+		queryKey: ["resultDetails", id, params],
+		queryFn: () => getResultDetails(id, params),
 		enabled: !!id,
 	});
 }

@@ -43,18 +43,60 @@ const QuizBasicInfo = ({ register, errors }) => (
 			</div>
 			<div className="space-y-2">
 				<label className="text-sm font-semibold text-gray-700 ml-1">
-					Duration (Hours)
+					Time Limit
+				</label>
+				<div className="flex gap-2">
+					<input
+						type="number"
+						{...register("expire", {
+							valueAsNumber: true,
+						})}
+						placeholder="e.g. 60"
+						className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
+					/>
+					<select
+						{...register("expireUnit")}
+						className="px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all bg-white"
+					>
+						<option value="minutes">Minutes</option>
+						<option value="hours">Hours</option>
+					</select>
+				</div>
+				{errors.expire && (
+					<p className="text-xs text-red-500 ml-1">{errors.expire.message}</p>
+				)}
+			</div>
+			<div className="space-y-2">
+				<label className="text-sm font-semibold text-gray-700 ml-1">
+					Quiz Deadline
+				</label>
+				<input
+					type="datetime-local"
+					{...register("expireDate")}
+					className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
+				/>
+				{errors.expireDate && (
+					<p className="text-xs text-red-500 ml-1">
+						{errors.expireDate.message}
+					</p>
+				)}
+			</div>
+			<div className="space-y-2">
+				<label className="text-sm font-semibold text-gray-700 ml-1">
+					Allowed Attempts (Tries)
 				</label>
 				<input
 					type="number"
-					step="0.1"
-					{...register("expire", {
+					{...register("tries", {
 						valueAsNumber: true,
 					})}
+					defaultValue={1}
+					min={1}
+					max={10}
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
 				/>
-				{errors.expire && (
-					<p className="text-xs text-red-500 ml-1">{errors.expire.message}</p>
+				{errors.tries && (
+					<p className="text-xs text-red-500 ml-1">{errors.tries.message}</p>
 				)}
 			</div>
 		</div>
@@ -204,7 +246,9 @@ export default function CreateQuiz() {
 		mode: "onChange",
 		defaultValues: {
 			quizName: "",
-			expire: 1,
+			expire: 60,
+			expireDate: "",
+			tries: 1,
 			questions: [
 				{
 					ques: "",
@@ -218,9 +262,15 @@ export default function CreateQuiz() {
 
 	useEffect(() => {
 		if (isEditSession && quiz) {
+			const formattedDate = quiz.expireDate
+				? new Date(quiz.expireDate).toISOString().slice(0, 16)
+				: "";
+
 			reset({
 				quizName: quiz.quizName,
 				expire: quiz.expire,
+				expireDate: formattedDate,
+				tries: quiz.tries,
 				questions: quiz.questions.map((q) => ({
 					ques: q.ques,
 					answers: q.answers,

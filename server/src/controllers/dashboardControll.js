@@ -28,46 +28,57 @@ export const getStats = errorHandling(async (req, res, next) => {
 		const quizzes = await quizModel.find({ teacherId });
 		const quizIds = quizzes.map((q) => q._id);
 
-		const [totalQuizzes, totalSubmissions, avgSuccessRate] = await Promise.all([
+		const [totalQuizzes, totalSubmissions, stats] = await Promise.all([
 			quizModel.countDocuments({ teacherId }),
 			quizResultModel.countDocuments({ quizId: { $in: quizIds } }),
-			quizModel.aggregate([
-				{ $match: { teacherId } },
-				{ $group: { _id: null, avg: { $avg: "$successRate" } } },
-			]),
-		]);
-
-		stats = {
-			totalQuizzes,
-			totalSubmissions,
-			avgSuccessRate: avgSuccessRate[0]?.avg || 0,
-		};
-	} else if (role === "student") {
-		const studentId = req.user._id;
-
-		const [totalTaken, passedCount, avgScore] = await Promise.all([
-			quizResultModel.countDocuments({ studentId }),
-			quizResultModel.countDocuments({ studentId, isPass: true }),
 			quizResultModel.aggregate([
-				{ $match: { studentId } },
+				{ $match: { quizId: { $in: quizIds } } },
 				{
 					$group: {
 						_id: null,
-						avg: {
-							$avg: {
-								$multiply: [{ $divide: ["$score", "$totalScore"] }, 100],
-							},
-						},
+						avgScore: { $avg: "$totalScore" },
+						passCount: { $sum: { $cond: ["$status", 1, 0] } },
+						total: { $sum: 1 },
 					},
 				},
 			]),
 		]);
 
 		stats = {
+			totalQuizzes,
+			totalSubmissions,
+			avgSuccessRate: stats[0]
+				? (stats[0].passCount / stats[0].total) * 100
+				: 0,
+		};
+	} else if (role === "student") {
+		const studentId = req.user._id;
+
+		const [totalTaken, passedCount, results] = await Promise.all([
+			quizResultModel.countDocuments({ studentId }),
+			quizResultModel.countDocuments({ studentId, status: true }),
+			quizResultModel.find({ studentId }).populate("quizId", "quizScore"),
+		]);
+
+		// Calculate weighted average score
+		let totalPointsEarned = 0;
+		let totalPossiblePoints = 0;
+
+		results.forEach((res) => {
+			if (res.quizId) {
+				totalPointsEarned += res.totalScore;
+				totalPossiblePoints += res.quizId.quizScore;
+			}
+		});
+
+		stats = {
 			totalTaken,
 			passedCount,
 			failedCount: totalTaken - passedCount,
-			avgScore: avgScore[0]?.avg || 0,
+			avgScore:
+				totalPossiblePoints > 0
+					? (totalPointsEarned / totalPossiblePoints) * 100
+					: 0,
 		};
 	}
 

@@ -8,6 +8,7 @@ import appError from "../utils/appError.js";
 import uniqid from "uniqid";
 import response from "../utils/handelResponse.js";
 import * as factory from "../utils/handlerFactory.js";
+import ApiFeatures from "../utils/apiFeatures.js";
 
 // create quiz
 export const createQuiz = errorHandling(async (req, res, next) => {
@@ -50,7 +51,28 @@ export const createQuiz = errorHandling(async (req, res, next) => {
 export const deleteQuiz = factory.deleteOneOwner(quizModel, "teacherId");
 
 // get quiz by params
-export const getQuiz = factory.getOne(quizModel, { path: "questions" });
+export const getQuiz = errorHandling(async (req, res, next) => {
+	const quiz = await quizModel.findById(req.params.id).populate("questions");
+	if (!quiz) return next(new appError("quiz not found", 404));
+
+	if (req.user.role === "student") {
+		const results = await quizResultModel.find({
+			studentId: req.user._id,
+			quizId: quiz._id,
+		});
+
+		return response(
+			{
+				...quiz.toObject(),
+				attemptCount: results.length,
+			},
+			200,
+			res
+		);
+	}
+
+	response(quiz, 200, res);
+});
 //get quiz by password
 export const getQuizByPass = errorHandling(async (req, res, next) => {
 	const { quizPassword, quizId } = req.body;
@@ -68,37 +90,47 @@ export const getQuizByPass = errorHandling(async (req, res, next) => {
 });
 // get all quizs
 export const allQuizs = errorHandling(async (req, res, next) => {
-	let query;
+	let filter = {};
 	if (req.user.role === "teacher") {
-		query = quizModel.find({ teacherId: req.user._id });
+		filter = { teacherId: req.user._id };
 	} else if (req.user.role === "student") {
 		// Students only see non-expired quizzes
-		query = quizModel.find({ expireDate: { $gt: Date.now() } });
-	} else {
-		// Admins see all
-		query = quizModel.find();
+		filter = { expireDate: { $gt: Date.now() } };
 	}
 
-	const quizzes = await query.populate("teacherId", "name email");
+	const features = new ApiFeatures(quizModel.find(filter), req.query)
+		.filter()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	const quizzes = await features.query.populate("teacherId", "name email");
 
 	// If student, attach their result for each quiz
 	if (req.user.role === "student") {
 		const results = await quizResultModel.find({ studentId: req.user._id });
 
 		const quizzesWithResults = quizzes.map((quiz) => {
-			const result = results.find(
+			const studentResults = results.filter(
 				(r) => r.quizId.toString() === quiz._id.toString()
 			);
+
+			// Find the best result (highest score) or latest result
+			const bestResult = studentResults.reduce((prev, current) => {
+				return prev.totalScore > current.totalScore ? prev : current;
+			}, studentResults[0] || null);
+
 			return {
 				...quiz.toObject(),
-				userResult: result
+				userResult: bestResult
 					? {
-							status: result.status,
-							totalScore: result.totalScore,
-							createdAt: result.createdAt,
-							_id: result._id,
+							status: bestResult.status,
+							totalScore: bestResult.totalScore,
+							createdAt: bestResult.createdAt,
+							_id: bestResult._id,
 					  }
 					: null,
+				attemptCount: studentResults.length,
 			};
 		});
 		return response(quizzesWithResults, 200, res);
@@ -106,6 +138,7 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 
 	response(quizzes, 200, res);
 });
+
 // admin get all quizs
 export const allQuizzesByAdmin = factory.getAll(quizModel);
 // admin delete quiz

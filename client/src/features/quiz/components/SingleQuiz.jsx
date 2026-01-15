@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { submitQuizSchema } from "../../../shared/validation/schemas";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuiz, useAddAnswer } from "../hooks/useQuiz";
+import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiClock, HiCheckCircle, HiExclamationTriangle } from "react-icons/hi2";
@@ -146,10 +147,10 @@ const QuestionItem = ({ el, index, register, error }) => (
 					/>
 					<label
 						htmlFor={answer + index}
-						className="flex items-center px-6 py-4 rounded-2xl border-2 border-gray-50 cursor-pointer transition-all peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 hover:bg-gray-50/50 text-gray-600 peer-checked:text-indigo-700 font-bold group/label"
+						className="flex items-center px-6 py-4 rounded-2xl border-2 border-gray-50 cursor-pointer transition-all peer-checked:border-blue-600 peer-checked:bg-blue-50/50 hover:bg-gray-50/50 text-gray-600 peer-checked:text-blue-700 font-bold group/label"
 					>
-						<div className="w-6 h-6 rounded-full border-2 border-gray-200 mr-4 flex items-center justify-center peer-checked:border-indigo-600 bg-white transition-all shrink-0">
-							<div className="w-2.5 h-2.5 rounded-full bg-indigo-600 scale-0 transition-transform peer-checked:scale-100" />
+						<div className="w-6 h-6 rounded-full border-2 border-gray-200 mr-4 flex items-center justify-center peer-checked:border-blue-600 bg-white transition-all shrink-0">
+							<div className="w-2.5 h-2.5 rounded-full bg-blue-600 scale-0 transition-transform peer-checked:scale-100" />
 						</div>
 						<span className="flex-1">{answer}</span>
 					</label>
@@ -191,9 +192,23 @@ export default function SingleQuiz() {
 	});
 
 	const { data: quiz, isLoading } = useQuiz(id);
+	const { user } = useUser();
 	const { mutate, isPending } = useAddAnswer();
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [formData, setFormData] = useState(null);
+
+	// Check if student has remaining tries
+	const attemptsLeft =
+		quiz && user && user.role === "student"
+			? (quiz.tries || 1) - (quiz.attemptCount || 0)
+			: 1;
+
+	useEffect(() => {
+		if (quiz && user?.role === "student" && attemptsLeft <= 0) {
+			toast.error("You have exhausted all attempts for this quiz.");
+			navigate("/app/quizzes", { replace: true });
+		}
+	}, [quiz, user, attemptsLeft, navigate]);
 
 	// Watch all answers to calculate progress
 	const watchedAnswers = useWatch({
@@ -208,8 +223,9 @@ export default function SingleQuiz() {
 
 	useEffect(() => {
 		if (quiz?.expire) {
-			// expire is in hours, convert to seconds
-			const totalSeconds = Math.floor(quiz.expire * 3600);
+			// Calculate total seconds based on unit
+			const multiplier = quiz.expireUnit === "hours" ? 3600 : 60;
+			const totalSeconds = Math.floor(quiz.expire * multiplier);
 			setTimeLeft(totalSeconds);
 		}
 	}, [quiz]);
@@ -245,52 +261,58 @@ export default function SingleQuiz() {
 		[id, mutate, navigate]
 	);
 
-	const Submit = useCallback(
-		(data, isAuto = false) => {
-			const questions = isAuto
-				? data.answer
-				: data.answer.map((q) => JSON.parse(q));
-
-			if (isAuto) {
-				toast.error("Time is up! Submitting your answers automatically...");
-				performSubmit(questions, true);
-			} else {
-				setFormData(questions);
-				setShowConfirmModal(true);
-			}
-		},
-		[performSubmit]
-	);
+	const onSubmit = useCallback((data) => {
+		const questions = data.answer.map((q) => JSON.parse(q));
+		setFormData(questions);
+		setShowConfirmModal(true);
+	}, []);
 
 	const handleAutoSubmit = useCallback(() => {
+		if (isTimeUp) return; // Prevent multiple auto-submissions
+		setIsTimeUp(true);
+
 		const data = getValues();
 		// If some questions are not answered, we send what we have
 		const answers = data.answer || [];
 		const formattedAnswers = quiz.questions.map((q, index) => {
 			const selected = answers[index];
 			if (selected) {
-				return JSON.parse(selected);
+				try {
+					return typeof selected === "string" ? JSON.parse(selected) : selected;
+				} catch (e) {
+					return { answer: selected, _id: q._id, ques: q.ques };
+				}
 			}
 			return { answer: "", _id: q._id, ques: q.ques };
 		});
 
-		Submit({ answer: formattedAnswers }, true);
-	}, [getValues, quiz?.questions, Submit]);
+		toast.error("Time is up! Submitting your answers automatically...", {
+			duration: 5000,
+			icon: "⏰",
+		});
+
+		performSubmit(formattedAnswers, true);
+	}, [getValues, quiz?.questions, performSubmit, isTimeUp]);
 
 	useEffect(() => {
-		if (timeLeft === null) return;
+		if (timeLeft === null || isTimeUp) return;
 		if (timeLeft <= 0) {
-			setIsTimeUp(true);
 			handleAutoSubmit();
 			return;
 		}
 
 		const timer = setInterval(() => {
-			setTimeLeft((prev) => prev - 1);
+			setTimeLeft((prev) => {
+				if (prev <= 1) {
+					clearInterval(timer);
+					return 0;
+				}
+				return prev - 1;
+			});
 		}, 1000);
 
 		return () => clearInterval(timer);
-	}, [timeLeft, handleAutoSubmit]);
+	}, [timeLeft, handleAutoSubmit, isTimeUp]);
 
 	if (isLoading) return <Loader />;
 
@@ -351,7 +373,7 @@ export default function SingleQuiz() {
 			</motion.div>
 
 			<form
-				onSubmit={handleSubmit((data) => Submit(data))}
+				onSubmit={handleSubmit(onSubmit)}
 				className="space-y-6 sm:space-y-10"
 			>
 				{quiz.questions.map((el, index) => (

@@ -79,23 +79,21 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
 	</NavLink>
 );
 
-const UserProfile = ({ user }) => (
-	<div className="bg-gray-50 rounded-4xl p-5 mb-6 border border-gray-100 group hover:bg-white hover:shadow-xl hover:shadow-gray-100 transition-all duration-500">
-		<div className="flex items-center gap-4">
-			<div className="relative">
-				<div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-100 group-hover:rotate-12 transition-transform duration-500">
-					{user?.name?.charAt(0).toUpperCase()}
-				</div>
-				<div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+export const UserProfile = ({ user }) => (
+	<div className="flex items-center gap-4">
+		<div className="relative">
+			<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-100 group-hover:rotate-12 transition-transform duration-500">
+				{user?.name?.charAt(0).toUpperCase()}
 			</div>
-			<div className="min-w-0 flex-1">
-				<p className="font-black text-gray-900 text-sm truncate leading-tight">
-					{user?.name}
-				</p>
-				<p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest mt-1 opacity-70">
-					{user?.role}
-				</p>
-			</div>
+			<div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+		</div>
+		<div className="min-w-0 hidden sm:block">
+			<p className="font-black text-gray-900 text-sm truncate leading-tight">
+				{user?.name}
+			</p>
+			<p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest mt-1 opacity-70">
+				{user?.role}
+			</p>
 		</div>
 	</div>
 );
@@ -147,27 +145,23 @@ export default function SideBar() {
 			{/* Mobile Header */}
 			<div className="lg:hidden fixed top-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 z-50">
 				<Logo size="sm" />
-				<div className="flex items-center gap-3">
-					<div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 text-sm font-black shadow-sm">
-						{user?.name?.charAt(0).toUpperCase()}
-					</div>
+				<div className="flex items-center gap-4">
+					<UserProfile user={user} />
+					<button
+						onClick={handleLogout}
+						className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+						title="Sign Out"
+					>
+						<HiArrowRightOnRectangle className="text-xl" />
+					</button>
 				</div>
 			</div>
 
 			{/* Mobile Bottom Navigation */}
 			<div className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-md border-t border-gray-100 flex items-center justify-around px-4 pb-2 z-50">
-				{navItems.slice(0, 4).map((item) => (
+				{navItems.map((item) => (
 					<NavItem key={item.to} {...item} mobile />
 				))}
-				<button
-					onClick={handleLogout}
-					className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-red-400 hover:text-red-500 transition-colors"
-				>
-					<HiArrowRightOnRectangle className="text-xl" />
-					<span className="text-[10px] font-bold uppercase tracking-wider">
-						Exit
-					</span>
-				</button>
 			</div>
 
 			<div className="hidden lg:flex fixed left-0 top-0 bottom-0 w-72 bg-white border-r border-gray-100 flex-col z-50">
@@ -190,19 +184,7 @@ export default function SideBar() {
 					</div>
 				</div>
 
-				<div className="p-8 border-t border-gray-50 bg-gray-50/30 shrink-0">
-					<UserProfile user={user} />
-
-					<button
-						onClick={handleLogout}
-						className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all duration-300 group font-bold text-sm tracking-wide border border-transparent hover:border-red-100"
-					>
-						<div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
-							<HiArrowRightOnRectangle className="text-xl" />
-						</div>
-						<span>Sign Out</span>
-					</button>
-				</div>
+				<div className="p-8 border-t border-gray-50 bg-gray-50/30 shrink-0"></div>
 			</div>
 		</>
 	);

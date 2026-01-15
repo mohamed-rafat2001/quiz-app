@@ -8,10 +8,10 @@ import {
 } from "../services/adminApi";
 import { toast } from "react-hot-toast";
 
-export const useAdminUsers = () => {
+export const useAdminUsers = (params) => {
 	return useQuery({
-		queryKey: ["adminUsers"],
-		queryFn: getAllUsers,
+		queryKey: ["adminUsers", params],
+		queryFn: () => getAllUsers(params),
 	});
 };
 
@@ -43,10 +43,10 @@ export const useUpdateUser = () => {
 	});
 };
 
-export const useAdminQuizzes = () => {
+export const useAdminQuizzes = (params) => {
 	return useQuery({
-		queryKey: ["adminQuizzes"],
-		queryFn: getAllQuizzes,
+		queryKey: ["adminQuizzes", params],
+		queryFn: () => getAllQuizzes(params),
 	});
 };
 

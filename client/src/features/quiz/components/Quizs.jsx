@@ -18,6 +18,7 @@ import {
 	HiCheckCircle,
 	HiXCircle,
 	HiInformationCircle,
+	HiClock,
 } from "react-icons/hi2";
 
 const QuizHeader = ({ isTeacher }) => (
@@ -48,6 +49,10 @@ const QuizCard = forwardRef(
 	({ quiz, index, isTeacher, isDeleting, onDelete }, ref) => {
 		const hasTaken = !isTeacher && quiz.userResult;
 		const isPassed = hasTaken && quiz.userResult.status;
+		const attemptsLeft = !isTeacher
+			? (quiz.tries || 1) - (quiz.attemptCount || 0)
+			: 0;
+		const canTakeAgain = !isTeacher && attemptsLeft > 0;
 
 		return (
 			<motion.div
@@ -75,7 +80,7 @@ const QuizCard = forwardRef(
 									: "bg-indigo-50 text-indigo-600"
 							}`}
 						>
-							{hasTaken ? (
+							{hasTaken && !canTakeAgain ? (
 								isPassed ? (
 									<HiCheckCircle className="text-2xl" />
 								) : (
@@ -111,23 +116,28 @@ const QuizCard = forwardRef(
 								</button>
 							</div>
 						) : (
-							hasTaken && (
-								<div
-									className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-										isPassed
-											? "bg-green-100 text-green-600"
-											: "bg-red-100 text-red-600"
-									}`}
-								>
-									{isPassed ? "Passed" : "Failed"}
+							<div className="flex flex-col items-end gap-1">
+								{hasTaken && (
+									<div
+										className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+											isPassed
+												? "bg-green-100 text-green-600"
+												: "bg-red-100 text-red-600"
+										}`}
+									>
+										{isPassed ? "Best: Passed" : "Best: Failed"}
+									</div>
+								)}
+								<div className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+									{attemptsLeft} Tries Left
 								</div>
-							)
+							</div>
 						)}
 					</div>
 
 					<h3
 						className={`text-xl font-bold mb-2 group-hover:text-indigo-600 transition-colors ${
-							hasTaken
+							hasTaken && !canTakeAgain
 								? isPassed
 									? "text-green-800"
 									: "text-red-800"
@@ -143,6 +153,13 @@ const QuizCard = forwardRef(
 							<span>{quiz.questions?.length || 0} Questions</span>
 						</div>
 
+						<div className="flex items-center gap-3 text-sm text-gray-500">
+							<HiClock className="text-lg" />
+							<span className="capitalize">
+								{quiz.expire} {quiz.expireUnit || "minutes"} Limit
+							</span>
+						</div>
+
 						{isTeacher && (
 							<div className="flex items-center gap-3 text-sm text-gray-500">
 								<HiUsers className="text-lg" />
@@ -150,17 +167,47 @@ const QuizCard = forwardRef(
 							</div>
 						)}
 
+						{isTeacher && (
+							<div className="flex items-center gap-3 text-sm text-gray-500">
+								<HiCalendar className="text-lg" />
+								<span>
+									Ends:{" "}
+									{new Date(quiz.expireDate).toLocaleString([], {
+										dateStyle: "short",
+										timeStyle: "short",
+									})}
+								</span>
+							</div>
+						)}
+
+						{isTeacher && (
+							<div className="flex items-center gap-3 text-sm text-gray-500">
+								<HiPlay className="text-lg" />
+								<span>Max Attempts: {quiz.tries || 1}</span>
+							</div>
+						)}
+
 						{hasTaken ? (
 							<div className="flex items-center gap-3 text-sm font-bold">
 								<HiInformationCircle className="text-lg" />
 								<span className={isPassed ? "text-green-600" : "text-red-600"}>
-									Score: {quiz.userResult.totalScore} / {quiz.quizScore}
+									Best Score: {quiz.userResult.totalScore} / {quiz.quizScore}
 								</span>
 							</div>
 						) : (
 							<div className="flex items-center gap-3 text-sm text-gray-500">
 								<HiCalendar className="text-lg" />
-								<span>{new Date(quiz.createdAt).toLocaleDateString()}</span>
+								<span className="flex flex-col">
+									<span className="text-[10px] uppercase font-bold text-gray-400">
+										Deadline
+									</span>
+									<span>
+										{new Date(quiz.expireDate).toLocaleString([], {
+											dateStyle: "short",
+											timeStyle: "short",
+										})}
+									</span>
+								</span>
 							</div>
 						)}
 
@@ -218,7 +265,7 @@ const QuizCard = forwardRef(
 					</div>
 
 					<div className="flex gap-3">
-						{hasTaken ? (
+						{hasTaken && !canTakeAgain ? (
 							<Link
 								to={`/app/my-submissions/${quiz.userResult._id}`}
 								className={`flex-1 font-bold py-3 rounded-xl text-center transition-all text-sm flex items-center justify-center gap-2 ${
@@ -240,7 +287,23 @@ const QuizCard = forwardRef(
 								} font-bold py-3 rounded-xl text-center transition-all text-sm flex items-center justify-center gap-2`}
 							>
 								{!isTeacher && <HiPlay />}
-								<span>{isTeacher ? "Preview" : "Start Quiz"}</span>
+								<span>
+									{isTeacher
+										? "Preview"
+										: hasTaken && canTakeAgain
+										? "Retake Quiz"
+										: "Start Quiz"}
+								</span>
+							</Link>
+						)}
+
+						{hasTaken && canTakeAgain && (
+							<Link
+								to={`/app/my-submissions/${quiz.userResult._id}`}
+								className="px-4 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold py-3 rounded-xl transition-colors text-sm text-center flex items-center justify-center"
+								title="View Best Result"
+							>
+								<HiInformationCircle className="text-lg" />
 							</Link>
 						)}
 

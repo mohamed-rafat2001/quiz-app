@@ -48,10 +48,14 @@ export const startQuizSchema = z.object({
 
 export const createQuizSchema = z.object({
 	quizName: z.string().min(3, "Quiz name must be at least 3 characters"),
-	expire: z
+	expire: z.number().min(1, "Time limit must be at least 1"),
+	expireUnit: z.enum(["minutes", "hours"]).default("minutes"),
+	expireDate: z.string().min(1, "Quiz deadline is required"),
+	tries: z
 		.number()
-		.min(1, "Expire days must be at least 1")
-		.max(30, "Maximum 30 days"),
+		.min(1, "Attempts must be at least 1")
+		.max(10, "Maximum 10 attempts allowed")
+		.default(1),
 	questions: z
 		.array(
 			z.object({

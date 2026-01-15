@@ -60,10 +60,23 @@ const quizSchema = new mongoose.Schema(
 		},
 		expire: {
 			type: Number,
-			default: 1,
-			min: [0.1, "Expiration must be at least 0.1 hours"],
+			default: 60,
+			min: [1, "Time limit must be at least 1 minute"],
 		},
-		expireDate: Date,
+		expireUnit: {
+			type: String,
+			enum: ["minutes", "hours"],
+			default: "minutes",
+		},
+		expireDate: {
+			type: Date,
+			required: [true, "Quiz deadline is required"],
+		},
+		tries: {
+			type: Number,
+			default: 1,
+			min: [1, "Tries must be at least 1"],
+		},
 	},
 	{
 		timestamps: true,
@@ -77,9 +90,6 @@ quizSchema.virtual("isExpired").get(function () {
 });
 
 quizSchema.pre("save", function (next) {
-	if (this.isModified("expire") || this.isNew) {
-		this.expireDate = new Date(Date.now() + this.expire * 60 * 60 * 1000);
-	}
 	// Set default successRate to 50% of quizScore if not set
 	if (
 		this.isModified("quizScore") &&
@@ -97,7 +107,9 @@ quizSchema.pre("findOneAndDelete", async function (next) {
 	if (quiz) {
 		await mongoose.model("QuizQuestionModel").deleteMany({ quizId: quiz._id });
 		await mongoose.model("QuizResultModel").deleteMany({ quizId: quiz._id });
-		await mongoose.model("QuestionAnswerModel").deleteMany({ quizId: quiz._id });
+		await mongoose
+			.model("QuestionAnswerModel")
+			.deleteMany({ quizId: quiz._id });
 	}
 	next();
 });

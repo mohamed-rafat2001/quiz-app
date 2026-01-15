@@ -1,6 +1,7 @@
 import errorHandling from "../middelwars/errorHandling.js";
 import appError from "./appError.js";
 import response from "./handelResponse.js";
+import ApiFeatures from "./apiFeatures.js";
 
 export const deleteOne = (Model) =>
 	errorHandling(async (req, res, next) => {
@@ -51,9 +52,21 @@ export const getAll = (Model, filter = {}) =>
 	errorHandling(async (req, res, next) => {
 		// To allow for nested get all in quizAnswer
 		let combinedFilter = { ...filter };
-		if (req.query) combinedFilter = { ...combinedFilter, ...req.query };
+		if (req.query) {
+			// Extract query params that are not part of ApiFeatures
+			const queryObj = { ...req.query };
+			const excludedFields = ["page", "sort", "limit", "fields"];
+			excludedFields.forEach((el) => delete queryObj[el]);
+			combinedFilter = { ...combinedFilter, ...queryObj };
+		}
 
-		const docs = await Model.find(combinedFilter);
+		const features = new ApiFeatures(Model.find(combinedFilter), req.query)
+			.filter()
+			.sort()
+			.limitFields()
+			.paginate();
+
+		const docs = await features.query;
 
 		response(docs, 200, res);
 	});
@@ -123,9 +136,18 @@ export const getOneOwner = (Model, ownerField, popOptions) =>
 
 export const getAllOwner = (Model, ownerField, popOptions) =>
 	errorHandling(async (req, res, next) => {
-		let query = Model.find({ [ownerField]: req.user._id });
-		if (popOptions) query = query.populate(popOptions);
-		const docs = await query;
+		const features = new ApiFeatures(
+			Model.find({ [ownerField]: req.user._id }),
+			req.query
+		)
+			.filter()
+			.sort()
+			.limitFields()
+			.paginate();
+
+		if (popOptions) features.query = features.query.populate(popOptions);
+
+		const docs = await features.query;
 
 		response(docs, 200, res);
 	});

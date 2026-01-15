@@ -52,8 +52,8 @@ quizResultSchema.pre(/^find/, function (next) {
 	next();
 });
 
-// Prevent duplicate quiz attempts
-quizResultSchema.index({ quizId: 1, studentId: 1 }, { unique: true });
+// Allow multiple quiz attempts
+quizResultSchema.index({ quizId: 1, studentId: 1 });
 
 quizResultSchema.statics.calcQuizStats = async function (quizId) {
 	const stats = await this.aggregate([
@@ -61,27 +61,48 @@ quizResultSchema.statics.calcQuizStats = async function (quizId) {
 			$match: { quizId: new mongoose.Types.ObjectId(quizId) },
 		},
 		{
+			// Group by student to get their best performance
 			$group: {
-				_id: "$quizId",
-				numberTookQuiz: { $sum: 1 },
-				avgScore: { $avg: "$totalScore" },
-				maxScore: { $max: "$totalScore" },
-				passingNum: {
-					$sum: { $cond: [{ $eq: ["$status", true] }, 1, 0] },
+				_id: "$studentId",
+				bestScore: { $max: "$totalScore" },
+				passed: {
+					$max: { $cond: [{ $eq: ["$status", true] }, 1, 0] },
 				},
+			},
+		},
+		{
+			// Aggregate student bests for quiz stats
+			$group: {
+				_id: null,
+				numberTookQuiz: { $sum: 1 },
+				avgScore: { $avg: "$bestScore" },
+				maxScore: { $max: "$bestScore" },
+				passingNum: { $sum: "$passed" },
 			},
 		},
 	]);
 
 	if (stats.length > 0) {
-		const allResults = await this.find({ quizId }).sort("-totalScore");
+		// For leaderboard, we still want to find unique students with the max score
 		const maxScore = stats[0].maxScore;
-		const firstInQuiz = allResults
-			.filter((res) => res.totalScore === maxScore)
-			.map((res) => ({
-				studentId: res.studentId,
-				Score: res.totalScore,
-			}));
+		const results = await this.find({
+			quizId,
+			totalScore: maxScore,
+		}).populate("studentId", "name email");
+
+		// Get unique students who achieved the max score
+		const seenStudents = new Set();
+		const firstInQuiz = [];
+		for (const res of results) {
+			const studentIdStr = res.studentId._id.toString();
+			if (!seenStudents.has(studentIdStr)) {
+				seenStudents.add(studentIdStr);
+				firstInQuiz.push({
+					studentId: res.studentId._id,
+					Score: res.totalScore,
+				});
+			}
+		}
 
 		await QuizModel.findByIdAndUpdate(quizId, {
 			numberTookQuiz: stats[0].numberTookQuiz,

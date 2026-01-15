@@ -48,9 +48,6 @@ export default function Loader() {
 				animate={{ opacity: 1, y: 0 }}
 				className="mt-8 text-center"
 			>
-				<h2 className="text-gray-900 font-black text-xl tracking-tight mb-1">
-					Preparing Your Experience
-				</h2>
 				<div className="flex items-center justify-center gap-1">
 					{[0, 1, 2].map((i) => (
 						<motion.div
