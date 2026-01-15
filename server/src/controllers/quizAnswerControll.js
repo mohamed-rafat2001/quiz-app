@@ -150,29 +150,18 @@ export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
 		teacherId: req.user._id,
 		quizId: req.params.id,
 	};
-
-	const features = new ApiFeatures(quizResultModel.find(filter), req.query)
-		.filter()
-		.sort()
-		.limitFields()
-		.paginate();
-
-	const docs = await features.query.populate("studentId").populate("quizId");
-
-	response(docs, 200, res);
+	return factory.getAll(quizResultModel, filter, [
+		{ path: "studentId" },
+		{ path: "quizId" },
+	])(req, res, next);
 });
 
 // get individual question answers for a specific result
 export const getResultDetails = errorHandling(async (req, res, next) => {
-	const features = new ApiFeatures(
-		questionAnswerModel.find({ resultId: req.params.id }),
-		req.query
-	)
-		.filter()
-		.sort()
-		.limitFields()
-		.paginate();
-
-	const answers = await features.query.populate("questionId");
-	response(answers, 200, res);
+	const filter = { resultId: req.params.id };
+	return factory.getAll(questionAnswerModel, filter, "questionId")(
+		req,
+		res,
+		next
+	);
 });

@@ -48,7 +48,7 @@ export const getOne = (Model, popOptions) =>
 		response(doc, 200, res);
 	});
 
-export const getAll = (Model, filter = {}) =>
+export const getAll = (Model, filter = {}, popOptions) =>
 	errorHandling(async (req, res, next) => {
 		// To allow for nested get all in quizAnswer
 		let combinedFilter = { ...filter };
@@ -65,6 +65,8 @@ export const getAll = (Model, filter = {}) =>
 			.sort()
 			.limitFields()
 			.paginate();
+
+		if (popOptions) features.query = features.query.populate(popOptions);
 
 		const docs = await features.query;
 
