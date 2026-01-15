@@ -1,17 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
 	startQuiz,
 	getQuiz,
 	getAllQuizzes,
 	createQuiz,
 	deleteQuiz,
+	updateQuiz,
 } from "../services/quizApi";
 import {
 	addAnswer,
 	getTeacherQuizAnswers,
 	getStudentQuizAnswers,
 	getQuizAnswer,
+	getResultDetails,
 } from "../services/quizAnswerApi";
 
 // Quiz Hooks
@@ -60,6 +63,19 @@ export function useDeleteQuiz() {
 	});
 }
 
+export function useUpdateQuiz() {
+	const queryClient = useQueryClient();
+	const navigate = useNavigate();
+	return useMutation({
+		mutationFn: updateQuiz,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+			toast.success("Quiz updated successfully");
+			navigate("/Quizs");
+		},
+	});
+}
+
 // Answer Hooks
 export function useAddAnswer() {
 	return useMutation({
@@ -86,6 +102,14 @@ export function useQuizAnswer(id) {
 	return useQuery({
 		queryKey: ["quizAnswer", id],
 		queryFn: () => getQuizAnswer(id),
+		enabled: !!id,
+	});
+}
+
+export function useResultDetails(id) {
+	return useQuery({
+		queryKey: ["resultDetails", id],
+		queryFn: () => getResultDetails(id),
 		enabled: !!id,
 	});
 }

@@ -74,10 +74,10 @@ export default function QuizAnswers() {
 									<td className="px-6 py-4">
 										<div className="flex items-center gap-3">
 											<div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold uppercase">
-												{answer.user?.name?.charAt(0)}
+												{answer.studentId?.name?.charAt(0)}
 											</div>
 											<span className="text-sm font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
-												{answer.user?.name}
+												{answer.studentId?.name}
 											</span>
 										</div>
 									</td>
@@ -102,7 +102,7 @@ export default function QuizAnswers() {
 									</td>
 									<td className="px-6 py-4 text-center">
 										<Link
-											to={`/QuizsAsnwers/${answer._id}`}
+											to={`/QuizAnswers/${answer._id}`}
 											className="inline-flex p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
 											title="View Details"
 										>
@@ -124,7 +124,7 @@ export default function QuizAnswers() {
 							No submissions yet
 						</h3>
 						<p className="text-gray-500 mt-1">
-							Students haven't completed this quiz yet.
+							Students haven&apos;t completed this quiz yet.
 						</p>
 					</div>
 				)}

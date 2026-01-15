@@ -1,131 +1,124 @@
 import quizModel from "../models/quizModel.js";
-import quizAnswerModel from "../models/quizAnswerModel.js";
+import questionAnswerModel from "../models/questionAnswerModel.js";
+import quizResultModel from "../models/quizResultModel.js";
 
 import errorHandling from "../middelwars/errorHandling.js";
 import appError from "../utils/appError.js";
 import response from "../utils/handelResponse.js";
 import Email from "../utils/Email.js";
+import * as factory from "../utils/handlerFactory.js";
 
-// questions asnwer
+// questions answer
 export const quesAnswer = errorHandling(async (req, res, next) => {
 	const _id = req.params.id;
-	const { questions } = req.body;
-	// ckeck if user is student
-	if (req.user.role != "student")
-		return next(new appError("you not student", 404));
-	//find the quiz
-	let quiz = await quizModel.findById(_id);
-	if (!quiz) return next(new appError("quiz not found", 404));
+	const { questions } = req.body; // Array of { _id: questionId, answer: studentChoice }
 
-	// check if student asnwer the quiz or not
-	const findStQuizAnswer = await quizAnswerModel.findOne({
+	// check if user is student
+	if (req.user.role !== "student")
+		return next(new appError("You are not a student", 403));
+
+	// find the quiz
+	const quiz = await quizModel.findById(_id).populate("questions");
+	if (!quiz) return next(new appError("Quiz not found", 404));
+
+	// check if student already answered the quiz
+	const existingResult = await quizResultModel.findOne({
 		quizId: _id,
 		studentId: req.user._id,
 	});
-	if (findStQuizAnswer)
-		return next(new appError("you have answered this quiz", 400));
-	const quesAnswer = [];
-	if (questions.length == 0)
-		return next(new appError("please add answers", 400));
-	// check if the asnwers is correct and filter the ques
-	questions.forEach((element) => {
-		quiz.questions.filter((q) => {
-			if (q._id == element._id && q.correctAnswer == element.answer)
-				return quesAnswer.push({
-					answer: q.correctAnswer,
-					Score: q.Score,
-					ques: q.ques,
-				});
-		});
-	});
-	// calculate the quiz score
-	const quizScore = quesAnswer.reduce((acc, current) => {
-		if (current.Score < 0) {
-			current.Score = -current.Score;
-		}
-		return acc + current.Score;
-	}, 0);
-	// create the quiz Answer doc
-	const quizAnswer = await quizAnswerModel.create({
+	if (existingResult)
+		return next(new appError("You have already answered this quiz", 400));
+
+	if (!questions || questions.length === 0)
+		return next(new appError("Please provide answers", 400));
+
+	// 1. Create the QuizResult first (initial state)
+	const quizResult = await quizResultModel.create({
 		teacherId: quiz.teacherId,
 		studentId: req.user._id,
 		quizId: quiz._id,
-		quesAnswers: [],
-		quizScore,
 		quizName: quiz.quizName,
-		status: quiz.successRate <= quizScore ? true : false,
 	});
-	quizAnswer.quesAnswers = quesAnswer;
-	await quizAnswer.save();
-	if (!quizAnswer) return next(new appError("not add asnwers", 400));
-	// find how meny pass the quiz
-	const studentPassQuiz = await quizAnswerModel.find({
-		quizId: quiz._id,
-		status: true,
-	});
-	// find all Quiz answers
-	const allQuizAnswers = await quizAnswerModel.find({ quizId: quiz._id });
-	//calculate the first student on quiz
-	const findBigerScore = allQuizAnswers.reduce((acc, current) => {
-		return current.quizScore > acc ? current.quizScore : acc;
-	}, 0);
-	const firstInQuiz = [];
-	allQuizAnswers.filter((el) => {
-		if (el.quizScore == findBigerScore)
-			return firstInQuiz.push({
-				Score: el.quizScore,
-				studentId: el.studentId,
+
+	let totalScore = 0;
+	const answerDocs = [];
+
+	// 2. Process each question and create QuestionAnswer docs
+	for (const qAnswer of questions) {
+		const question = quiz.questions.find(
+			(q) => q._id.toString() === qAnswer._id
+		);
+
+		if (question) {
+			const isCorrect = question.correctAnswer === qAnswer.answer;
+			const score = isCorrect ? question.Score : 0;
+			totalScore += score;
+
+			answerDocs.push({
+				studentId: req.user._id,
+				quizId: quiz._id,
+				questionId: question._id,
+				studentAnswer: qAnswer.answer,
+				isCorrect,
+				score,
+				resultId: quizResult._id,
 			});
-	});
-	// calculate the total quiz score of asnwers
-	const quizToatalScore = allQuizAnswers.reduce((acc, current) => {
-		return acc + current.quizScore;
-	}, 0);
-	// update quiz doc and add [passingNum,numberTookQuiz,averagePassing]
-	quiz = await quizModel.findByIdAndUpdate(
-		quiz._id,
-
-		{
-			$inc: { numberTookQuiz: 1 },
-			passingNum: studentPassQuiz.length,
-			averagePassing: quizToatalScore / allQuizAnswers.length,
-			firstInQuiz,
-		},
-		{ new: true, runValidators: true }
-	);
-	if (!quiz) return next(new appError("quiz doc not updated", 400));
-
-	// send email if user is pass the quiz or not
-	if (quizAnswer.status == true) {
-		await new Email(req.user).passQuizEmail(
-			`congratulation ${req.user.name} you pass the quiz:${quiz.quizName} and score is ${quizAnswer.quizScore}`
-		);
-	} else if (quizAnswer.status == false) {
-		await new Email(req.user).passQuizEmail(
-			`sorry ${req.user.name} you don't pass the quiz:${quiz.quizName} and score is ${quizAnswer.quizScore}`
-		);
+		}
 	}
-	response(quizAnswer, 201, res);
+
+	// 3. Bulk create question answers
+	await questionAnswerModel.insertMany(answerDocs);
+
+	// 4. Update the final result
+	quizResult.totalScore = totalScore;
+	quizResult.status = totalScore >= quiz.successRate;
+	await quizResult.save();
+
+	// 5. Send email notification
+	try {
+		const message = quizResult.status
+			? `Congratulations ${req.user.name}, you passed the quiz: ${quiz.quizName} with a score of ${totalScore}.`
+			: `Sorry ${req.user.name}, you did not pass the quiz: ${quiz.quizName}. Your score was ${totalScore}.`;
+
+		await new Email(req.user).passQuizEmail(message);
+	} catch (err) {
+		// Don't fail the request if email fails
+	}
+
+	response(quizResult, 201, res);
 });
-// get quiz asnwer by params
-export const getQuizAnswer = errorHandling(async (req, res, next) => {
-	const _id = req.params.id;
-	const QuizAnswer = await quizAnswerModel.findById(_id);
-	if (!QuizAnswer) return next(new appError("not founded", 404));
-	response(QuizAnswer, 200, res);
+
+// get quiz result by params
+export const getQuizAnswer = factory.getOne(quizResultModel, {
+	path: "quizId",
 });
-// get all quizs asnwers for student
-export const studentquizAnswers = errorHandling(async (req, res, next) => {
-	const QuizAnswers = await quizAnswerModel.find({ studentId: req.user._id });
-	if (QuizAnswers.length == 0) return next(new appError("not quizs yet", 404));
-	response(QuizAnswers, 200, res);
-});
-// get all quizs asnwers for teacher quiz
-export const teacherQuizAnswers = errorHandling(async (req, res, next) => {
-	const QuizAnswers = await quizAnswerModel.find({
+
+// get all quiz results for student
+export const studentquizAnswers = factory.getAllOwner(
+	quizResultModel,
+	"studentId",
+	{ path: "quizId", select: "quizName" }
+);
+
+// get all quiz results for teacher's specific quiz
+export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
+	const filter = {
 		teacherId: req.user._id,
 		quizId: req.params.id,
-	});
-	if (QuizAnswers.length == 0) return next(new appError("no answers yet", 404));
-	response(QuizAnswers, 200, res);
+	};
+
+	const docs = await quizResultModel
+		.find(filter)
+		.populate("studentId")
+		.populate("quizId");
+
+	response(docs, 200, res);
+});
+
+// get individual question answers for a specific result
+export const getResultDetails = errorHandling(async (req, res, next) => {
+	const answers = await questionAnswerModel
+		.find({ resultId: req.params.id })
+		.populate("questionId");
+	response(answers, 200, res);
 });

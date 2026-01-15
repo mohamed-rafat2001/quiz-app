@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useUser, useLogout } from "../../../features/auth/hooks/useAuth";
-import { motion } from "framer-motion";
 import {
 	HiHome,
 	HiUser,
-	HiClipboardCheck,
+	HiClipboardDocumentCheck,
 	HiListBullet,
+	HiUsers,
+	HiAcademicCap,
+	HiChartBar,
 	HiArrowRightOnRectangle,
 } from "react-icons/hi2";
 
@@ -14,18 +16,31 @@ export default function SideBar() {
 	const logout = useLogout();
 
 	const navItems = [
+		{ to: "/dashboard", icon: HiChartBar, label: "Dashboard" },
 		{ to: "/home", icon: HiHome, label: "Home" },
 		{ to: "/profile", icon: HiUser, label: "Profile" },
-		{ to: "/QuizsAsnwers", icon: HiClipboardCheck, label: "My Answers" },
 	];
 
-	// Add teacher-only routes
+	if (user?.role === "admin") {
+		navItems.push(
+			{ to: "/admin/users", icon: HiUsers, label: "Users" },
+			{ to: "/admin/quizzes", icon: HiAcademicCap, label: "All Quizzes" }
+		);
+	} else {
+		navItems.push(
+			{ to: "/Quizs", icon: HiListBullet, label: "Quizzes" },
+			{
+				to: "/QuizAnswers",
+				icon: HiClipboardDocumentCheck,
+				label: "My Answers",
+			}
+		);
+	}
+
+	// Adjust labels for teacher
 	if (user?.role === "teacher") {
-		navItems.push({
-			to: "/Quizs",
-			icon: HiListBullet,
-			label: "Manage Quizzes",
-		});
+		const quizItem = navItems.find((item) => item.to === "/Quizs");
+		if (quizItem) quizItem.label = "Manage Quizzes";
 	}
 
 	const handleLogout = () => {
@@ -81,65 +96,67 @@ export default function SideBar() {
 			</div>
 
 			{/* Desktop Sidebar */}
-			<motion.div
-				initial={{ x: -20, opacity: 0 }}
-				animate={{ x: 0, opacity: 1 }}
-				className="hidden lg:flex h-screen bg-white border-r border-gray-100 flex-col w-64 transition-all duration-300 fixed left-0 top-0 z-40"
-			>
-				{/* Logo Section */}
-				<div className="p-8 flex items-center gap-3">
-					<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-200">
-						Q
+			<div className="hidden lg:flex fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-100 flex-col z-50">
+				<div className="p-8">
+					<div className="flex items-center gap-3 mb-12">
+						<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-200">
+							Q
+						</div>
+						<h1 className="font-extrabold text-gray-900 text-lg tracking-tight">
+							QUIZ APP
+						</h1>
 					</div>
-					<h5 className="font-bold text-gray-800 text-lg tracking-tight">
-						QUIZ APP
-					</h5>
+
+					<nav className="space-y-2">
+						{navItems.map((item) => (
+							<NavLink
+								key={item.to}
+								to={item.to}
+								className={({ isActive }) =>
+									`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group ${
+										isActive
+											? "bg-indigo-600 text-white shadow-lg shadow-indigo-100"
+											: "text-gray-500 hover:bg-gray-50"
+									}`
+								}
+							>
+								<item.icon
+									className={`text-xl transition-colors duration-300 group-hover:scale-110`}
+								/>
+								<span className="font-bold text-sm tracking-wide">
+									{item.label}
+								</span>
+							</NavLink>
+						))}
+					</nav>
 				</div>
 
-				{/* Navigation Section */}
-				<nav className="flex-1 px-4 space-y-2 mt-4">
-					{navItems.map((item) => (
-						<NavLink
-							key={item.to}
-							to={item.to}
-							className={({ isActive }) =>
-								`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-200 group ${
-									isActive
-										? "bg-indigo-50 text-indigo-600 shadow-sm"
-										: "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-								}`
-							}
-						>
-							<item.icon className="text-xl transition-transform group-hover:scale-110" />
-							<span className="font-bold tracking-tight">{item.label}</span>
-						</NavLink>
-					))}
-				</nav>
-
-				{/* User Section / Logout */}
-				<div className="p-6 border-t border-gray-50">
-					<div className="flex items-center gap-4 px-4 py-3 mb-4">
-						<div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold">
-							{user?.name?.charAt(0).toUpperCase()}
-						</div>
-						<div className="flex-1 min-w-0">
-							<p className="text-sm font-bold text-gray-900 truncate">
-								{user?.name}
-							</p>
-							<p className="text-xs text-gray-500 truncate uppercase tracking-wider">
-								{user?.role}
-							</p>
+				<div className="mt-auto p-8 border-t border-gray-50">
+					<div className="bg-gray-50 rounded-3xl p-6 mb-6">
+						<div className="flex items-center gap-3 mb-1">
+							<div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 font-bold uppercase">
+								{user?.name?.charAt(0)}
+							</div>
+							<div className="min-w-0">
+								<p className="font-bold text-gray-900 text-sm truncate">
+									{user?.name}
+								</p>
+								<p className="text-xs text-gray-400 font-medium capitalize">
+									{user?.role}
+								</p>
+							</div>
 						</div>
 					</div>
+
 					<button
 						onClick={handleLogout}
-						className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all duration-200 group"
+						className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all duration-300 group"
 					>
 						<HiArrowRightOnRectangle className="text-xl group-hover:translate-x-1 transition-transform" />
-						<span className="font-bold tracking-tight">Logout</span>
+						<span className="font-bold text-sm tracking-wide">Logout</span>
 					</button>
 				</div>
-			</motion.div>
+			</div>
 		</>
 	);
 }

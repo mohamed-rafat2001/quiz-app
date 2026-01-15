@@ -6,7 +6,7 @@ export async function signUp(data) {
 		user = await user.data;
 		return user.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -14,7 +14,7 @@ export async function logout() {
 	try {
 		await BaseApi.get("/user/logout");
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -24,7 +24,7 @@ export async function login(data) {
 		user = await user.data;
 		return user.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 export async function updateMe(data) {
@@ -33,25 +33,26 @@ export async function updateMe(data) {
 		user = await user.data;
 		return user.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
-export async function getMe(data) {
+export async function getMe() {
 	try {
-		let user = await BaseApi.get("/user/Me");
-		user = await user.data;
-		return user.data;
+		const response = await BaseApi.get("/user/Me");
+		return response.data.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		if (e.response?.status === 401) {
+			return null;
+		}
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 export async function updatePassword(data) {
 	try {
 		let user = await BaseApi.patch("/user/updatePassword", data);
 		user = await user.data;
-		console.log(user.data);
 		return user.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }

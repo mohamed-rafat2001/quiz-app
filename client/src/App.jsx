@@ -1,10 +1,10 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
-import { AppProviders } from "./providers/AppProviders";
+import AppProviders from "./providers/AppProviders";
 import { router } from "./routes";
-import "./App.css";
 
 function App() {
+	console.log("App component rendering");
 	return (
 		<AppProviders>
 			<RouterProvider router={router} />

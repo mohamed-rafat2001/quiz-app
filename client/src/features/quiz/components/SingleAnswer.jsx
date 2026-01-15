@@ -1,16 +1,28 @@
-import { useParams, Link } from "react-router-dom";
-import { useQuizAnswer } from "../hooks/useQuiz";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuizAnswer, useResultDetails } from "../hooks/useQuiz";
+import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
 import { motion } from "framer-motion";
-import { HiMagnifyingGlass, HiCheckCircle, HiXCircle } from "react-icons/hi2";
+import {
+	HiMagnifyingGlass,
+	HiCheckCircle,
+	HiXCircle,
+	HiArrowLeft,
+} from "react-icons/hi2";
 
 export default function SingleAnswer() {
 	const { id } = useParams();
-	const { data: answer, isLoading } = useQuizAnswer(id);
+	const navigate = useNavigate();
+	const { data: user } = useUser();
+	const { data: result, isLoading: isLoadingResult } = useQuizAnswer(id);
+	const { data: details, isLoading: isLoadingDetails } = useResultDetails(id);
+
+	const isLoading = isLoadingResult || isLoadingDetails;
+	const isTeacher = user?.role === "teacher";
 
 	if (isLoading) return <Loader />;
 
-	if (!answer)
+	if (!result)
 		return (
 			<div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
 				<div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 text-gray-300">
@@ -22,12 +34,12 @@ export default function SingleAnswer() {
 				<p className="text-gray-500 mb-8">
 					The submission you are looking for does not exist or has been removed.
 				</p>
-				<Link
-					to="/QuizsAsnwers"
+				<button
+					onClick={() => navigate(-1)}
 					className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-100 transition-all"
 				>
-					Back to My Answers
-				</Link>
+					Go Back
+				</button>
 			</div>
 		);
 
@@ -40,27 +52,42 @@ export default function SingleAnswer() {
 			>
 				{/* Header Section */}
 				<div
-					className={`p-6 sm:p-8 md:p-12 text-center border-b border-gray-50 ${
-						answer.isPass ? "bg-green-50/30" : "bg-red-50/30"
+					className={`p-6 sm:p-8 md:p-12 text-center border-b border-gray-50 relative ${
+						result.status ? "bg-green-50/30" : "bg-red-50/30"
 					}`}
 				>
+					<button
+						onClick={() => navigate(-1)}
+						className="absolute top-6 left-6 p-2 text-gray-400 hover:text-indigo-600 hover:bg-white rounded-xl transition-all hidden sm:flex items-center gap-2 text-sm font-bold"
+					>
+						<HiArrowLeft className="text-xl" />
+						Back
+					</button>
+
 					<motion.div
 						initial={{ scale: 0.9 }}
 						animate={{ scale: 1 }}
 						className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-white shadow-sm mb-4 sm:mb-6"
 					>
-						{answer.isPass ? (
+						{result.status ? (
 							<HiCheckCircle className="text-green-500 text-3xl sm:text-4xl" />
 						) : (
 							<HiXCircle className="text-red-500 text-3xl sm:text-4xl" />
 						)}
 					</motion.div>
 					<h1 className="text-xl sm:text-3xl font-extrabold text-gray-900 mb-2">
-						{answer.quizId?.quizName}
+						{result.quizName}
 					</h1>
-					<p className="text-xs sm:text-sm text-gray-500 font-medium uppercase tracking-wider">
-						Quiz Results Review
-					</p>
+					<div className="flex flex-col items-center gap-1">
+						<p className="text-xs sm:text-sm text-gray-500 font-medium uppercase tracking-wider">
+							Quiz Results Review
+						</p>
+						{isTeacher && result.studentId && (
+							<p className="text-sm font-bold text-indigo-600 mt-2">
+								Student: {result.studentId.name}
+							</p>
+						)}
+					</div>
 				</div>
 
 				<div className="p-6 sm:p-8 md:p-12">
@@ -71,9 +98,9 @@ export default function SingleAnswer() {
 								Final Score
 							</p>
 							<h4 className="text-2xl sm:text-3xl font-black text-indigo-600">
-								{answer.score}{" "}
+								{result.totalScore}{" "}
 								<span className="text-base sm:text-lg text-gray-400 font-medium">
-									/ {answer.quizId?.questions?.length || "?"}
+									/ {result.quizId?.quizScore || "?"}
 								</span>
 							</h4>
 						</div>
@@ -83,10 +110,10 @@ export default function SingleAnswer() {
 							</p>
 							<h4
 								className={`text-2xl sm:text-3xl font-black ${
-									answer.isPass ? "text-green-600" : "text-red-600"
+									result.status ? "text-green-600" : "text-red-600"
 								}`}
 							>
-								{answer.isPass ? "PASSED" : "FAILED"}
+								{result.status ? "PASSED" : "FAILED"}
 							</h4>
 						</div>
 					</div>
@@ -100,15 +127,13 @@ export default function SingleAnswer() {
 							</h2>
 						</div>
 
-						{answer.questions?.map((q, index) => {
-							const originalQ = answer.quizId?.questions?.find(
-								(oq) => oq._id === q._id
-							);
-							const isCorrect = q.answer === originalQ?.correctAnswer;
+						{details?.map((ans, index) => {
+							const question = ans.questionId;
+							const isCorrect = ans.isCorrect;
 
 							return (
 								<motion.div
-									key={index}
+									key={ans._id}
 									initial={{ opacity: 0, x: -10 }}
 									animate={{ opacity: 1, x: 0 }}
 									transition={{ delay: index * 0.1 }}
@@ -130,7 +155,7 @@ export default function SingleAnswer() {
 										</span>
 										<div className="flex-1 min-w-0">
 											<p className="font-bold text-sm sm:text-base text-gray-800 mb-4">
-												{q.ques}
+												{question?.ques}
 											</p>
 
 											<div className="space-y-2 sm:space-y-3">
@@ -150,18 +175,18 @@ export default function SingleAnswer() {
 														Your:
 													</span>
 													<span className="text-xs sm:text-sm font-medium truncate">
-														{q.answer}
+														{ans.studentAnswer}
 													</span>
 												</div>
 
-												{!isCorrect && originalQ?.correctAnswer && (
+												{!isCorrect && question?.correctAnswer && (
 													<div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-green-100/50 text-green-800">
 														<HiCheckCircle className="text-sm sm:text-base flex-shrink-0" />
 														<span className="text-[10px] sm:text-xs font-bold uppercase shrink-0">
 															Correct:
 														</span>
 														<span className="text-xs sm:text-sm font-medium truncate">
-															{originalQ.correctAnswer}
+															{question.correctAnswer}
 														</span>
 													</div>
 												)}
@@ -175,12 +200,12 @@ export default function SingleAnswer() {
 
 					{/* Action Footer */}
 					<div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-100 flex justify-center">
-						<Link
-							to="/QuizsAsnwers"
+						<button
+							onClick={() => navigate(-1)}
 							className="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 sm:py-4 px-10 rounded-2xl transition-all text-sm sm:text-base"
 						>
-							Back to All Submissions
-						</Link>
+							Back to List
+						</button>
 					</div>
 				</div>
 			</motion.div>

@@ -5,27 +5,33 @@ const quizSchema = new mongoose.Schema(
 	{
 		quizName: {
 			type: String,
-			require: true,
+			required: [true, "Quiz name is required"],
 			trim: true,
 		},
 		teacherId: {
 			type: mongoose.Schema.ObjectId,
 			ref: "UserModel",
+			required: [true, "Quiz must belong to a teacher"],
+			index: true,
 		},
 		questions: [
 			{
-				ques: String,
-				answers: [],
-				correctAnswer: String,
-				Score: Number,
+				type: mongoose.Schema.ObjectId,
+				ref: "QuizQuestionModel",
 			},
 		],
 		numberTookQuiz: {
 			type: Number,
 			default: 0,
 		},
-		quizScore: Number,
-		successRate: Number,
+		quizScore: {
+			type: Number,
+			default: 0,
+		},
+		successRate: {
+			type: Number,
+			default: 0,
+		},
 		passingNum: {
 			type: Number,
 			default: 0,
@@ -43,13 +49,58 @@ const quizSchema = new mongoose.Schema(
 				Score: Number,
 			},
 		],
-		quizId: String,
-		quizPassword: String,
-		expire: Number,
+		quizId: {
+			type: String,
+			unique: true,
+			index: true,
+		},
+		quizPassword: {
+			type: String,
+			required: true,
+		},
+		expire: {
+			type: Number,
+			default: 1,
+			min: [0.1, "Expiration must be at least 0.1 hours"],
+		},
 		expireDate: Date,
 	},
-	{ timestamps: true }
+	{
+		timestamps: true,
+		toJSON: { virtuals: true },
+		toObject: { virtuals: true },
+	}
 );
+
+quizSchema.virtual("isExpired").get(function () {
+	return this.expireDate < Date.now();
+});
+
+quizSchema.pre("save", function (next) {
+	if (this.isModified("expire") || this.isNew) {
+		this.expireDate = new Date(Date.now() + this.expire * 60 * 60 * 1000);
+	}
+	// Set default successRate to 50% of quizScore if not set
+	if (
+		this.isModified("quizScore") &&
+		this.successRate === 0 &&
+		this.quizScore > 0
+	) {
+		this.successRate = this.quizScore / 2;
+	}
+	next();
+});
+
+// Cascade delete: remove questions, results, and answers when a quiz is deleted
+quizSchema.pre("findOneAndDelete", async function (next) {
+	const quiz = await this.model.findOne(this.getQuery());
+	if (quiz) {
+		await mongoose.model("QuizQuestionModel").deleteMany({ quizId: quiz._id });
+		await mongoose.model("QuizResultModel").deleteMany({ quizId: quiz._id });
+		await mongoose.model("QuestionAnswerModel").deleteMany({ quizId: quiz._id });
+	}
+	next();
+});
 
 //Export the model
 export default mongoose.model("QuizModel", quizSchema);

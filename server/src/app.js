@@ -11,15 +11,22 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 dotenv.config();
 export const app = express();
+app.use((req, res, next) => {
+	console.log(`${req.method} ${req.url}`);
+	res.on("finish", () => {
+		console.log(`Response: ${res.statusCode}`);
+	});
+	next();
+});
 // share api with frontEnd
 app.use(
 	cors({
-		origin: ["http://localhost:5173", "http://localhost:3000"],
+		origin: "http://localhost:5173",
 		credentials: true,
 	})
 );
-// set security http headers
-app.use(helmet());
+// set security HTTP headers
+// app.use(helmet());
 
 // limit requests
 const limiter = rateLimit({
@@ -44,9 +51,11 @@ app.use(hpp());
 import userRouter from "./routers/userRouter.js";
 import quizRouter from "./routers/quizRouter.js";
 import quizAnswerRouter from "./routers/quizAnswerRouter.js";
+import dashboardRouter from "./routers/dashboardRouter.js";
 app.use("/api/user", userRouter);
 app.use("/api/teacher", quizRouter);
 app.use("/api/quiz", quizAnswerRouter);
+app.use("/api/dashboard", dashboardRouter);
 // handeling routes not found in app
 app.all("*", (req, res, next) => {
 	res.status(404).json({

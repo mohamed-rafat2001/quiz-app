@@ -3,7 +3,6 @@ import UserDetails from "./UserDetails";
 import UpdatePass from "./UpdatePass";
 import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
-import { motion, AnimatePresence } from "framer-motion";
 import { HiEnvelope } from "react-icons/hi2";
 
 function Profile() {
@@ -13,11 +12,7 @@ function Profile() {
 	if (isLoading) return <Loader />;
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, y: 10 }}
-			animate={{ opacity: 1, y: 0 }}
-			className="max-w-4xl mx-auto"
-		>
+		<div className="max-w-4xl mx-auto">
 			{/* Profile Header Card */}
 			<div className="bg-white rounded-3xl sm:rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
 				<div className="h-24 sm:h-32 bg-gradient-to-r from-indigo-500 to-purple-600" />
@@ -57,10 +52,7 @@ function Profile() {
 						>
 							{tab.charAt(0).toUpperCase() + tab.slice(1)}
 							{activeTab === tab && (
-								<motion.div
-									layoutId="activeTab"
-									className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"
-								/>
+								<div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600" />
 							)}
 						</button>
 					))}
@@ -68,22 +60,14 @@ function Profile() {
 			</div>
 
 			{/* Tab Content */}
-			<AnimatePresence mode="wait">
-				<motion.div
-					key={activeTab}
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: -10 }}
-					transition={{ duration: 0.2 }}
-				>
-					{activeTab === "details" ? (
-						<UserDetails user={user} />
-					) : (
-						<UpdatePass />
-					)}
-				</motion.div>
-			</AnimatePresence>
-		</motion.div>
+			<div>
+				{activeTab === "details" ? (
+					<UserDetails user={user} />
+				) : (
+					<UpdatePass />
+				)}
+			</div>
+		</div>
 	);
 }
 export default Profile;

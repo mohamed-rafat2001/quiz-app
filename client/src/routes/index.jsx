@@ -9,29 +9,50 @@ import Quizs from "../features/quiz/components/Quizs";
 import SingleQuiz from "../features/quiz/components/SingleQuiz";
 import QuizAnswers from "../features/quiz/components/QuizAnswers";
 import SingleAnswer from "../features/quiz/components/SingleAnswer";
+import CreateQuiz from "../features/quiz/components/CreateQuiz";
+import DashBoard from "../features/dashboard/components/DashBoard";
+import AdminUsers from "../features/admin/components/AdminUsers";
+import AdminQuizzes from "../features/admin/components/AdminQuizzes";
 
 export const router = createBrowserRouter([
 	{
-		path: "/",
+		path: "/login",
 		element: <Auth />,
 	},
 	{
+		path: "/",
 		element: <AppLayout />,
 		children: [
 			{
+				index: true,
+				element: <Navigate to="/dashboard" replace />,
+			},
+			{
+				path: "/dashboard",
+				element: <DashBoard />,
+			},
+			{
 				path: "/home",
 				element: <Home />,
+			},
+			{
+				path: "/admin/users",
+				element: <AdminUsers />,
+			},
+			{
+				path: "/admin/quizzes",
+				element: <AdminQuizzes />,
 			},
 			{
 				path: "/profile",
 				element: <Profile />,
 			},
 			{
-				path: "/QuizsAsnwers",
+				path: "/QuizAnswers",
 				element: <Answers />,
 			},
 			{
-				path: "/QuizsAsnwers/:id",
+				path: "/QuizAnswers/:id",
 				element: <SingleAnswer />,
 			},
 			{
@@ -45,6 +66,14 @@ export const router = createBrowserRouter([
 			{
 				path: "/Quizs/Answers/:id",
 				element: <QuizAnswers />,
+			},
+			{
+				path: "/Quizs/Create",
+				element: <CreateQuiz />,
+			},
+			{
+				path: "/Quizs/Edit/:id",
+				element: <CreateQuiz />,
 			},
 		],
 	},

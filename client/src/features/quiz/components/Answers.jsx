@@ -84,7 +84,7 @@ export default function Answers() {
 									<td className="px-6 py-4">
 										<div className="flex items-center justify-center gap-3">
 											<Link
-												to={`/QuizsAsnwers/${answer._id}`}
+												to={`/QuizAnswers/${answer._id}`}
 												className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
 												title="View Details"
 											>

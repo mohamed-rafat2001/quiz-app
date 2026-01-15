@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
-import slugify from "slugify";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 
@@ -38,8 +37,6 @@ const userSchema = new mongoose.Schema(
 				message: "confirm password must equal password",
 			},
 		},
-		slug: String,
-		passwordChangeAt: Date,
 		resetPassCode: String,
 		role: {
 			type: String,
@@ -62,7 +59,6 @@ const userSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 userSchema.pre("save", async function (next) {
-	this.slug = slugify(this.name, { lower: true });
 	if (!this.isModified("password")) return next();
 
 	this.password = await bcryptjs.hash(this.password, 12);
@@ -70,12 +66,6 @@ userSchema.pre("save", async function (next) {
 	next();
 });
 
-userSchema.pre("save", async function (next) {
-	if (!this.isModified("password") || this.isNew) return next();
-
-	this.passwordChangeAt = Date.now() - 1000;
-	next();
-});
 userSchema.pre(/^find/, function (next) {
 	this.find({
 		active: {

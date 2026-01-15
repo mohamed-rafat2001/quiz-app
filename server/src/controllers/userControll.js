@@ -3,8 +3,9 @@ import errorHandling from "../middelwars/errorHandling.js";
 import appError from "../utils/appError.js";
 import cloudinary from "../utils/cloudinary.js";
 import Email from "../utils/Email.js";
-import uniqid from "uniqid";
 import response from "../utils/handelResponse.js";
+import * as factory from "../utils/handlerFactory.js";
+import uniqid from "uniqid";
 
 // generate cookies
 const cookiesOptions = {
@@ -75,6 +76,7 @@ const filterObj = (obj, ...data) => {
 };
 // update me
 export const updateMe = errorHandling(async (req, res, next) => {
+	const updates = filterObj(req.body, "name", "email");
 	if (req.file) {
 		// upload img in cloudinary
 		const { public_id, secure_url } = await cloudinary.uploader.upload(
@@ -83,7 +85,6 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		);
 		updates.profileImg = { public_id, secure_url };
 	}
-	const updates = filterObj(req.body, "name", "email");
 	const user = await UserModel.findByIdAndUpdate(req.user._id, updates, {
 		new: true,
 		runValidators: true,
@@ -98,11 +99,7 @@ export const getMe = errorHandling(async (req, res, next) => {
 	next();
 });
 // get user
-export const getUser = errorHandling(async (req, res, next) => {
-	const user = await UserModel.findById(req.params.id);
-	if (!user) return next(new appError("user not founded", 404));
-	response(user, 200, res);
-});
+export const getUser = factory.getOne(UserModel);
 
 //delete me
 export const deleteMe = errorHandling(async (req, res, next) => {
@@ -112,22 +109,13 @@ export const deleteMe = errorHandling(async (req, res, next) => {
 });
 
 //admin get all users
-export const allUsers = errorHandling(async (req, res, next) => {
-	const users = await UserModel.find({ role: { $ne: "admin" } });
-	if (!users) return next(new appError("no users founded", 404));
-
-	response({ users, numbers: users.length }, 200, res);
-});
+export const allUsers = factory.getAll(UserModel, { role: { $ne: "admin" } });
 // admin block user
-export const blockUserByAdmin = errorHandling(async (req, res, next) => {
-	const user = await UserModel.findByIdAndUpdate(
-		req.params.id,
-		{ block: true },
-		{ new: true, runValidators: true }
-	);
-	if (!user) return next(new appError("user not blocked", 400));
-	response(null, 200, res);
-});
+export const blockUserByAdmin = factory.updateOne(UserModel);
+// admin delete user
+export const deleteUserByAdmin = factory.deleteOne(UserModel);
+// admin update user (for role etc)
+export const updateUserByAdmin = factory.updateOne(UserModel);
 // update password
 export const updatePassword = errorHandling(async (req, res, next) => {
 	// find user

@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useUpdatePassword } from "../../auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updatePasswordSchema } from "../../../shared/validation/schemas";
-import { motion } from "framer-motion";
 
 export default function UpdatePass() {
 	const {
@@ -25,11 +24,7 @@ export default function UpdatePass() {
 	}
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, x: 20 }}
-			animate={{ opacity: 1, x: 0 }}
-			className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
-		>
+		<div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
 			<h3 className="text-xl font-bold text-gray-800 mb-6">Change Password</h3>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 				<div className="space-y-2">
@@ -96,16 +91,14 @@ export default function UpdatePass() {
 				</div>
 
 				<div className="pt-2">
-					<motion.button
-						whileHover={{ scale: 1.01 }}
-						whileTap={{ scale: 0.99 }}
+					<button
 						className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors disabled:opacity-70"
 						disabled={isPending}
 					>
-						{isPending ? "Updating..." : "Update Password"}
-					</motion.button>
+						{isPending ? "Saving..." : "Update Password"}
+					</button>
 				</div>
 			</form>
-		</motion.div>
+		</div>
 	);
 }

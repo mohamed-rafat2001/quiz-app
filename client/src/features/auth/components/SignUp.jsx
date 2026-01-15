@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useSignUp } from "../hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../../../shared/validation/schemas";
-import { motion } from "framer-motion";
+import { HiUser, HiEnvelope, HiLockClosed } from "react-icons/hi2";
 
 function SignUp() {
 	const {
@@ -20,111 +20,109 @@ function SignUp() {
 	}
 
 	return (
-		<motion.form
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5 }}
-			onSubmit={handleSubmit(onSubmit)}
-			className="w-full space-y-4"
-		>
-			<div className="space-y-1">
-				<label className="text-sm font-medium text-gray-700 ml-1">
+		<form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+			<div className="space-y-1.5">
+				<label className="text-sm font-semibold text-gray-700 ml-1">
 					Full Name
 				</label>
-				<input
-					className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-200 outline-none ${
-						errors.name
-							? "border-red-500 focus:ring-2 focus:ring-red-200"
-							: "border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-					}`}
-					type="text"
-					placeholder="John Doe"
-					{...register("name")}
-				/>
+				<div className="relative group">
+					<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+						<HiUser className="h-5 w-5" />
+					</div>
+					<input
+						className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 focus:bg-white ${
+							errors.name
+								? "border-red-500 focus:ring-4 focus:ring-red-100"
+								: "border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 shadow-sm"
+						}`}
+						type="text"
+						placeholder="John Doe"
+						{...register("name")}
+					/>
+				</div>
 				{errors.name && (
-					<motion.p
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						className="text-xs text-red-500 ml-1 font-medium"
-					>
+					<p className="text-xs text-red-500 ml-1 font-medium animate-shake">
 						{errors.name.message}
-					</motion.p>
+					</p>
 				)}
 			</div>
 
-			<div className="space-y-1">
-				<label className="text-sm font-medium text-gray-700 ml-1">
+			<div className="space-y-1.5">
+				<label className="text-sm font-semibold text-gray-700 ml-1">
 					Email Address
 				</label>
-				<input
-					className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-200 outline-none ${
-						errors.email
-							? "border-red-500 focus:ring-2 focus:ring-red-200"
-							: "border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-					}`}
-					type="email"
-					placeholder="name@example.com"
-					{...register("email")}
-				/>
+				<div className="relative group">
+					<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+						<HiEnvelope className="h-5 w-5" />
+					</div>
+					<input
+						className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 focus:bg-white ${
+							errors.email
+								? "border-red-500 focus:ring-4 focus:ring-red-100"
+								: "border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 shadow-sm"
+						}`}
+						type="email"
+						placeholder="name@example.com"
+						{...register("email")}
+					/>
+				</div>
 				{errors.email && (
-					<motion.p
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						className="text-xs text-red-500 ml-1 font-medium"
-					>
+					<p className="text-xs text-red-500 ml-1 font-medium animate-shake">
 						{errors.email.message}
-					</motion.p>
+					</p>
 				)}
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<div className="space-y-1">
-					<label className="text-sm font-medium text-gray-700 ml-1">
+				<div className="space-y-1.5">
+					<label className="text-sm font-semibold text-gray-700 ml-1">
 						Password
 					</label>
-					<input
-						className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-200 outline-none ${
-							errors.password
-								? "border-red-500 focus:ring-2 focus:ring-red-200"
-								: "border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-						}`}
-						type="password"
-						placeholder="••••••••"
-						{...register("password")}
-					/>
+					<div className="relative group">
+						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+							<HiLockClosed className="h-5 w-5" />
+						</div>
+						<input
+							className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 focus:bg-white ${
+								errors.password
+									? "border-red-500 focus:ring-4 focus:ring-red-100"
+									: "border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 shadow-sm"
+							}`}
+							type="password"
+							placeholder="••••••••"
+							{...register("password")}
+						/>
+					</div>
 					{errors.password && (
-						<motion.p
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							className="text-xs text-red-500 ml-1 font-medium"
-						>
+						<p className="text-xs text-red-500 ml-1 font-medium animate-shake">
 							{errors.password.message}
-						</motion.p>
+						</p>
 					)}
 				</div>
 
-				<div className="space-y-1">
-					<label className="text-sm font-medium text-gray-700 ml-1">
+				<div className="space-y-1.5">
+					<label className="text-sm font-semibold text-gray-700 ml-1">
 						Confirm Password
 					</label>
-					<input
-						className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-200 outline-none ${
-							errors.confirmPass
-								? "border-red-500 focus:ring-2 focus:ring-red-200"
-								: "border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-						}`}
-						type="password"
-						placeholder="••••••••"
-						{...register("confirmPass")}
-					/>
+					<div className="relative group">
+						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+							<HiLockClosed className="h-5 w-5" />
+						</div>
+						<input
+							className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 focus:bg-white ${
+								errors.confirmPass
+									? "border-red-500 focus:ring-4 focus:ring-red-100"
+									: "border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 shadow-sm"
+							}`}
+							type="password"
+							placeholder="••••••••"
+							{...register("confirmPass")}
+						/>
+					</div>
 					{errors.confirmPass && (
-						<motion.p
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							className="text-xs text-red-500 ml-1 font-medium"
-						>
+						<p className="text-xs text-red-500 ml-1 font-medium animate-shake">
 							{errors.confirmPass.message}
-						</motion.p>
+						</p>
 					)}
 				</div>
 			</div>
@@ -158,32 +156,41 @@ function SignUp() {
 					</label>
 				</div>
 				{errors.role && (
-					<motion.p
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						className="text-xs text-red-500 ml-1 font-medium"
-					>
+					<p className="text-xs text-red-500 ml-1 font-medium">
 						{errors.role.message}
-					</motion.p>
+					</p>
 				)}
 			</div>
 
-			<motion.button
-				whileHover={{ scale: 1.01 }}
-				whileTap={{ scale: 0.98 }}
-				className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-200 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+			<button
+				className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-black py-4 rounded-2xl shadow-xl shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-4 flex items-center justify-center space-x-3 cursor-pointer group"
 				disabled={isPending}
 			>
 				{isPending ? (
-					<div className="flex items-center justify-center space-x-2">
-						<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-						<span>Creating account...</span>
-					</div>
+					<>
+						<div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+						<span>Creating Account...</span>
+					</>
 				) : (
-					"Create Account"
+					<>
+						<span>Sign Up</span>
+						<svg
+							className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M13 7l5 5m0 0l-5 5m5-5H6"
+							/>
+						</svg>
+					</>
 				)}
-			</motion.button>
-		</motion.form>
+			</button>
+		</form>
 	);
 }
 export default SignUp;
