@@ -50,7 +50,7 @@ export default function Quizs() {
 				</div>
 				{isTeacher && (
 					<Link
-						to="/Quizs/Create"
+						to="/app/Quizs/Create"
 						className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
 					>
 						<HiPlus className="text-xl" />
@@ -78,14 +78,14 @@ export default function Quizs() {
 									{isTeacher && (
 										<div className="flex gap-2">
 											<Link
-												to={`/Quizs/Edit/${quiz._id}`}
+												to={`/app/Quizs/Edit/${quiz._id}`}
 												className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-colors"
 												title="Edit Quiz"
 											>
 												<HiPencilSquare className="text-xl" />
 											</Link>
 											<Link
-												to={`/Quizs/Answers/${quiz._id}`}
+												to={`/app/Quizs/Answers/${quiz._id}`}
 												className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
 												title="View Submissions"
 											>
@@ -174,7 +174,7 @@ export default function Quizs() {
 
 								<div className="flex gap-3">
 									<Link
-										to={`/singleQuiz/${quiz._id}`}
+										to={`/app/singleQuiz/${quiz._id}`}
 										className={`flex-1 ${
 											isTeacher
 												? "bg-gray-50 hover:bg-gray-100 text-gray-700"
@@ -186,7 +186,7 @@ export default function Quizs() {
 									</Link>
 									{isTeacher && (
 										<Link
-											to={`/Quizs/Edit/${quiz._id}`}
+											to={`/app/Quizs/Edit/${quiz._id}`}
 											className="flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-3 rounded-xl transition-colors text-sm text-center"
 										>
 											Edit Quiz
@@ -214,7 +214,7 @@ export default function Quizs() {
 					</p>
 					{isTeacher && (
 						<Link
-							to="/Quizs/Create"
+							to="/app/Quizs/Create"
 							className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg shadow-indigo-100 transition-all inline-block"
 						>
 							Create New Quiz

@@ -1,37 +1,44 @@
-import axios from "axios";
-
-const USER_API = "http://localhost:8000/api/user";
-const QUIZ_API = "http://localhost:8000/api/teacher";
+import BaseApi from "../../../shared/api/baseApi.js";
 
 export const getAllUsers = async () => {
-	const response = await axios.get(`${USER_API}/allUsers/admin`, {
-		withCredentials: true,
-	});
-	return response.data.data;
+	try {
+		const response = await BaseApi.get("/user/allUsers/admin");
+		return response.data.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
 };
 
 export const deleteUser = async (id) => {
-	await axios.delete(`${USER_API}/admin/${id}`, {
-		withCredentials: true,
-	});
+	try {
+		await BaseApi.delete(`/user/admin/${id}`);
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
 };
 
 export const updateUser = async ({ id, data }) => {
-	const response = await axios.patch(`${USER_API}/admin/${id}`, data, {
-		withCredentials: true,
-	});
-	return response.data.data;
+	try {
+		const response = await BaseApi.patch(`/user/admin/${id}`, data);
+		return response.data.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
 };
 
 export const getAllQuizzes = async () => {
-	const response = await axios.get(`${QUIZ_API}/admin/all`, {
-		withCredentials: true,
-	});
-	return response.data.data;
+	try {
+		const response = await BaseApi.get("/teacher/admin/all");
+		return response.data.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
 };
 
 export const deleteQuizByAdmin = async (id) => {
-	await axios.delete(`${QUIZ_API}/admin/${id}`, {
-		withCredentials: true,
-	});
+	try {
+		await BaseApi.delete(`/teacher/admin/${id}`);
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
 };

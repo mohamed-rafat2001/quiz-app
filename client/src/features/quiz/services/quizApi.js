@@ -6,7 +6,7 @@ export async function startQuiz(data) {
 		quiz = await quiz.data;
 		return quiz.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -16,7 +16,7 @@ export async function getQuiz(ID) {
 		quiz = await quiz.data;
 		return quiz.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -25,7 +25,7 @@ export async function getAllQuizzes() {
 		let response = await BaseApi.get("/teacher/quiz/all");
 		return response.data.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -34,7 +34,7 @@ export async function createQuiz(data) {
 		let response = await BaseApi.post("/teacher/quiz", data);
 		return response.data.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -43,7 +43,7 @@ export async function deleteQuiz(id) {
 		let response = await BaseApi.delete(`/teacher/quiz/${id}`);
 		return response.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
 
@@ -52,6 +52,6 @@ export async function updateQuiz({ id, data }) {
 		let response = await BaseApi.patch(`/teacher/quiz/${id}`, data);
 		return response.data.data;
 	} catch (e) {
-		throw new Error(e.response.data.message);
+		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }

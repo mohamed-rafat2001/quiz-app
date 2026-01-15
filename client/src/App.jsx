@@ -4,7 +4,6 @@ import AppProviders from "./providers/AppProviders";
 import { router } from "./routes";
 
 function App() {
-	console.log("App component rendering");
 	return (
 		<AppProviders>
 			<RouterProvider router={router} />

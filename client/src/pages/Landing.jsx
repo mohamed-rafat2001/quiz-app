@@ -111,7 +111,7 @@ const Landing = () => {
 							</p>
 							<div className="flex flex-col sm:flex-row gap-4">
 								<Link
-									to="/login"
+									to="/welcome"
 									className="px-10 py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-2xl shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 group"
 								>
 									Start Learning Now
@@ -227,7 +227,7 @@ const Landing = () => {
 							learning experience. It's free to start and easy to use.
 						</p>
 						<Link
-							to="/login"
+							to="/welcome"
 							className="inline-flex px-10 py-5 bg-white text-indigo-600 font-black rounded-2xl shadow-2xl hover:bg-gray-50 transition-all transform hover:-translate-y-1"
 						>
 							Create Free Account

@@ -4,18 +4,14 @@ import Loader from "./Loader";
 import { useUser } from "../../../features/auth/hooks/useAuth";
 
 export default function AppLayout() {
-	console.log("AppLayout component rendering");
 	const navigation = useNavigation();
 	const { data: user, isLoading: isUserLoading } = useUser();
 	const isPageLoading = navigation.state === "loading";
 
-	console.log("AppLayout state:", { isUserLoading, hasUser: !!user });
-
 	if (isUserLoading) return <Loader />;
 
 	if (!user) {
-		console.log("AppLayout: No user, navigating to /login");
-		return <Navigate to="/login" replace />;
+		return <Navigate to="/welcome" replace />;
 	}
 
 	return (

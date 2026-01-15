@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createQuizSchema } from "../../../shared/validation/schemas";
@@ -41,7 +41,7 @@ export default function CreateQuiz() {
 		},
 	});
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isEditSession && quiz) {
 			reset({
 				quizName: quiz.quizName,

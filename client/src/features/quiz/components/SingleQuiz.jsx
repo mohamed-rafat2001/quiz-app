@@ -1,4 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { submitQuizSchema } from "../../../shared/validation/schemas";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuiz, useAddAnswer } from "../hooks/useQuiz";
 import Loader from "../../../shared/components/ui/Loader";
@@ -20,6 +22,7 @@ export default function SingleQuiz() {
 		getValues,
 		control,
 	} = useForm({
+		resolver: zodResolver(submitQuizSchema),
 		mode: "onChange",
 	});
 
@@ -140,7 +143,7 @@ export default function SingleQuiz() {
 					The quiz you are looking for does not exist or has been removed.
 				</p>
 				<button
-					onClick={() => navigate("/Quizs")}
+					onClick={() => navigate("/app/Quizs")}
 					className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-all"
 				>
 					Back to Quizzes
@@ -287,9 +290,7 @@ export default function SingleQuiz() {
 										type="radio"
 										id={answer + index}
 										className="peer hidden"
-										{...register(`answer[${index}]`, {
-											required: "Please select an answer",
-										})}
+										{...register(`answer[${index}]`)}
 										value={JSON.stringify({
 											answer: answer,
 											_id: el._id,

@@ -6,18 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 
 export default function Auth() {
-	console.log("Auth component rendering");
 	const [isLogin, setIsLogin] = useState(true);
-	const { data: user, isLoading, error } = useUser();
+	const { data: user, isLoading } = useUser();
 	const navigate = useNavigate();
-
-	console.log("Auth state:", {
-		isLoading,
-		hasUser: !!user,
-		user: user,
-		error: error,
-		errorMessage: error?.message,
-	});
 
 	useEffect(() => {
 		if (user) {

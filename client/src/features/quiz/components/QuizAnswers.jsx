@@ -26,7 +26,7 @@ export default function QuizAnswers() {
 					</p>
 				</div>
 				<Link
-					to="/Quizs"
+					to="/app/Quizs"
 					className="inline-flex items-center gap-2 text-indigo-600 font-bold hover:text-indigo-700 transition-colors text-sm sm:text-base"
 				>
 					<HiArrowLeft className="text-lg" />

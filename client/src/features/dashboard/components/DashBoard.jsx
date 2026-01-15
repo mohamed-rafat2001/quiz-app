@@ -51,7 +51,7 @@ export default function DashBoard() {
 				</div>
 				{role === "teacher" && (
 					<Link
-						to="/Quizs/Create"
+						to="/app/Quizs/Create"
 						className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg shadow-indigo-100 transition-all"
 					>
 						<HiPlus className="text-xl" />
@@ -60,7 +60,7 @@ export default function DashBoard() {
 				)}
 				{role === "student" && (
 					<Link
-						to="/home"
+						to="/app/home"
 						className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg shadow-indigo-100 transition-all"
 					>
 						<HiPlay className="text-xl" />
@@ -170,7 +170,7 @@ export default function DashBoard() {
 						</Link>
 						{role !== "admin" && (
 							<Link
-								to="/Quizs"
+								to="/app/Quizs"
 								className="p-4 rounded-2xl bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all group"
 							>
 								<p className="font-bold mb-1">
@@ -183,7 +183,7 @@ export default function DashBoard() {
 						)}
 						{role === "student" && (
 							<Link
-								to="/QuizAnswers"
+								to="/app/QuizAnswers"
 								className="p-4 rounded-2xl bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all group"
 							>
 								<p className="font-bold mb-1">My Results</p>
