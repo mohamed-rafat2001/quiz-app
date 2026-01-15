@@ -15,12 +15,17 @@ export const protect = errorHandling(async (req, res, next) => {
 	} else if (req.cookies) {
 		token = req.cookies.jwt;
 	}
-	if (!token)
+	if (!token || token === "loggedout")
 		return next(
 			new appError("you not logged in !, please log in to get access", 401)
 		);
 	// 2) verify token
-	const decode = jwt.verify(token, process.env.JWT_SECRET);
+	let decode;
+	try {
+		decode = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return next(new appError("Invalid token, please log in again", 401));
+	}
 
 	// 3) find user
 	const user = await UserModel.findById(decode.id);

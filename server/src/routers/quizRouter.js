@@ -21,22 +21,24 @@ import {
 
 quizRouter.use(protect);
 quizRouter
-	.route("/quiz/:id")
+	.route("/quizzes/:id")
 	.get(getQuizValidator, getQuiz)
 	.delete(allowTo("teacher"), deleteQuiz)
 	.patch(allowTo("teacher"), updateQuiz);
 quizRouter
-	.route("/quiz")
+	.route("/quizzes")
 	.post(allowTo("teacher"), createQuizValidator, createQuiz);
-quizRouter.post("/startQuiz", allowTo("student"), getQuizByPass);
+quizRouter.post("/start-quiz", allowTo("student"), getQuizByPass);
 
-quizRouter.route("/quiz/all").get(allQuizs);
+quizRouter
+	.route("/all-quizzes")
+	.get(allQuizs)
+	.delete(protect, allowTo("teacher"), deleteQuizs);
 
-// protect all routes after this middelware
-quizRouter.use(protect, allowTo("teacher"));
-//routes
-quizRouter.route("/quiz/all").delete(deleteQuizs);
-quizRouter.route("/quiz/question/:id").delete(deleteQues).patch(addQues);
+quizRouter
+	.route("/question/:id")
+	.delete(protect, allowTo("teacher"), deleteQues)
+	.patch(protect, allowTo("teacher"), addQues);
 
 // Admin routes
 quizRouter.get("/admin/all", allowTo("admin"), allQuizzesByAdmin);

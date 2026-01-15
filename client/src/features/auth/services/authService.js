@@ -2,7 +2,7 @@ import BaseApi from "../../../shared/api/baseApi.js";
 
 export async function signUp(data) {
 	try {
-		let user = await BaseApi.post("/user/signUp", data);
+		let user = await BaseApi.post("/user/sign-up", data);
 		user = await user.data;
 		return user.data;
 	} catch (e) {
@@ -29,7 +29,7 @@ export async function login(data) {
 }
 export async function updateMe(data) {
 	try {
-		let user = await BaseApi.patch("/user/Me", data);
+		let user = await BaseApi.patch("/user/me", data);
 		user = await user.data;
 		return user.data;
 	} catch (e) {
@@ -38,7 +38,7 @@ export async function updateMe(data) {
 }
 export async function getMe() {
 	try {
-		const response = await BaseApi.get("/user/Me");
+		const response = await BaseApi.get("/user/me");
 		return response.data.data;
 	} catch (e) {
 		if (e.response?.status === 401) {
@@ -49,7 +49,7 @@ export async function getMe() {
 }
 export async function updatePassword(data) {
 	try {
-		let user = await BaseApi.patch("/user/updatePassword", data);
+		let user = await BaseApi.patch("/user/update-password", data);
 		user = await user.data;
 		return user.data;
 	} catch (e) {

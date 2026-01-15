@@ -19,7 +19,7 @@ export default function Auth() {
 	if (isLoading) return <Loader />;
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4 py-12">
+		<div className="min-h-screen bg-linear-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4 py-12">
 			<div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
 				{/* Left Side - Hero Section */}
 				<div className="hidden md:flex md:w-5/12 bg-indigo-600 p-12 text-white flex-col justify-between relative overflow-hidden">
@@ -62,7 +62,7 @@ export default function Auth() {
 					{/* Decorative Elements */}
 					<div className="absolute -bottom-20 -left-20 w-80 h-80 bg-indigo-500 rounded-full blur-3xl opacity-50 animate-pulse" />
 					<div className="absolute -top-20 -right-20 w-80 h-80 bg-purple-500 rounded-full blur-3xl opacity-30 animate-pulse" />
-					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-from)_0%,_transparent_70%)] from-indigo-400/20 pointer-events-none" />
+					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-linear-to-tr from-indigo-400/20 pointer-events-none" />
 				</div>
 
 				{/* Right Side - Form Section */}

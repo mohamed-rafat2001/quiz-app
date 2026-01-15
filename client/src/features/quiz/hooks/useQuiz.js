@@ -39,7 +39,7 @@ export function useStartQuiz() {
 		mutationFn: startQuiz,
 		onSuccess: (data) => {
 			toast.success("Quiz started!");
-			navigate(`/app/singleQuiz/${data._id}`);
+			navigate(`/app/quizzes/${data._id}`);
 		},
 		onError: (err) => {
 			toast.error(err.message || "Failed to start quiz");
@@ -55,7 +55,7 @@ export function useCreateQuiz() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
 			toast.success("Quiz created successfully!");
-			navigate("/app/Quizs");
+			navigate("/app/quizzes");
 		},
 		onError: (err) => {
 			toast.error(err.message || "Failed to create quiz");
@@ -85,7 +85,7 @@ export function useUpdateQuiz() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
 			toast.success("Quiz updated successfully");
-			navigate("/app/Quizs");
+			navigate("/app/quizzes");
 		},
 		onError: (err) => {
 			toast.error(err.message || "Failed to update quiz");

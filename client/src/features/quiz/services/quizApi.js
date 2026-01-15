@@ -2,7 +2,7 @@ import BaseApi from "../../../shared/api/baseApi.js";
 
 export async function startQuiz(data) {
 	try {
-		let quiz = await BaseApi.post("/teacher/startQuiz", data);
+		let quiz = await BaseApi.post("/teacher/start-quiz", data);
 		quiz = await quiz.data;
 		return quiz.data;
 	} catch (e) {
@@ -12,7 +12,7 @@ export async function startQuiz(data) {
 
 export async function getQuiz(ID) {
 	try {
-		let quiz = await BaseApi.get(`/teacher/quiz/${ID}`);
+		let quiz = await BaseApi.get(`/teacher/quizzes/${ID}`);
 		quiz = await quiz.data;
 		return quiz.data;
 	} catch (e) {
@@ -22,7 +22,7 @@ export async function getQuiz(ID) {
 
 export async function getAllQuizzes() {
 	try {
-		let response = await BaseApi.get("/teacher/quiz/all");
+		let response = await BaseApi.get("/teacher/all-quizzes");
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -31,7 +31,7 @@ export async function getAllQuizzes() {
 
 export async function createQuiz(data) {
 	try {
-		let response = await BaseApi.post("/teacher/quiz", data);
+		let response = await BaseApi.post("/teacher/quizzes", data);
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -40,7 +40,7 @@ export async function createQuiz(data) {
 
 export async function deleteQuiz(id) {
 	try {
-		let response = await BaseApi.delete(`/teacher/quiz/${id}`);
+		let response = await BaseApi.delete(`/teacher/quizzes/${id}`);
 		return response.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -49,7 +49,7 @@ export async function deleteQuiz(id) {
 
 export async function updateQuiz({ id, data }) {
 	try {
-		let response = await BaseApi.patch(`/teacher/quiz/${id}`, data);
+		let response = await BaseApi.patch(`/teacher/quizzes/${id}`, data);
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");

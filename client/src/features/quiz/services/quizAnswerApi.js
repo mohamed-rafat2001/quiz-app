@@ -12,7 +12,7 @@ export async function addAnswer({ questions, id }) {
 
 export async function getTeacherQuizAnswers(id) {
 	try {
-		let response = await BaseApi.get(`/quiz/teacherQuizAnswers/${id}`);
+		let response = await BaseApi.get(`/quiz/teacher-quiz-answers/${id}`);
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -21,7 +21,7 @@ export async function getTeacherQuizAnswers(id) {
 
 export async function getStudentQuizAnswers() {
 	try {
-		let response = await BaseApi.get("/quiz/studentquizAnswers");
+		let response = await BaseApi.get("/quiz/student-quiz-answers");
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -30,7 +30,7 @@ export async function getStudentQuizAnswers() {
 
 export async function getQuizAnswer(id) {
 	try {
-		let response = await BaseApi.get(`/quiz/quizAnswer/${id}`);
+		let response = await BaseApi.get(`/quiz/quiz-answer/${id}`);
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
@@ -39,7 +39,7 @@ export async function getQuizAnswer(id) {
 
 export async function getResultDetails(id) {
 	try {
-		let response = await BaseApi.get(`/quiz/resultDetails/${id}`);
+		let response = await BaseApi.get(`/quiz/result-details/${id}`);
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");

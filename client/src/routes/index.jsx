@@ -1,32 +1,78 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Auth from "../shared/components/ui/Auth";
-import AppLayout from "../shared/components/ui/AppLayout";
-import Profile from "../features/profile/components/Profile";
-import Home from "../pages/Home";
-import Answers from "../features/quiz/components/Answers";
-import Quizs from "../features/quiz/components/Quizs";
-import SingleQuiz from "../features/quiz/components/SingleQuiz";
-import QuizAnswers from "../features/quiz/components/QuizAnswers";
-import SingleAnswer from "../features/quiz/components/SingleAnswer";
-import CreateQuiz from "../features/quiz/components/CreateQuiz";
-import DashBoard from "../features/dashboard/components/DashBoard";
-import AdminUsers from "../features/admin/components/AdminUsers";
-import AdminQuizzes from "../features/admin/components/AdminQuizzes";
-import Landing from "../pages/Landing";
+import Loader from "../shared/components/ui/Loader";
+
+// Lazy load components
+const Auth = lazy(() => import("../shared/components/ui/Auth"));
+const AppLayout = lazy(() => import("../shared/components/ui/AppLayout"));
+const Profile = lazy(() => import("../features/profile/components/Profile"));
+const Home = lazy(() => import("../pages/Home"));
+const Answers = lazy(() => import("../features/quiz/components/Answers"));
+const Quizs = lazy(() => import("../features/quiz/components/Quizs"));
+const SingleQuiz = lazy(() => import("../features/quiz/components/SingleQuiz"));
+const QuizAnswers = lazy(() =>
+	import("../features/quiz/components/QuizAnswers")
+);
+const SingleAnswer = lazy(() =>
+	import("../features/quiz/components/SingleAnswer")
+);
+const CreateQuiz = lazy(() => import("../features/quiz/components/CreateQuiz"));
+const DashBoard = lazy(() =>
+	import("../features/dashboard/components/DashBoard")
+);
+const AdminUsers = lazy(() =>
+	import("../features/admin/components/AdminUsers")
+);
+const AdminQuizzes = lazy(() =>
+	import("../features/admin/components/AdminQuizzes")
+);
+const Landing = lazy(() => import("../pages/Landing"));
+const NotFound = lazy(() => import("../shared/components/ui/NotFound"));
+const ErrorElement = lazy(() => import("../shared/components/ui/NotFound").then(module => ({ default: module.ErrorElement })));
+
+const SuspenseLayout = ({ children }) => (
+	<Suspense fallback={<Loader />}>{children}</Suspense>
+);
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Landing />,
+		element: (
+			<SuspenseLayout>
+				<Landing />
+			</SuspenseLayout>
+		),
+		errorElement: (
+			<SuspenseLayout>
+				<ErrorElement />
+			</SuspenseLayout>
+		),
 	},
 	{
 		path: "/welcome",
-		element: <Auth />,
+		element: (
+			<SuspenseLayout>
+				<Auth />
+			</SuspenseLayout>
+		),
+		errorElement: (
+			<SuspenseLayout>
+				<ErrorElement />
+			</SuspenseLayout>
+		),
 	},
 	{
 		path: "/app",
-		element: <AppLayout />,
+		element: (
+			<SuspenseLayout>
+				<AppLayout />
+			</SuspenseLayout>
+		),
+		errorElement: (
+			<SuspenseLayout>
+				<ErrorElement />
+			</SuspenseLayout>
+		),
 		children: [
 			{
 				index: true,
@@ -53,33 +99,41 @@ export const router = createBrowserRouter([
 				element: <Profile />,
 			},
 			{
-				path: "QuizAnswers",
+				path: "my-submissions",
 				element: <Answers />,
 			},
 			{
-				path: "QuizAnswers/:id",
+				path: "my-submissions/:id",
 				element: <SingleAnswer />,
 			},
 			{
-				path: "Quizs",
+				path: "quizzes",
 				element: <Quizs />,
 			},
 			{
-				path: "singleQuiz/:id",
+				path: "quizzes/:id",
 				element: <SingleQuiz />,
 			},
 			{
-				path: "Quizs/Answers/:id",
+				path: "quizzes/submissions/:id",
 				element: <QuizAnswers />,
 			},
 			{
-				path: "Quizs/Create",
+				path: "quizzes/create",
 				element: <CreateQuiz />,
 			},
 			{
-				path: "Quizs/Edit/:id",
+				path: "quizzes/edit/:id",
 				element: <CreateQuiz />,
 			},
 		],
+	},
+	{
+		path: "*",
+		element: (
+			<SuspenseLayout>
+				<NotFound />
+			</SuspenseLayout>
+		),
 	},
 ]);

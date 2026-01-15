@@ -24,23 +24,23 @@ import {
 } from "../utils/validators/authValidator.js";
 
 //auth
-userRouter.route("/signUp").post(signupValidator, createUser);
+userRouter.route("/sign-up").post(signupValidator, createUser);
 userRouter.route("/login").post(loginValidator, loginFunc);
 userRouter.get("/logout", logout);
-userRouter.post("/forgetPassword", forgetPass);
-userRouter.patch("/resetPassword", resetPass);
+userRouter.post("/forget-password", forgetPass);
+userRouter.patch("/reset-password", resetPass);
 
 // protect all routes after this middelware
 userRouter.use(protect);
 userRouter
-	.route("/Me")
+	.route("/me")
 	.get(getMe, getUser)
 	.patch(fileUpload("image").single("image"), updateMe)
 	.delete(deleteMe);
-userRouter.patch("/updatePassword", updatePassword);
-userRouter.get("/getUser/:id", getUser);
-userRouter.patch("/blockUser/admin/:id", allowTo("admin"), blockUserByAdmin);
-userRouter.get("/allUsers/admin", allowTo("admin"), allUsers);
+userRouter.patch("/update-password", updatePassword);
+userRouter.get("/get-user/:id", getUser);
+userRouter.patch("/block-user/admin/:id", allowTo("admin"), blockUserByAdmin);
+userRouter.get("/all-users/admin", allowTo("admin"), allUsers);
 userRouter
 	.route("/admin/:id")
 	.patch(allowTo("admin"), updateUserByAdmin)

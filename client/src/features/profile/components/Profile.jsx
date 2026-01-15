@@ -14,8 +14,8 @@ function Profile() {
 	return (
 		<div className="max-w-4xl mx-auto">
 			{/* Profile Header Card */}
-			<div className="bg-white rounded-3xl sm:rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
-				<div className="h-24 sm:h-32 bg-gradient-to-r from-indigo-500 to-purple-600" />
+			<div className="bg-white rounded-3xl sm:rounded-4xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+				<div className="h-24 sm:h-32 bg-linear-to-r from-indigo-500 to-purple-600" />
 				<div className="px-6 sm:px-8 pb-6 sm:pb-8 flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 -mt-10 sm:-mt-12">
 					<div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-md p-1">
 						<div className="w-full h-full bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-2xl sm:text-3xl font-bold">
@@ -60,14 +60,11 @@ function Profile() {
 			</div>
 
 			{/* Tab Content */}
-			<div>
-				{activeTab === "details" ? (
-					<UserDetails user={user} />
-				) : (
-					<UpdatePass />
-				)}
+			<div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+				{activeTab === "details" ? <UserDetails user={user} /> : <UpdatePass />}
 			</div>
 		</div>
 	);
 }
+
 export default Profile;

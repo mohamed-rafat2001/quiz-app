@@ -5,7 +5,10 @@ import { Toaster } from "react-hot-toast";
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			staleTime: 60 * 1000, // 1 minute
+			staleTime: 5 * 60 * 1000, // 5 minutes (increased from 1 min)
+			gcTime: 10 * 60 * 1000, // 10 minutes
+			refetchOnWindowFocus: false, // Disable automatic refetch on window focus
+			retry: 1, // Reduce retries for faster failure feedback
 		},
 	},
 });

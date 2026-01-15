@@ -11,15 +11,15 @@ import { quizAnswerValidator } from "../utils/validators/quizAnswerValidator.js"
 
 const quizAnswerRouter = express.Router();
 quizAnswerRouter.get(
-	"/teacherQuizAnswers/:id",
+	"/teacher-quiz-answers/:id",
 	protect,
 	allowTo("teacher"),
 	getTeacherQuizAnswers
 );
-quizAnswerRouter.get("/quizAnswer/:id", protect, getQuizAnswer);
-quizAnswerRouter.get("/resultDetails/:id", protect, getResultDetails);
+quizAnswerRouter.get("/quiz-answer/:id", protect, getQuizAnswer);
+quizAnswerRouter.get("/result-details/:id", protect, getResultDetails);
 quizAnswerRouter.use(protect, allowTo("student"));
 quizAnswerRouter.post("/answer/:id", quizAnswerValidator, quesAnswer);
 
-quizAnswerRouter.get("/studentquizAnswers", studentquizAnswers);
+quizAnswerRouter.get("/student-quiz-answers", studentquizAnswers);
 export default quizAnswerRouter;

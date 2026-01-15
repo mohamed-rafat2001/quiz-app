@@ -37,7 +37,11 @@ export function useSignUp() {
 			const user = data.user;
 			queryClient.setQueryData(["user"], user);
 			toast.success("Account created successfully!");
-			navigate("/app/dashboard", { replace: true });
+			
+			// Small delay to show the "success" state before redirecting to animated dashboard
+			setTimeout(() => {
+				navigate("/app/dashboard", { replace: true });
+			}, 500);
 		},
 		onError: (error) => {
 			toast.error(error.message || "Failed to sign up");

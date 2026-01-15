@@ -40,4 +40,34 @@
 	.animate-shake {
 		animation: shake 0.2s ease-in-out 0s 2;
 	}
+
+	.custom-scrollbar {
+		scrollbar-width: thin;
+		scrollbar-color: #e5e7eb transparent;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-gray-200 rounded-full;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-gray-300;
+	}
+
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
 }

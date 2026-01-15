@@ -89,7 +89,7 @@ export default function AdminQuizzes() {
 									<td className="px-6 py-4 text-right">
 										<div className="flex items-center justify-end gap-2">
 											<Link
-												to={`/singleQuiz/${quiz._id}`}
+												to={`/app/quizzes/${quiz._id}`}
 												className="p-2 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors"
 												title="Preview Quiz"
 											>

@@ -10,7 +10,7 @@ export default function Error({ error }) {
 			animate={{ opacity: 1, y: 0 }}
 			className="text-red-500 text-xs font-medium mt-1 ml-1 flex items-center gap-1"
 		>
-			<HiExclamationCircle className="flex-shrink-0" />
+			<HiExclamationCircle className="shrink-0" />
 			<span>{error}</span>
 		</motion.div>
 	);
