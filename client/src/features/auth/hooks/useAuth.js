@@ -19,7 +19,7 @@ export function useLogin() {
 		onSuccess: (data) => {
 			queryClient.setQueryData(["user"], data.user);
 			toast.success("Logged in successfully!");
-			navigate("/home", { replace: true });
+			navigate("/app/dashboard", { replace: true });
 		},
 		onError: (error) => {
 			toast.error(error.message || "Failed to login");
@@ -37,7 +37,7 @@ export function useSignUp() {
 			const user = data.user;
 			queryClient.setQueryData(["user"], user);
 			toast.success("Account created successfully!");
-			navigate("/home", { replace: true });
+			navigate("/app/dashboard", { replace: true });
 		},
 		onError: (error) => {
 			toast.error(error.message || "Failed to sign up");

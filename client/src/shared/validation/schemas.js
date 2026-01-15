@@ -36,3 +36,16 @@ export const startQuizSchema = z.object({
   quizId: z.string().min(1, "Quiz ID is required"),
   quizPassword: z.string().min(1, "Quiz password is required"),
 });
+
+export const createQuizSchema = z.object({
+  quizName: z.string().min(3, "Quiz name must be at least 3 characters"),
+  expire: z.number().min(1, "Expire days must be at least 1").max(30, "Maximum 30 days"),
+  questions: z.array(
+    z.object({
+      ques: z.string().min(5, "Question must be at least 5 characters"),
+      answers: z.array(z.string().min(1, "Answer cannot be empty")).min(2, "At least 2 answers required"),
+      correctAnswer: z.string().min(1, "Please select the correct answer"),
+      Score: z.number().min(1, "Score must be at least 1"),
+    })
+  ).min(1, "At least one question is required"),
+});

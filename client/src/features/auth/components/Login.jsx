@@ -11,6 +11,7 @@ function Login() {
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(loginSchema),
+		mode: "onChange",
 	});
 
 	const { mutate, isPending } = useLogin();

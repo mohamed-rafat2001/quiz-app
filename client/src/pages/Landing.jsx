@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
-import { HiArrowRight, HiAcademicCap, HiLightningBolt, HiUserGroup } from "react-icons/hi2";
+import {
+	HiArrowRight,
+	HiAcademicCap,
+	HiBolt,
+	HiUserGroup,
+} from "react-icons/hi2";
 
 const Landing = () => {
 	useEffect(() => {
@@ -32,13 +37,15 @@ const Landing = () => {
 		{
 			icon: HiAcademicCap,
 			title: "Expert Content",
-			description: "Curated quizzes across various subjects designed by educators.",
+			description:
+				"Curated quizzes across various subjects designed by educators.",
 			color: "bg-blue-500",
 		},
 		{
-			icon: HiLightningBolt,
+			icon: HiBolt,
 			title: "Instant Feedback",
-			description: "Get detailed explanations and results as soon as you finish.",
+			description:
+				"Get detailed explanations and results as soon as you finish.",
 			color: "bg-yellow-500",
 		},
 		{
@@ -99,8 +106,8 @@ const Landing = () => {
 								<span className="text-indigo-600">Potential.</span>
 							</h1>
 							<p className="text-xl text-gray-500 max-w-lg mb-10 leading-relaxed font-medium">
-								Master any subject with our interactive quizzes. Join over 5,000+
-								learners today and start your journey to excellence.
+								Master any subject with our interactive quizzes. Join over
+								5,000+ learners today and start your journey to excellence.
 							</p>
 							<div className="flex flex-col sm:flex-row gap-4">
 								<Link
@@ -216,8 +223,8 @@ const Landing = () => {
 							Ready to start <br /> your journey?
 						</h2>
 						<p className="text-indigo-100 text-xl font-medium mb-12 leading-relaxed">
-							Join thousands of users who have already transformed their learning
-							experience. It's free to start and easy to use.
+							Join thousands of users who have already transformed their
+							learning experience. It's free to start and easy to use.
 						</p>
 						<Link
 							to="/login"

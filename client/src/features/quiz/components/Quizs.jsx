@@ -29,9 +29,7 @@ export default function Quizs() {
 				"Are you sure you want to delete this quiz? This action cannot be undone."
 			)
 		) {
-			deleteQuiz(id, {
-				onSuccess: () => toast.success("Quiz deleted successfully"),
-			});
+			deleteQuiz(id);
 		}
 	};
 

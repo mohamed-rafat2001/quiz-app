@@ -10,6 +10,7 @@ export default function UserDetails({ user }) {
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(updateMeSchema),
+		mode: "onChange",
 		defaultValues: {
 			name: user?.name,
 			email: user?.email,

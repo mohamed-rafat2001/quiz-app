@@ -1,5 +1,7 @@
 import React from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createQuizSchema } from "../../../shared/validation/schemas";
 import { useParams } from "react-router-dom";
 import { useCreateQuiz, useQuiz, useUpdateQuiz } from "../hooks/useQuiz";
 import Loader from "../../../shared/components/ui/Loader";
@@ -23,6 +25,8 @@ export default function CreateQuiz() {
 		reset,
 		formState: { errors },
 	} = useForm({
+		resolver: zodResolver(createQuizSchema),
+		mode: "onChange",
 		defaultValues: {
 			quizName: "",
 			expire: 1,
@@ -61,11 +65,7 @@ export default function CreateQuiz() {
 		if (isEditSession) {
 			updateQuiz({ id, data });
 		} else {
-			createQuiz(data, {
-				onSuccess: () => {
-					toast.success("Quiz created successfully!");
-				},
-			});
+			createQuiz(data);
 		}
 	};
 
@@ -97,7 +97,7 @@ export default function CreateQuiz() {
 								Quiz Name
 							</label>
 							<input
-								{...register("quizName", { required: "Quiz name is required" })}
+								{...register("quizName")}
 								className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
 								placeholder="e.g. Mathematics Midterm"
 							/>
@@ -115,8 +115,7 @@ export default function CreateQuiz() {
 								type="number"
 								step="0.1"
 								{...register("expire", {
-									required: "Duration is required",
-									min: 0.1,
+									valueAsNumber: true,
 								})}
 								className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
 							/>
@@ -173,9 +172,7 @@ export default function CreateQuiz() {
 										</span>
 										<div className="flex-grow space-y-2">
 											<input
-												{...register(`questions.${index}.ques`, {
-													required: "Question is required",
-												})}
+												{...register(`questions.${index}.ques`)}
 												className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all font-medium"
 												placeholder="Enter your question here..."
 											/>
@@ -213,9 +210,7 @@ export default function CreateQuiz() {
 													Correct Answer
 												</label>
 												<select
-													{...register(`questions.${index}.correctAnswer`, {
-														required: "Select correct answer",
-													})}
+													{...register(`questions.${index}.correctAnswer`)}
 													className="w-full px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm appearance-none"
 												>
 													<option value="">Select Correct Answer</option>

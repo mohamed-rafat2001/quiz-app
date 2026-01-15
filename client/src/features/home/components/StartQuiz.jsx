@@ -11,6 +11,7 @@ export default function StartQuiz() {
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(startQuizSchema),
+		mode: "onChange",
 	});
 
 	const { mutate, isPending } = useStartQuiz();

@@ -38,17 +38,27 @@ export function useStartQuiz() {
 	return useMutation({
 		mutationFn: startQuiz,
 		onSuccess: (data) => {
-			navigate(`/singleQuiz/${data._id}`);
+			toast.success("Quiz started!");
+			navigate(`/app/singleQuiz/${data._id}`);
+		},
+		onError: (err) => {
+			toast.error(err.message || "Failed to start quiz");
 		},
 	});
 }
 
 export function useCreateQuiz() {
 	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 	return useMutation({
 		mutationFn: createQuiz,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+			toast.success("Quiz created successfully!");
+			navigate("/app/Quizs");
+		},
+		onError: (err) => {
+			toast.error(err.message || "Failed to create quiz");
 		},
 	});
 }
@@ -59,6 +69,10 @@ export function useDeleteQuiz() {
 		mutationFn: deleteQuiz,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+			toast.success("Quiz deleted successfully");
+		},
+		onError: (err) => {
+			toast.error(err.message || "Failed to delete quiz");
 		},
 	});
 }
@@ -71,7 +85,10 @@ export function useUpdateQuiz() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["quizzes"] });
 			toast.success("Quiz updated successfully");
-			navigate("/Quizs");
+			navigate("/app/Quizs");
+		},
+		onError: (err) => {
+			toast.error(err.message || "Failed to update quiz");
 		},
 	});
 }

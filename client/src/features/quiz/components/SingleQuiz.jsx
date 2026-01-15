@@ -19,7 +19,9 @@ export default function SingleQuiz() {
 		formState: { errors },
 		getValues,
 		control,
-	} = useForm();
+	} = useForm({
+		mode: "onChange",
+	});
 
 	const { data: quiz, isLoading } = useQuiz(id);
 	const { mutate, isPending } = useAddAnswer();

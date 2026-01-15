@@ -11,6 +11,7 @@ export default function UpdatePass() {
 		reset,
 	} = useForm({
 		resolver: zodResolver(updatePasswordSchema),
+		mode: "onChange",
 	});
 
 	const { mutate, isPending } = useUpdatePassword();

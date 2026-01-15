@@ -11,6 +11,7 @@ function SignUp() {
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(signUpSchema),
+		mode: "onChange",
 	});
 
 	const { mutate, isPending } = useSignUp();
