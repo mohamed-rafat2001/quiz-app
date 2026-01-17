@@ -9,6 +9,7 @@ import {
 	HiAcademicCap,
 	HiChartBar,
 	HiPlusCircle,
+	HiArrowRightOnRectangle,
 } from "react-icons/hi2";
 
 export const Logo = ({ size = "lg" }) => (
