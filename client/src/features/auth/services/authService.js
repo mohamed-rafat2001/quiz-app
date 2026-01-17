@@ -27,9 +27,32 @@ export async function login(data) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
-export async function updateMe(data) {
+export async function updateMe(data, onUploadProgress) {
 	try {
-		let user = await BaseApi.patch("/user/me", data);
+		const isFormData = data instanceof FormData;
+		let user = await BaseApi.patch("/user/me", data, {
+			headers: isFormData
+				? { "Content-Type": "multipart/form-data" }
+				: undefined,
+			onUploadProgress: (progressEvent) => {
+				if (onUploadProgress && progressEvent.total) {
+					const progress = Math.round(
+						(progressEvent.loaded * 100) / progressEvent.total
+					);
+					onUploadProgress(progress);
+				}
+			},
+		});
+		user = await user.data;
+		return user.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
+}
+
+export async function deleteMeImage() {
+	try {
+		let user = await BaseApi.delete("/user/me-image");
 		user = await user.data;
 		return user.data;
 	} catch (e) {
