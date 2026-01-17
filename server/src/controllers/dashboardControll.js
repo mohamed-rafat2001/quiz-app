@@ -99,9 +99,9 @@ export const getTeacherQuizStats = errorHandling(async (req, res, next) => {
 			{ quizName: { $regex: keyword, $options: "i" } },
 			{ quizId: { $regex: keyword, $options: "i" } },
 		];
-		// Delete keyword from query so ApiFeatures doesn't try to filter by it
-		delete req.query.keyword;
 	}
+	// Always delete keyword from query so ApiFeatures doesn't try to filter by it
+	delete req.query.keyword;
 
 	const features = new ApiFeatures(quizModel.find(searchFilter), req.query)
 		.filter()

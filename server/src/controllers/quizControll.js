@@ -45,10 +45,15 @@ export const createQuiz = errorHandling(async (req, res, next) => {
 		)
 	);
 
-	quiz.questions = createdQuestions.map((q) => q._id);
-	await quiz.save();
+	// Update quiz with question IDs
+	// We use findByIdAndUpdate to avoid overwriting quizScore which might have been updated by hooks
+	const updatedQuiz = await quizModel.findByIdAndUpdate(
+		quiz._id,
+		{ questions: createdQuestions.map((q) => q._id) },
+		{ new: true }
+	);
 
-	response(quiz, 201, res);
+	response(updatedQuiz, 201, res);
 });
 // delete quiz
 export const deleteQuiz = factory.deleteOneOwner(quizModel, "teacherId");
@@ -108,9 +113,9 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 			{ quizName: { $regex: keyword, $options: "i" } },
 			{ quizId: { $regex: keyword, $options: "i" } },
 		];
-		// Delete keyword from query so ApiFeatures doesn't try to filter by it
-		delete req.query.keyword;
 	}
+	// Always delete keyword from query so ApiFeatures doesn't try to filter by it
+	delete req.query.keyword;
 
 	const features = new ApiFeatures(quizModel.find(filter), req.query)
 		.filter()
