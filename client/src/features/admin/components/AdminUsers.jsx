@@ -106,8 +106,8 @@ export default function AdminUsers() {
 												onClick={() => handleToggleBlock(user._id, user.active)}
 												className={`p-3 rounded-xl transition-all shadow-sm active:scale-90 ${
 													user.active
-														? "bg-orange-50 text-orange-600 hover:bg-orange-100"
-														: "bg-green-50 text-green-600 hover:bg-green-100"
+														? "bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-500/20"
+														: "bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-500/20"
 												}`}
 												title={user.active ? "Block User" : "Unblock User"}
 											>
@@ -123,7 +123,7 @@ export default function AdminUsers() {
 														deleteUser(user._id);
 													}
 												}}
-												className="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"
+												className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-500/20 transition-all active:scale-90"
 												title="Delete User"
 											>
 												<HiTrash />

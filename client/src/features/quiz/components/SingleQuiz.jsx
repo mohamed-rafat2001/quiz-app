@@ -27,12 +27,12 @@ const QuizTimer = ({ timeLeft, formatTime, answeredCount, totalQuestions }) => (
 		animate={{ y: 0, opacity: 1 }}
 		className="sticky top-4 z-30 mb-8"
 	>
-		<div className="bg-white/80 dark:bg-[#0b0f1a]/80 backdrop-blur-xl border border-gray-100 dark:border-white/5 shadow-2xl rounded-[2rem] px-8 py-5 flex items-center justify-between max-w-sm mx-auto transition-colors duration-300">
+		<div className="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-100 dark:border-white/5 shadow-2xl rounded-[2rem] px-8 py-5 flex items-center justify-between max-w-sm mx-auto transition-colors duration-300">
 			<div className="flex items-center gap-4">
 				<div
 					className={`p-3 rounded-2xl transition-colors ${
 						timeLeft < 60
-							? "bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400"
+							? "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"
 							: "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
 					}`}
 				>
@@ -81,7 +81,7 @@ const ConfirmationModal = ({
 					initial={{ scale: 0.9, opacity: 0, y: 20 }}
 					animate={{ scale: 1, opacity: 1, y: 0 }}
 					exit={{ scale: 0.9, opacity: 0, y: 20 }}
-					className="bg-white dark:bg-[#0b0f1a] rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl border border-gray-100 dark:border-white/5"
+					className="bg-white dark:bg-white/[0.03] rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl border border-gray-100 dark:border-white/5"
 				>
 					<div className="text-center">
 						<div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 rounded-3xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 mx-auto mb-8 shadow-sm">
@@ -90,7 +90,7 @@ const ConfirmationModal = ({
 						<h3 className="text-3xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">
 							Ready to submit?
 						</h3>
-						<p className="text-gray-500 dark:text-gray-400 mb-10 font-medium leading-relaxed">
+						<p className="text-gray-600 dark:text-gray-400 mb-10 font-black leading-relaxed">
 							{answeredCount < totalQuestions
 								? `You've only answered ${answeredCount} out of ${totalQuestions} questions. Are you sure you want to finish?`
 								: "Great job! You've answered all questions. Ready to see your results?"}
@@ -122,7 +122,7 @@ const QuestionItem = ({ el, index, register, error }) => (
 		initial={{ opacity: 0, y: 20 }}
 		animate={{ opacity: 1, y: 0 }}
 		transition={{ delay: index * 0.1 }}
-		className="bg-white dark:bg-[#0b0f1a] p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group duration-500"
+		className="bg-white dark:bg-white/[0.03] p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group duration-500"
 	>
 		<div className="flex items-start gap-6 mb-10">
 			<span className="shrink-0 w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black text-xl group-hover:scale-110 transition-transform shadow-sm">
@@ -149,9 +149,9 @@ const QuestionItem = ({ el, index, register, error }) => (
 					/>
 					<label
 						htmlFor={answer + index}
-						className="flex items-center px-8 py-5 rounded-3xl border-2 border-gray-50 dark:border-white/5 cursor-pointer transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50/50 dark:peer-checked:bg-indigo-500/10 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] text-gray-600 dark:text-gray-400 peer-checked:text-indigo-700 dark:peer-checked:text-indigo-300 font-black group-hover/option:border-indigo-100 dark:group-hover/option:border-white/10"
+						className="flex items-center px-8 py-5 rounded-3xl border-2 border-gray-50 dark:border-white/5 cursor-pointer transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50/50 dark:peer-checked:bg-indigo-500/10 hover:bg-gray-50/50 dark:hover:bg-white/[0.05] text-gray-600 dark:text-gray-400 peer-checked:text-indigo-700 dark:peer-checked:text-indigo-300 font-black group-hover/option:border-indigo-100 dark:group-hover/option:border-white/10"
 					>
-						<div className="w-6 h-6 rounded-full border-2 border-gray-200 dark:border-white/10 mr-5 flex items-center justify-center peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 bg-white dark:bg-transparent transition-all shrink-0">
+						<div className="w-6 h-6 rounded-full border-2 border-gray-200 dark:border-white/10 mr-5 flex items-center justify-center peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 bg-white dark:bg-white/[0.05] transition-all shrink-0">
 							<div className="w-2.5 h-2.5 rounded-full bg-indigo-600 dark:bg-indigo-500 scale-0 transition-transform peer-checked:scale-100" />
 						</div>
 						<span className="flex-1 text-base sm:text-lg">{answer}</span>
@@ -166,7 +166,7 @@ const QuestionItem = ({ el, index, register, error }) => (
 					initial={{ opacity: 0, height: 0 }}
 					animate={{ opacity: 1, height: "auto" }}
 					exit={{ opacity: 0, height: 0 }}
-					className="mt-6 flex items-center gap-2 text-red-500 dark:text-red-400 text-sm font-black ml-2"
+					className="mt-6 flex items-center gap-2 text-red-600 dark:text-red-500 text-sm font-black ml-2"
 				>
 					<HiExclamationTriangle className="text-lg" />
 					<span>{error.message}</span>
@@ -327,7 +327,7 @@ export default function SingleQuiz() {
 				<h3 className="text-3xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">
 					Quiz not found
 				</h3>
-				<p className="text-gray-500 dark:text-gray-400 mb-10 font-medium">
+				<p className="text-gray-600 dark:text-gray-400 mb-10 font-black">
 					The quiz you are looking for does not exist or has been removed.
 				</p>
 				<button

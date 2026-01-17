@@ -27,10 +27,10 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
 				<Icon className={`text-2xl ${color.replace("bg-", "text-")}`} />
 			</div>
 			<div>
-				<p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+				<p className="text-sm font-black text-gray-600 dark:text-gray-400">
 					{title}
 				</p>
-				<h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+				<h3 className="text-2xl font-black text-gray-900 dark:text-white">
 					{value}
 				</h3>
 			</div>
@@ -43,10 +43,10 @@ const QuizStatsTable = ({ quizzes, isLoading, searchTerm, onSearchChange }) => {
 		<div className="bg-white dark:bg-white/[0.03] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden transition-colors duration-300">
 			<div className="p-8 border-b border-gray-100 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
 				<div>
-					<h3 className="text-xl font-bold text-gray-900 dark:text-white">
+					<h3 className="text-xl font-black text-gray-900 dark:text-white">
 						Quiz Performance
 					</h3>
-					<p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+					<p className="text-sm text-gray-600 dark:text-gray-400 mt-1 font-black">
 						Detailed statistics for each of your quizzes
 					</p>
 				</div>
@@ -307,7 +307,7 @@ const StatsGrid = ({ role, stats }) => (
 );
 
 const QuickActions = ({ role }) => (
-	<div className="bg-white dark:bg-gray-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
+	<div className="bg-white dark:bg-white/[0.03] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm transition-colors duration-300">
 		<h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
 			Quick Actions
 		</h3>
@@ -357,7 +357,7 @@ const TipCard = ({ role }) => (
 		<h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
 			{role === "teacher" ? "Teaching Tip" : "Learning Tip"}
 		</h3>
-		<p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs">
+		<p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs font-black">
 			{role === "teacher"
 				? "Clear and concise questions help students focus on the core concepts being tested."
 				: "Reviewing your previous answers is a great way to identify areas where you can improve."}

@@ -77,7 +77,7 @@ export default function Auth() {
 							<h2 className="text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tighter">
 								{isLogin ? "Welcome Back!" : "Create Account"}
 							</h2>
-							<p className="text-gray-500 dark:text-gray-400 font-black text-sm uppercase tracking-widest">
+							<p className="text-gray-600 dark:text-gray-400 font-black text-sm uppercase tracking-widest">
 								{isLogin
 									? "Enter your credentials"
 									: "Start your journey today"}
@@ -95,7 +95,7 @@ export default function Auth() {
 								className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 									isLogin
 										? "text-indigo-600 dark:text-white"
-										: "text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
+										: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
 								}`}
 								onClick={() => setIsLogin(true)}
 							>
@@ -105,7 +105,7 @@ export default function Auth() {
 								className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 									!isLogin
 										? "text-indigo-600 dark:text-white"
-										: "text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
+										: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
 								}`}
 								onClick={() => setIsLogin(false)}
 							>

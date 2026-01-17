@@ -20,7 +20,7 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 	>
 		<button
 			onClick={onBack}
-			className="absolute top-8 left-8 p-3 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-[#151b2b] rounded-2xl transition-all hidden sm:flex items-center gap-2 text-sm font-black shadow-sm active:scale-95"
+			className="absolute top-8 left-8 p-3 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-white/[0.08] rounded-2xl transition-all hidden sm:flex items-center gap-2 text-sm font-black shadow-sm active:scale-95"
 		>
 			<HiArrowLeft className="text-xl" />
 			Back
@@ -29,7 +29,7 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 		<motion.div
 			initial={{ scale: 0.9, opacity: 0 }}
 			animate={{ scale: 1, opacity: 1 }}
-			className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white dark:bg-[#151b2b] shadow-xl dark:shadow-none mb-6 sm:mb-8 border border-gray-50 dark:border-white/5"
+			className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white dark:bg-white/[0.05] shadow-xl dark:shadow-none mb-6 sm:mb-8 border border-gray-50 dark:border-white/5"
 		>
 			{result.status ? (
 				<HiCheckCircle className="text-green-500 dark:text-green-400 text-4xl sm:text-5xl" />
@@ -173,7 +173,7 @@ export default function SingleAnswer() {
 	if (!result)
 		return (
 			<div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 transition-colors duration-300">
-				<div className="w-20 h-20 bg-gray-50 dark:bg-[#0b0f1a] border border-gray-100 dark:border-white/5 rounded-full flex items-center justify-center mb-6 text-gray-300 dark:text-gray-600">
+				<div className="w-20 h-20 bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 rounded-full flex items-center justify-center mb-6 text-gray-300 dark:text-gray-600">
 					<HiMagnifyingGlass className="text-4xl" />
 				</div>
 				<h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
@@ -196,7 +196,7 @@ export default function SingleAnswer() {
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
-				className="bg-white dark:bg-[#0b0f1a] rounded-3xl sm:rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5 overflow-hidden transition-colors duration-300"
+				className="bg-white dark:bg-white/[0.03] rounded-3xl sm:rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5 overflow-hidden transition-colors duration-300"
 			>
 				<ResultHeader
 					result={result}

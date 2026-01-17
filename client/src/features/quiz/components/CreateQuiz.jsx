@@ -17,7 +17,7 @@ const QuizFormHeader = ({ isEditSession }) => (
 		<h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white tracking-tight">
 			{isEditSession ? "Edit Quiz" : "Create New Quiz"}
 		</h1>
-		<p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">
+		<p className="text-gray-600 dark:text-gray-400 mt-2 font-black">
 			{isEditSession
 				? "Modify your quiz details and questions."
 				: "Design your quiz and share it with your students."}
@@ -26,25 +26,25 @@ const QuizFormHeader = ({ isEditSession }) => (
 );
 
 const QuizBasicInfo = ({ register, errors }) => (
-	<div className="bg-white dark:bg-[#0b0f1a] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-8 transition-colors duration-300">
+	<div className="bg-white dark:bg-white/[0.03] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-8 transition-colors duration-300">
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<div className="space-y-2.5">
-				<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+				<label className="text-sm font-black text-gray-900 dark:text-white ml-1">
 					Quiz Name
 				</label>
 				<input
 					{...register("quizName")}
-					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
 					placeholder="e.g. Mathematics Midterm"
 				/>
 				{errors.quizName && (
-					<p className="text-xs text-red-500 ml-1 font-black">
+					<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black">
 						{errors.quizName.message}
 					</p>
 				)}
 			</div>
 			<div className="space-y-2.5">
-				<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+				<label className="text-sm font-black text-gray-900 dark:text-white ml-1">
 					Time Limit
 				</label>
 				<div className="flex gap-3">
@@ -54,39 +54,39 @@ const QuizBasicInfo = ({ register, errors }) => (
 							valueAsNumber: true,
 						})}
 						placeholder="e.g. 60"
-						className="flex-1 px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+						className="flex-1 px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
 					/>
 					<select
 						{...register("expireUnit")}
-						className="px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-[#151b2b] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all cursor-pointer"
+						className="px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.05] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all cursor-pointer"
 					>
 						<option value="minutes">Minutes</option>
 						<option value="hours">Hours</option>
 					</select>
 				</div>
 				{errors.expire && (
-					<p className="text-xs text-red-500 ml-1 font-black">
+					<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black">
 						{errors.expire.message}
 					</p>
 				)}
 			</div>
 			<div className="space-y-2.5">
-				<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+				<label className="text-sm font-black text-gray-900 dark:text-white ml-1">
 					Quiz Deadline
 				</label>
 				<input
 					type="datetime-local"
 					{...register("expireDate")}
-					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
+					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
 				/>
 				{errors.expireDate && (
-					<p className="text-xs text-red-500 ml-1 font-black">
+					<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black">
 						{errors.expireDate.message}
 					</p>
 				)}
 			</div>
 			<div className="space-y-2.5">
-				<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+				<label className="text-sm font-black text-gray-900 dark:text-white ml-1">
 					Allowed Attempts (Tries)
 				</label>
 				<input
@@ -97,10 +97,10 @@ const QuizBasicInfo = ({ register, errors }) => (
 					defaultValue={1}
 					min={1}
 					max={10}
-					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+					className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
 				/>
 				{errors.tries && (
-					<p className="text-xs text-red-500 ml-1 font-black">
+					<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black">
 						{errors.tries.message}
 					</p>
 				)}
@@ -118,7 +118,7 @@ const AnswerOptions = ({ control, index, register, errors }) => {
 	return (
 		<div className="space-y-4">
 			<div className="space-y-2.5">
-				<label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
+				<label className="text-[10px] font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
 					Correct Answer
 				</label>
 				<div className="grid grid-cols-2 gap-3">
@@ -158,7 +158,7 @@ const QuestionCard = forwardRef(
 			initial={{ opacity: 0, scale: 0.95 }}
 			animate={{ opacity: 1, scale: 1 }}
 			exit={{ opacity: 0, scale: 0.95 }}
-			className="bg-white dark:bg-[#0b0f1a] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-8 relative group transition-colors duration-300"
+			className="bg-white dark:bg-white/[0.03] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-8 relative group transition-colors duration-300"
 		>
 			<button
 				type="button"
@@ -176,11 +176,11 @@ const QuestionCard = forwardRef(
 					<div className="grow space-y-2.5">
 						<input
 							{...register(`questions.${index}.ques`)}
-							className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-bold focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+							className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/[0.03] text-gray-900 dark:text-white font-black focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
 							placeholder="Enter your question here..."
 						/>
 						{errors.questions?.[index]?.ques && (
-							<p className="text-xs text-red-500 font-black ml-1">
+							<p className="text-xs text-red-600 dark:text-red-500 font-black ml-1">
 								{errors.questions[index].ques.message}
 							</p>
 						)}
@@ -189,7 +189,7 @@ const QuestionCard = forwardRef(
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 ml-0 md:ml-16">
 					<div className="space-y-4">
-						<label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
+						<label className="text-[10px] font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
 							Answer Choices
 						</label>
 						<div className="space-y-3">
@@ -197,7 +197,7 @@ const QuestionCard = forwardRef(
 								<div key={choiceIndex} className="relative">
 									<input
 										{...register(`questions.${index}.answers.${choiceIndex}`)}
-										className="w-full px-5 py-3 rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] text-gray-900 dark:text-white font-bold focus:bg-white dark:focus:bg-[#151b2b] focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm placeholder:text-gray-400 dark:placeholder:text-gray-600 shadow-sm"
+										className="w-full px-5 py-3 rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.05] text-gray-900 dark:text-white font-black focus:bg-white dark:focus:bg-white/[0.08] focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm placeholder:text-gray-400 dark:placeholder:text-gray-600 shadow-sm"
 										placeholder={`Option ${choiceIndex + 1}`}
 									/>
 								</div>
@@ -214,7 +214,7 @@ const QuestionCard = forwardRef(
 						/>
 
 						<div className="space-y-2.5">
-							<label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
+							<label className="text-[10px] font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">
 								Points
 							</label>
 							<input
@@ -222,7 +222,7 @@ const QuestionCard = forwardRef(
 								{...register(`questions.${index}.Score`, {
 									valueAsNumber: true,
 								})}
-								className="w-full px-5 py-3 rounded-2xl border-2 border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] text-gray-900 dark:text-white font-black focus:bg-white dark:focus:bg-[#151b2b] focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm shadow-sm"
+								className="w-full px-5 py-3 rounded-2xl border-2 border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.05] text-gray-900 dark:text-white font-black focus:bg-white dark:focus:bg-white/[0.08] focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm shadow-sm"
 							/>
 						</div>
 					</div>

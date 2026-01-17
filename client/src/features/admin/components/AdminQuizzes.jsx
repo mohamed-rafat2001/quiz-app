@@ -62,7 +62,7 @@ export default function AdminQuizzes() {
 												<p className="font-black text-gray-900 dark:text-white text-base">
 													{quiz.quizName}
 												</p>
-												<p className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-[250px] font-medium">
+												<p className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-[250px] font-black">
 													{quiz.description}
 												</p>
 											</div>
@@ -107,7 +107,7 @@ export default function AdminQuizzes() {
 														deleteQuiz(quiz._id);
 													}
 												}}
-												className="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"
+												className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-500/20 transition-all active:scale-90"
 												title="Delete Quiz"
 											>
 												<HiTrash />

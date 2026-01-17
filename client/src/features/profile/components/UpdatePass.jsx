@@ -35,7 +35,7 @@ export default function UpdatePass() {
 						Current Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-[#151b2b] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
 							errors.password
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -45,7 +45,7 @@ export default function UpdatePass() {
 						{...register("password")}
 					/>
 					{errors.password && (
-						<p className="text-xs text-red-500 ml-1 font-black animate-shake">
+						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
 							{errors.password.message}
 						</p>
 					)}
@@ -56,7 +56,7 @@ export default function UpdatePass() {
 						New Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-[#151b2b] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
 							errors.newPassword
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -66,7 +66,7 @@ export default function UpdatePass() {
 						{...register("newPassword")}
 					/>
 					{errors.newPassword && (
-						<p className="text-xs text-red-500 ml-1 font-black animate-shake">
+						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
 							{errors.newPassword.message}
 						</p>
 					)}
@@ -77,7 +77,7 @@ export default function UpdatePass() {
 						Confirm New Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-[#151b2b] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
 							errors.confirmPass
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -87,7 +87,7 @@ export default function UpdatePass() {
 						{...register("confirmPass")}
 					/>
 					{errors.confirmPass && (
-						<p className="text-xs text-red-500 ml-1 font-black animate-shake">
+						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
 							{errors.confirmPass.message}
 						</p>
 					)}

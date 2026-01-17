@@ -161,7 +161,7 @@ const Hero = ({ opacity, scale }) => {
 								/>
 							</motion.span>
 						</h1>
-						<p className="text-xl text-gray-500 dark:text-gray-400 max-w-lg mb-10 leading-relaxed font-medium">
+						<p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg mb-10 leading-relaxed font-black">
 							Step into a world of interactive learning where quizzes meet
 							innovation. Create, share, and master any subject with our
 							comprehensive toolset designed for students and educators alike.
@@ -325,7 +325,8 @@ const Hero = ({ opacity, scale }) => {
 
 const Features = () => (
 	<section
-		className="py-32 px-6 bg-gray-50/50 dark:bg-[#0b0f1a] transition-colors duration-300 relative overflow-hidden"
+		id="features"
+		className="py-32 px-6 bg-gray-50/50 dark:bg-white/[0.02] transition-colors duration-300 relative overflow-hidden"
 		aria-labelledby="features-heading"
 	>
 		<div className="max-w-7xl mx-auto relative z-10">
@@ -340,7 +341,7 @@ const Features = () => (
 					Elevate Your{" "}
 					<span className="text-indigo-600 dark:text-indigo-400">Learning</span>
 				</motion.h2>
-				<p className="text-xl text-gray-500 dark:text-gray-400 font-black max-w-2xl mx-auto leading-relaxed">
+				<p className="text-xl text-gray-600 dark:text-gray-400 font-black max-w-2xl mx-auto leading-relaxed">
 					Everything you need to master your studies and track your progress
 					effectively in one place.
 				</p>
@@ -354,10 +355,11 @@ const Features = () => (
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true }}
 						transition={{ duration: 0.5 }}
-						className="bg-white dark:bg-[#151b2b] p-12 rounded-[3rem] shadow-sm hover:shadow-2xl transition-all border border-gray-100 dark:border-white/5 group"
+						whileHover={{ y: -10, scale: 1.02 }}
+						className="bg-white dark:bg-white/[0.03] p-12 rounded-[3rem] shadow-sm hover:shadow-2xl transition-all border border-gray-100 dark:border-white/5 group cursor-default"
 					>
 						<div
-							className={`w-20 h-20 ${feature.color} rounded-3xl flex items-center justify-center text-white mb-10 shadow-lg group-hover:scale-110 transition-transform`}
+							className={`w-20 h-20 ${feature.color} rounded-3xl flex items-center justify-center text-white mb-10 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
 							aria-hidden="true"
 						>
 							<feature.icon className="w-10 h-10" />
@@ -365,7 +367,7 @@ const Features = () => (
 						<h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
 							{feature.title}
 						</h3>
-						<p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+						<p className="text-gray-600 dark:text-gray-400 font-black leading-relaxed opacity-90">
 							{feature.description}
 						</p>
 					</motion.div>
@@ -430,7 +432,7 @@ const Stats = () => (
 
 const Footer = () => (
 	<footer
-		className="py-24 px-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-[#0b0f1a] transition-colors duration-300"
+		className="py-24 px-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-white/[0.02] transition-colors duration-300"
 		aria-label="Footer"
 	>
 		<div className="max-w-7xl mx-auto">
@@ -444,16 +446,16 @@ const Footer = () => (
 					</span>
 				</div>
 				<nav
-					className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-sm font-black text-gray-500 dark:text-gray-400"
+					className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-sm font-black text-gray-600 dark:text-gray-400"
 					aria-label="Footer navigation"
 				>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide">
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
 						Privacy Policy
 					</button>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide">
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
 						Terms of Service
 					</button>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide">
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
 						Contact
 					</button>
 				</nav>
@@ -492,7 +494,7 @@ const Landing = () => {
 	const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
 
 	return (
-		<div className="bg-white dark:bg-[#0b0f1a] overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400 transition-colors duration-300">
+		<div className="bg-white dark:bg-white/[0.02] overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400 transition-colors duration-300">
 			<Navbar />
 			<Hero opacity={opacity} scale={scale} />
 			<Features />

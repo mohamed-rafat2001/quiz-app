@@ -4,7 +4,7 @@ import { HiHome, HiArrowLeft, HiExclamationTriangle } from "react-icons/hi2";
 
 export default function NotFound() {
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-[#0b0f1a] flex items-center justify-center p-6 transition-colors duration-300">
+		<div className="min-h-screen bg-gray-50 dark:bg-white/[0.02] flex items-center justify-center p-6 transition-colors duration-300">
 			<motion.div
 				initial={{ opacity: 0, scale: 0.9 }}
 				animate={{ opacity: 1, scale: 1 }}
@@ -65,7 +65,7 @@ export function ErrorElement() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-[#0b0f1a] flex items-center justify-center p-6 transition-colors duration-300">
+		<div className="min-h-screen bg-gray-50 dark:bg-white/[0.02] flex items-center justify-center p-6 transition-colors duration-300">
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}

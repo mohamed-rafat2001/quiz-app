@@ -2,11 +2,13 @@ import { motion } from "framer-motion";
 
 export default function Loader({ fullPage = true }) {
 	const containerClasses = fullPage
-		? "fixed inset-0 bg-white/80 dark:bg-[#0b0f1a]/80 backdrop-blur-md z-[9999]"
+		? "fixed inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-md z-[9999]"
 		: "relative py-20 bg-transparent";
 
 	return (
-		<div className={`${containerClasses} flex flex-col items-center justify-center overflow-hidden transition-colors duration-300`}>
+		<div
+			className={`${containerClasses} flex flex-col items-center justify-center overflow-hidden transition-colors duration-300`}
+		>
 			{/* Animated Background Elements - Only for full page */}
 			{fullPage && (
 				<motion.div
