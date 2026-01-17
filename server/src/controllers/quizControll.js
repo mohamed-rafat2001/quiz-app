@@ -14,7 +14,7 @@ import ApiFeatures from "../utils/apiFeatures.js";
 export const createQuiz = errorHandling(async (req, res, next) => {
 	const teacherId = req.user._id;
 	const quizId = uniqid();
-	let { questions, expire, quizName } = req.body;
+	let { questions, expire, quizName, expireUnit, expireDate, tries } = req.body;
 
 	if (!questions || (Array.isArray(questions) && questions.length === 0))
 		return next(new appError("please enter the question", 400));
@@ -27,6 +27,9 @@ export const createQuiz = errorHandling(async (req, res, next) => {
 		quizPassword: Date.now() + Math.floor(Math.random() * 1000),
 		quizId,
 		expire,
+		expireUnit,
+		expireDate,
+		tries,
 	});
 
 	if (!quiz) return next(new appError("quiz not created", 400));
