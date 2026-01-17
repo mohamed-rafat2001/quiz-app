@@ -8,7 +8,7 @@ export default function Error({ error }) {
 		<motion.div
 			initial={{ opacity: 0, y: -5 }}
 			animate={{ opacity: 1, y: 0 }}
-			className="text-red-500 text-xs font-medium mt-1 ml-1 flex items-center gap-1"
+			className="text-red-600 dark:text-red-500 text-xs font-black mt-1 ml-1 flex items-center gap-1"
 		>
 			<HiExclamationCircle className="shrink-0" />
 			<span>{error}</span>

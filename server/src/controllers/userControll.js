@@ -95,6 +95,12 @@ export const updateMe = errorHandling(async (req, res, next) => {
 
 // get Me
 export const getMe = errorHandling(async (req, res, next) => {
+	if (!req.user) {
+		return res.status(200).json({
+			status: "success",
+			data: null,
+		});
+	}
 	req.params.id = req.user._id;
 	next();
 });

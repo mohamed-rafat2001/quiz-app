@@ -98,6 +98,17 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 		filter = { expireDate: { $gt: Date.now() } };
 	}
 
+	// Add search keyword filter
+	if (req.query.keyword) {
+		const keyword = req.query.keyword;
+		filter.$or = [
+			{ quizName: { $regex: keyword, $options: "i" } },
+			{ quizId: { $regex: keyword, $options: "i" } },
+		];
+		// Delete keyword from query so ApiFeatures doesn't try to filter by it
+		delete req.query.keyword;
+	}
+
 	const features = new ApiFeatures(quizModel.find(filter), req.query)
 		.filter()
 		.sort()

@@ -36,6 +36,31 @@ export const protect = errorHandling(async (req, res, next) => {
 	next();
 });
 
+export const isLoggedIn = async (req, res, next) => {
+	let token;
+	if (
+		req.header("Authorization") &&
+		req.header("Authorization").startsWith("Bearer")
+	) {
+		token = req.header("Authorization").replace("Bearer ", "");
+	} else if (req.cookies) {
+		token = req.cookies.jwt;
+	}
+
+	if (!token || token === "loggedout") return next();
+
+	// 2) verify token
+	try {
+		const decode = jwt.verify(token, process.env.JWT_SECRET);
+		// 3) find user
+		const user = await UserModel.findById(decode.id);
+		if (user) req.user = user;
+	} catch (err) {
+		// silent fail for isLoggedIn
+	}
+	next();
+};
+
 export const allowTo = (...roles) => {
 	return (req, res, next) => {
 		if (!roles.includes(req.user.role))

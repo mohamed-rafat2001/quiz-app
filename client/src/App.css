@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--color-brand: #4f46e5;
 }
@@ -15,7 +17,7 @@
 	}
 
 	body {
-		@apply font-sans antialiased text-gray-900 bg-gray-50;
+		@apply font-sans antialiased text-gray-900 bg-gray-50 transition-colors duration-300 dark:text-white dark:bg-[#0b0f1a];
 	}
 
 	button {

@@ -11,6 +11,29 @@ const userSchema = new mongoose.Schema(
 			trim: true,
 			minlength: 3,
 		},
+		username: {
+			type: String,
+			unique: true,
+			lowercase: true,
+			trim: true,
+		},
+		city: {
+			type: String,
+			trim: true,
+			lowercase: true,
+			required: true,
+		},
+		country: {
+			type: String,
+			trim: true,
+			lowercase: true,
+			required: true,
+		},
+		phoneNumber: {
+			type: String,
+			trim: true,
+			required: true,
+		},
 		email: {
 			type: String,
 			required: [true, "email required"],
@@ -37,7 +60,7 @@ const userSchema = new mongoose.Schema(
 				message: "confirm password must equal password",
 			},
 		},
-		resetPassCode: String,
+
 		role: {
 			type: String,
 			default: "student",
@@ -55,17 +78,60 @@ const userSchema = new mongoose.Schema(
 			public_id: String,
 			secure_url: String,
 		},
+		gender: {
+			type: String,
+			enum: ["male", "female"],
+			required: true,
+		},
+		passwordResetCode: Number,
+		passwordResetExpires: Date,
 	},
 	{ timestamps: true }
 );
 userSchema.pre("save", async function (next) {
-	if (!this.isModified("password")) return next();
+	if (this.isModified("password")) {
+		this.password = await bcryptjs.hash(this.password, 12);
+		this.confirmPass = undefined;
+	}
 
-	this.password = await bcryptjs.hash(this.password, 12);
-	this.confirmPass = undefined;
+	if (this.isNew && !this.username) {
+		const baseUsername = `${this.firstName}${this.lastName}`
+			.toLowerCase()
+			.replace(/\s+/g, "");
+
+		let uniqueUsername = baseUsername;
+		let isUnique = false;
+		let attempts = 0;
+
+		while (!isUnique && attempts < 10) {
+			const existingUser = await mongoose.model("UserModel").findOne({
+				username: uniqueUsername,
+			});
+			if (!existingUser) {
+				isUnique = true;
+			} else {
+				// Append random digits if collision occurs
+				const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+				uniqueUsername = `${baseUsername}${randomSuffix}`;
+				attempts++;
+			}
+		}
+		this.username = uniqueUsername;
+	}
 	next();
 });
+// create passwordResetToken
+userSchema.methods.createPasswordResetCode = function () {
+	const buffer = crypto.randomBytes(6);
+	let code = "";
 
+	for (let i = 0; i < 6; i++) {
+		code += (buffer[i] % 10).toString();
+	}
+	this.passwordResetCode = code;
+	this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+	return code;
+};
 userSchema.pre(/^find/, function (next) {
 	this.find({
 		active: {

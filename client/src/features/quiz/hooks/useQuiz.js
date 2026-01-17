@@ -5,6 +5,7 @@ import {
 	startQuiz,
 	getQuiz,
 	getAllQuizzes,
+	getTeacherQuizStats,
 	createQuiz,
 	deleteQuiz,
 	updateQuiz,
@@ -18,10 +19,11 @@ import {
 } from "../services/quizAnswerApi";
 
 // Quiz Hooks
-export function useQuizzes(params) {
+export function useQuizzes(params, isTeacher = false) {
 	return useQuery({
-		queryKey: ["quizzes", params],
-		queryFn: () => getAllQuizzes(params),
+		queryKey: ["quizzes", params, isTeacher],
+		queryFn: () =>
+			isTeacher ? getTeacherQuizStats(params) : getAllQuizzes(params),
 	});
 }
 

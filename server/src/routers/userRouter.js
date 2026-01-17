@@ -17,7 +17,7 @@ import {
 	deleteUserByAdmin,
 	updateUserByAdmin,
 } from "../controllers/userControll.js";
-import { allowTo, protect } from "../middelwars/authMiddelwar.js";
+import { allowTo, protect, isLoggedIn } from "../middelwars/authMiddelwar.js";
 import {
 	signupValidator,
 	loginValidator,
@@ -30,11 +30,13 @@ userRouter.get("/logout", logout);
 userRouter.post("/forget-password", forgetPass);
 userRouter.patch("/reset-password", resetPass);
 
+// /me GET route with optional auth to avoid 401 console errors
+userRouter.get("/me", isLoggedIn, getMe, getUser);
+
 // protect all routes after this middelware
 userRouter.use(protect);
 userRouter
 	.route("/me")
-	.get(getMe, getUser)
 	.patch(fileUpload("image").single("image"), updateMe)
 	.delete(deleteMe);
 userRouter.patch("/update-password", updatePassword);

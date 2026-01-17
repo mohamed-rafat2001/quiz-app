@@ -5,20 +5,23 @@ const DarkModeContext = createContext();
 function DarkModeProvider({ children }) {
 	const [isDarkMode, setIsDarkMode] = useState(function () {
 		const savedMode = localStorage.getItem("isDarkMode");
-		return savedMode ? JSON.parse(savedMode) : window.matchMedia("(prefers-color-scheme: dark)").matches;
+		return savedMode
+			? JSON.parse(savedMode)
+			: window.matchMedia("(prefers-color-scheme: dark)").matches;
 	});
 
 	useEffect(() => {
+		const html = window.document.documentElement;
 		if (isDarkMode) {
-			document.documentElement.classList.add("dark");
+			html.classList.add("dark");
 		} else {
-			document.documentElement.classList.remove("dark");
+			html.classList.remove("dark");
 		}
 		localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
 	}, [isDarkMode]);
 
 	function toggleDarkMode() {
-		setIsDarkMode((isDark) => !isDark);
+		setIsDarkMode((prev) => !prev);
 	}
 
 	return (

@@ -1,10 +1,11 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:8000/api/dashboard";
+import BaseApi from "../../../shared/api/baseApi";
 
 export const getStats = async () => {
-	const response = await axios.get(`${API_URL}/stats`, {
-		withCredentials: true,
-	});
+	const response = await BaseApi.get("/dashboard/stats");
+	return response.data.data;
+};
+
+export const getTeacherQuizStats = async (params) => {
+	const response = await BaseApi.get("/dashboard/teacher-quizzes", { params });
 	return response.data.data;
 };
