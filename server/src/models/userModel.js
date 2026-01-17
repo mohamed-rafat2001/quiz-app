@@ -96,9 +96,7 @@ userSchema.pre("save", async function (next) {
 	}
 
 	if (this.isNew && !this.username) {
-		const baseUsername = `${this.firstName}${this.lastName}`
-			.toLowerCase()
-			.replace(/\s+/g, "");
+		const baseUsername = this.name.toLowerCase().replace(/\s+/g, "");
 
 		let uniqueUsername = baseUsername;
 		let isUnique = false;

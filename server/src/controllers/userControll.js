@@ -89,7 +89,15 @@ const filterObj = (obj, ...data) => {
 };
 // update me
 export const updateMe = errorHandling(async (req, res, next) => {
-	const updates = filterObj(req.body, "name", "email");
+	const updates = filterObj(
+		req.body,
+		"name",
+		"email",
+		"city",
+		"country",
+		"phoneNumber",
+		"gender"
+	);
 	if (req.file) {
 		// upload img in cloudinary
 		const { public_id, secure_url } = await cloudinary.uploader.upload(
