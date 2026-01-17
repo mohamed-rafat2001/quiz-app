@@ -56,3 +56,21 @@ export async function updatePassword(data) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
+
+export async function forgotPassword(data) {
+	try {
+		const response = await BaseApi.post("/user/forget-password", data);
+		return response.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
+}
+
+export async function resetPassword(data) {
+	try {
+		const response = await BaseApi.post("/user/reset-password", data);
+		return response.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
+}

@@ -5,7 +5,6 @@ import cloudinary from "../utils/cloudinary.js";
 import Email from "../utils/Email.js";
 import response from "../utils/handelResponse.js";
 import * as factory from "../utils/handlerFactory.js";
-import uniqid from "uniqid";
 
 // generate cookies
 const cookiesOptions = {
@@ -17,7 +16,17 @@ const cookies = (token, res) => {
 };
 // create new user func
 export const createUser = errorHandling(async (req, res, next) => {
-	const { name, email, password, confirmPass, role } = req.body;
+	const {
+		name,
+		email,
+		password,
+		confirmPass,
+		role,
+		city,
+		country,
+		phoneNumber,
+		gender,
+	} = req.body;
 	if (role === "admin")
 		return next(new appError("role must be student or teacher", 400));
 	const findUser = await UserModel.findOne({ email });
@@ -28,6 +37,10 @@ export const createUser = errorHandling(async (req, res, next) => {
 		password,
 		confirmPass,
 		role,
+		city,
+		country,
+		phoneNumber,
+		gender,
 	});
 	const token = user.createToken();
 	if (process.env.STATUS === "PRODUCTION") cookiesOptions.secure = true;
@@ -146,42 +159,62 @@ export const updatePassword = errorHandling(async (req, res, next) => {
 });
 //forget password
 export const forgetPass = errorHandling(async (req, res, next) => {
-	const email = req.body.email;
-	const resetPassCode = uniqid();
-	if (!email) return next(new appError("please enter your email", "400"));
-	// find user
-	let user = await UserModel.findOne({ email });
-	if (!user) return next(new appError("user not founded", 404));
-	await new Email(user).resetPass(
-		`hi ${user.name} copy this code: ${resetPassCode} and paste in reset password page `
-	);
-	user = await UserModel.findByIdAndUpdate(
-		user._id,
-		{ resetPassCode },
-		{ new: true, runValidators: true }
-	);
-	response(null, 200, res);
+	const { email } = req.body;
+	if (!email) return next(new appError("please enter your email", 400));
+
+	// 1) find user
+	const user = await UserModel.findOne({ email });
+	if (!user) return next(new appError("user not found", 404));
+
+	// 2) generate reset code
+	const resetCode = user.createPasswordResetCode();
+	await user.save({ validateBeforeSave: false });
+
+	// 3) send email
+	try {
+		await new Email(user).sendPasswordReset(resetCode);
+		response({ message: "Reset code sent to your email" }, 200, res);
+	} catch (err) {
+		user.passwordResetCode = undefined;
+		user.passwordResetExpires = undefined;
+		await user.save({ validateBeforeSave: false });
+		return next(
+			new appError(
+				"There was an error sending the email. Try again later!",
+				500
+			)
+		);
+	}
 });
+
 // reset password
 export const resetPass = errorHandling(async (req, res, next) => {
 	const { resetPassCode, newPassword, confirmPass } = req.body;
 	if (!resetPassCode) return next(new appError("please enter the code", 400));
-	const user = await UserModel.findOne({ resetPassCode });
-	if (!user) return next(new appError("code is wrong", 401));
+
+	// 1) get user based on reset code and check if it has not expired
+	const user = await UserModel.findOne({
+		passwordResetCode: resetPassCode,
+		passwordResetExpires: { $gt: Date.now() },
+	});
+
+	if (!user) return next(new appError("Code is invalid or has expired", 400));
+
+	// 2) update password
 	if (!confirmPass || !newPassword)
 		return next(new appError("please enter valid password", 400));
 
-	//update password and confirm password
 	user.password = newPassword;
 	user.confirmPass = confirmPass;
-	user.resetPassCode = "";
-	// generat token and cookies
+	user.passwordResetCode = undefined;
+	user.passwordResetExpires = undefined;
+
+	// 3) save user and generate token
+	await user.save();
+
 	const token = user.createToken();
 	if (process.env.STATUS === "PRODUCTION") cookiesOptions.secure = true;
 	cookies(token, res);
-	// save doc
-	await user.save();
 
-	// send response
 	response({ user, token }, 200, res);
 });

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import Login from "../../../features/auth/components/Login";
 import SignUp from "../../../features/auth/components/SignUp";
+import ForgotPassword from "../../../features/auth/components/ForgotPassword";
+import ResetPassword from "../../../features/auth/components/ResetPassword";
 import { useUser } from "../../../features/auth/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 
 export default function Auth() {
-	const [isLogin, setIsLogin] = useState(true);
+	const [mode, setMode] = useState("login"); // 'login', 'signup', 'forgot', 'reset'
+	const [resetEmail, setResetEmail] = useState("");
 	const { data: user, isLoading } = useUser();
 	const navigate = useNavigate();
 
@@ -17,6 +20,11 @@ export default function Auth() {
 	}, [user, navigate]);
 
 	if (isLoading) return <Loader />;
+
+	const handleForgotPasswordSuccess = (email) => {
+		setResetEmail(email);
+		setMode("reset");
+	};
 
 	return (
 		<div className="min-h-screen bg-linear-to-tr from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4 py-12 transition-colors duration-300">
@@ -75,46 +83,67 @@ export default function Auth() {
 								</div>
 							</div>
 							<h2 className="text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tighter">
-								{isLogin ? "Welcome Back!" : "Create Account"}
+								{mode === "login" && "Welcome Back!"}
+								{mode === "signup" && "Create Account"}
+								{mode === "forgot" && "Forgot Password?"}
+								{mode === "reset" && "Reset Password"}
 							</h2>
 							<p className="text-gray-600 dark:text-gray-400 font-black text-sm uppercase tracking-widest">
-								{isLogin
-									? "Enter your credentials"
-									: "Start your journey today"}
+								{mode === "login" && "Enter your credentials"}
+								{mode === "signup" && "Start your journey today"}
+								{mode === "forgot" && "Recover your account"}
+								{mode === "reset" && "Enter your new password"}
 							</p>
 						</div>
 
-						{/* Toggle Switch */}
-						<div className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/5">
-							<div
-								className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-white/[0.08] rounded-xl shadow-xl transition-all duration-500 ease-out ${
-									isLogin ? "left-1.5" : "left-[calc(50%+3px)]"
-								}`}
-							/>
-							<button
-								className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
-									isLogin
-										? "text-indigo-600 dark:text-white"
-										: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
-								}`}
-								onClick={() => setIsLogin(true)}
-							>
-								Sign In
-							</button>
-							<button
-								className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
-									!isLogin
-										? "text-indigo-600 dark:text-white"
-										: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
-								}`}
-								onClick={() => setIsLogin(false)}
-							>
-								Register
-							</button>
-						</div>
+						{/* Toggle Switch - Only show for Login/SignUp */}
+						{(mode === "login" || mode === "signup") && (
+							<div className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/5">
+								<div
+									className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-white/[0.08] rounded-xl shadow-xl transition-all duration-500 ease-out ${
+										mode === "login" ? "left-1.5" : "left-[calc(50%+3px)]"
+									}`}
+								/>
+								<button
+									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
+										mode === "login"
+											? "text-indigo-600 dark:text-white"
+											: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
+									}`}
+									onClick={() => setMode("login")}
+								>
+									Sign In
+								</button>
+								<button
+									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
+										mode === "signup"
+											? "text-indigo-600 dark:text-white"
+											: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
+									}`}
+									onClick={() => setMode("signup")}
+								>
+									Register
+								</button>
+							</div>
+						)}
 
 						<div className="transition-all duration-300 transform">
-							{isLogin ? <Login /> : <SignUp />}
+							{mode === "login" && (
+								<Login onForgotPassword={() => setMode("forgot")} />
+							)}
+							{mode === "signup" && <SignUp />}
+							{mode === "forgot" && (
+								<ForgotPassword
+									onBack={() => setMode("login")}
+									onSuccess={handleForgotPasswordSuccess}
+								/>
+							)}
+							{mode === "reset" && (
+								<ResetPassword
+									email={resetEmail}
+									onBack={() => setMode("forgot")}
+								/>
+							)}
 						</div>
 					</div>
 				</div>

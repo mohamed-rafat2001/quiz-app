@@ -84,7 +84,7 @@ const userSchema = new mongoose.Schema(
 			enum: ["male", "female"],
 			required: true,
 		},
-		passwordResetCode: Number,
+		passwordResetCode: String,
 		passwordResetExpires: Date,
 	},
 	{ timestamps: true }

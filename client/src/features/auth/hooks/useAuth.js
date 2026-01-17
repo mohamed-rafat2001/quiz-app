@@ -6,6 +6,8 @@ import {
 	logout as logoutApi,
 	updateMe,
 	updatePassword,
+	forgotPassword as forgotPasswordApi,
+	resetPassword as resetPasswordApi,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -37,7 +39,7 @@ export function useSignUp() {
 			const user = data.user;
 			queryClient.setQueryData(["user"], user);
 			toast.success("Account created successfully!");
-			
+
 			// Small delay to show the "success" state before redirecting to animated dashboard
 			setTimeout(() => {
 				navigate("/app/dashboard", { replace: true });
@@ -80,6 +82,35 @@ export function useUpdatePassword() {
 		},
 		onError: (error) => {
 			toast.error(error.message || "Failed to update password");
+		},
+	});
+}
+
+export function useForgotPassword() {
+	return useMutation({
+		mutationFn: forgotPasswordApi,
+		onSuccess: () => {
+			toast.success("Reset code sent to your email!");
+		},
+		onError: (error) => {
+			toast.error(error.message || "Failed to send reset code");
+		},
+	});
+}
+
+export function useResetPassword() {
+	const queryClient = useQueryClient();
+	const navigate = useNavigate();
+
+	return useMutation({
+		mutationFn: resetPasswordApi,
+		onSuccess: (data) => {
+			queryClient.setQueryData(["user"], data.data.user);
+			toast.success("Password reset successfully!");
+			navigate("/app/dashboard", { replace: true });
+		},
+		onError: (error) => {
+			toast.error(error.message || "Failed to reset password");
 		},
 	});
 }

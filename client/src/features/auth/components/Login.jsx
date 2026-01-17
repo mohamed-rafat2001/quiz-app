@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../../shared/validation/schemas";
 import { HiEnvelope, HiLockClosed } from "react-icons/hi2";
 
-function Login() {
+function Login({ onForgotPassword }) {
 	const {
 		register,
 		handleSubmit,
@@ -55,6 +55,7 @@ function Login() {
 					</label>
 					<button
 						type="button"
+						onClick={onForgotPassword}
 						className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 cursor-pointer transition-colors"
 					>
 						Forgot?
