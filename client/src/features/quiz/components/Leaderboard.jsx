@@ -1,5 +1,6 @@
 import React from "react";
 import { HiTrophy } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 
 const Leaderboard = ({
 	quiz,
@@ -56,7 +57,8 @@ const Leaderboard = ({
 								</div>
 								<div className="space-y-2">
 									{tier.data.map((entry, idx) => (
-										<div
+										<Link
+											to={`/app/users/${entry.studentId?._id}`}
 											key={idx}
 											className="flex items-center gap-3 p-2 rounded-xl transition-all hover:bg-gray-50 dark:hover:bg-white/[0.03] border border-transparent hover:border-gray-100 dark:hover:border-white/5"
 										>
@@ -90,7 +92,7 @@ const Leaderboard = ({
 													</p>
 												</div>
 											</div>
-										</div>
+										</Link>
 									))}
 								</div>
 							</div>

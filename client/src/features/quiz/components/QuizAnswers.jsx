@@ -14,7 +14,7 @@ import {
 	HiClock,
 	HiClipboardDocumentList,
 } from "react-icons/hi2";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Pagination from "../../../shared/components/ui/Pagination";
 import Leaderboard from "./Leaderboard";
 
@@ -49,8 +49,25 @@ const QuizHeader = ({ quiz }) => (
 	</motion.div>
 );
 
-const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
-	<div className="bg-white dark:bg-gray-800/50 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+const StatCard = ({
+	title,
+	value,
+	icon: Icon,
+	color,
+	subtitle,
+	onClick,
+	isActive,
+}) => (
+	<div
+		onClick={onClick}
+		className={`bg-white dark:bg-gray-800/50 p-5 rounded-xl border transition-all duration-200 shadow-sm ${
+			onClick ? "cursor-pointer hover:shadow-md" : ""
+		} ${
+			isActive
+				? "border-indigo-500 ring-1 ring-indigo-500 dark:border-indigo-400 dark:ring-indigo-400"
+				: "border-gray-100 dark:border-gray-700"
+		}`}
+	>
 		<div className="flex items-center gap-3">
 			<div
 				className={`p-2.5 rounded-lg ${color} bg-opacity-10 dark:bg-opacity-20`}
@@ -72,85 +89,82 @@ const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
 	</div>
 );
 
-const StatsOverview = ({ answers, quiz }) => {
-	const stats = useMemo(() => {
-		if (!answers || answers.length === 0) {
+const StatsOverview = ({
+	quiz,
+	stats: backendStats,
+	activeFilter,
+	onFilterChange,
+}) => {
+	const displayStats = useMemo(() => {
+		if (backendStats) {
+			const max = quiz?.quizScore || 100;
 			return {
-				totalAttempts: 0,
-				passed: 0,
-				failed: 0,
-				avgScore: 0,
-				highestScore: 0,
-				lowestScore: 0,
-				successRate: 0,
+				totalAttempts: backendStats.totalAttempts || 0,
+				passed: backendStats.passed || 0,
+				failed: backendStats.failed || 0,
+				avgScore: max > 0 ? ((backendStats.avgScoreRaw || 0) / max) * 100 : 0,
+				highestScore:
+					max > 0 ? ((backendStats.highestScoreRaw || 0) / max) * 100 : 0,
+				successRate: backendStats.successRate || 0,
 			};
 		}
-
-		const scores = answers.map((a) => a.score || 0);
-		const passed = answers.filter((a) => a.isPass).length;
-		const failed = answers.length - passed;
-		const totalScore = scores.reduce((sum, s) => sum + s, 0);
-		const avgScore = totalScore / answers.length;
-		const maxPossibleScore = quiz?.quizScore || 100;
-
 		return {
-			totalAttempts: answers.length,
-			passed,
-			failed,
-			avgScore: maxPossibleScore > 0 ? (avgScore / maxPossibleScore) * 100 : 0,
-			highestScore:
-				maxPossibleScore > 0
-					? (Math.max(...scores) / maxPossibleScore) * 100
-					: 0,
-			lowestScore:
-				maxPossibleScore > 0
-					? (Math.min(...scores) / maxPossibleScore) * 100
-					: 0,
-			successRate: answers.length > 0 ? (passed / answers.length) * 100 : 0,
+			totalAttempts: 0,
+			passed: 0,
+			failed: 0,
+			avgScore: 0,
+			highestScore: 0,
+			successRate: 0,
 		};
-	}, [answers, quiz]);
+	}, [backendStats, quiz]);
 
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
 			<StatCard
 				title="Total Attempts"
-				value={stats.totalAttempts}
+				value={displayStats.totalAttempts}
 				icon={HiUsers}
 				color="bg-blue-500"
+				onClick={() => onFilterChange(undefined)}
+				isActive={activeFilter === undefined}
 			/>
 			<StatCard
 				title="Passed"
-				value={stats.passed}
+				value={displayStats.passed}
 				icon={HiCheckBadge}
 				color="bg-green-500"
+				onClick={() => onFilterChange("true")}
+				isActive={activeFilter === "true"}
 			/>
 			<StatCard
 				title="Failed"
-				value={stats.failed}
+				value={displayStats.failed}
 				icon={HiXCircle}
 				color="bg-red-500"
+				onClick={() => onFilterChange("false")}
+				isActive={activeFilter === "false"}
 			/>
 			<StatCard
 				title="Avg Score"
-				value={`${Math.round(stats.avgScore)}%`}
+				value={`${Math.round(displayStats.avgScore)}%`}
 				icon={HiChartBar}
 				color="bg-indigo-500"
 			/>
 			<StatCard
 				title="Highest"
-				value={`${Math.round(stats.highestScore)}%`}
+				value={`${Math.round(displayStats.highestScore)}%`}
 				icon={HiTrophy}
 				color="bg-yellow-500"
 			/>
 			<StatCard
 				title="Success Rate"
-				value={`${Math.round(stats.successRate)}%`}
+				value={`${Math.round(displayStats.successRate)}%`}
 				icon={HiClipboardDocumentList}
 				color="bg-purple-500"
 				subtitle={
-					stats.successRate >= 70
+					displayStats.successRate >= 70
 						? "Good!"
-						: stats.successRate >= 50
+						: displayStats.successRate >= 50
 						? "Average"
 						: "Needs work"
 				}
@@ -268,11 +282,18 @@ const EmptyState = () => (
 export default function QuizAnswers() {
 	const { id } = useParams();
 	const [page, setPage] = useState(1);
+	const [filterStatus, setFilterStatus] = useState(undefined);
+
+	useEffect(() => {
+		setPage(1);
+	}, [filterStatus]);
+
 	const { data: response, isLoading: isLoadingAnswers } = useTeacherQuizAnswers(
 		id,
 		{
 			page,
 			limit: 10,
+			status: filterStatus,
 		}
 	);
 	const answers = response?.data || [];
@@ -288,7 +309,12 @@ export default function QuizAnswers() {
 			<QuizHeader quiz={quiz} />
 
 			{/* Statistics Overview */}
-			<StatsOverview answers={answers} quiz={quiz} />
+			<StatsOverview
+				quiz={quiz}
+				stats={meta.stats}
+				activeFilter={filterStatus}
+				onFilterChange={setFilterStatus}
+			/>
 
 			{/* Leaderboard */}
 			<div className="mb-8 bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm">

@@ -146,18 +146,68 @@ export const studentquizAnswers = errorHandling(async (req, res, next) => {
 });
 
 // get all quiz results for teacher's specific quiz
+// get all quiz results for teacher's specific quiz
 export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
-	const filter = {
+	let filter = {
 		quizId: req.params.id,
 	};
 
 	if (req.user.role !== "admin") {
 		filter.teacherId = req.user._id;
 	}
-	return factory.getAll(quizResultModel, filter, [
-		{ path: "studentId" },
-		{ path: "quizId" },
-	])(req, res, next);
+
+	// Calculate Stats (Global for this quiz)
+	// We clone a basic query for stats to avoid filters affecting the overview stats
+	const statsQuery = { ...filter };
+	const allResults = await quizResultModel
+		.find(statsQuery)
+		.select("status totalScore");
+
+	const totalAttempts = allResults.length;
+	const passed = allResults.filter((r) => r.status).length;
+	const failed = totalAttempts - passed;
+	const scores = allResults.map((r) => r.totalScore || 0);
+	const avgScoreRaw =
+		totalAttempts > 0
+			? scores.reduce((sum, s) => sum + s, 0) / totalAttempts
+			: 0;
+	const highestScoreRaw = scores.length ? Math.max(...scores) : 0;
+	const lowestScoreRaw = scores.length ? Math.min(...scores) : 0;
+	const successRate = totalAttempts > 0 ? (passed / totalAttempts) * 100 : 0;
+
+	const stats = {
+		totalAttempts,
+		passed,
+		failed,
+		avgScoreRaw,
+		highestScoreRaw,
+		lowestScoreRaw,
+		successRate,
+	};
+
+	// Apply Filters for Listing (e.g. status=true/false)
+	if (req.query.status !== undefined) {
+		// status comes as string 'true' or 'false'
+		filter.status = req.query.status === "true";
+	}
+
+	const features = new ApiFeatures(
+		quizResultModel.find(filter).populate("studentId").populate("quizId"),
+		req.query
+	)
+		.filter()
+		.sort()
+		.limitFields();
+
+	const total = await features.query.clone().countDocuments();
+
+	features.paginate();
+	const docs = await features.query;
+
+	const page = req.query.page * 1 || 1;
+	const limit = req.query.limit * 1 || 100;
+
+	response(docs, 200, res, { total, page, limit, stats });
 });
 
 // get individual question answers for a specific result

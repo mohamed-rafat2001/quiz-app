@@ -5,7 +5,26 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
 	HiUsers,
-	// ... existing icons ...
+	HiAcademicCap,
+	HiClipboardDocumentList,
+	HiCheckBadge,
+	HiXCircle,
+	HiChartBar,
+	HiPlus,
+	HiPlay,
+	HiMagnifyingGlass,
+	HiArrowTrendingUp,
+	HiArrowTrendingDown,
+	HiTrophy,
+	HiClock,
+	HiEye,
+	HiCog6Tooth,
+	HiPresentationChartBar,
+	HiSparkles,
+	HiRocketLaunch,
+	HiBookOpen,
+	HiUserGroup,
+	HiShieldCheck,
 	HiDocumentText,
 } from "react-icons/hi2";
 import toast from "react-hot-toast";
