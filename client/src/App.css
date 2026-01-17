@@ -43,25 +43,39 @@
 		animation: shake 0.2s ease-in-out 0s 2;
 	}
 
-	.custom-scrollbar {
+	/* Global Scrollbar Styling */
+	* {
 		scrollbar-width: thin;
-		scrollbar-color: #e5e7eb transparent;
+		scrollbar-color: #4f46e5 transparent;
 	}
 
-	.custom-scrollbar::-webkit-scrollbar {
+	*::-webkit-scrollbar {
 		width: 6px;
+		height: 6px;
 	}
 
-	.custom-scrollbar::-webkit-scrollbar-track {
+	*::-webkit-scrollbar-track {
 		background: transparent;
 	}
 
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		@apply bg-gray-200 rounded-full;
+	*::-webkit-scrollbar-thumb {
+		@apply bg-indigo-600/20 rounded-full border-2 border-transparent bg-clip-padding;
 	}
 
-	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-		@apply bg-gray-300;
+	*::-webkit-scrollbar-thumb:hover {
+		@apply bg-indigo-600/40;
+	}
+
+	.dark * {
+		scrollbar-color: #6366f1 transparent;
+	}
+
+	.dark *::-webkit-scrollbar-thumb {
+		@apply bg-indigo-500/20;
+	}
+
+	.dark *::-webkit-scrollbar-thumb:hover {
+		@apply bg-indigo-500/40;
 	}
 
 	.scrollbar-hide::-webkit-scrollbar {

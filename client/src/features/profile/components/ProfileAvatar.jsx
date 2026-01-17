@@ -46,7 +46,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 	return (
 		<AnimatePresence>
 			{isOpen && (
-				<div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+				<div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -185,7 +185,7 @@ export default function ProfileAvatar({ user }) {
 						initial={{ opacity: 0, y: 10, scale: 0.95 }}
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: 10, scale: 0.95 }}
-						className="absolute top-full left-0 mt-4 w-56 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-white/5 p-2 z-[60] overflow-hidden"
+						className="absolute top-full left-0 mt-4 w-56 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-white/5 p-2 z-[110] overflow-hidden"
 					>
 						<button
 							onClick={() => {

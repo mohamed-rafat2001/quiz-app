@@ -96,7 +96,7 @@ export default function AppLayout() {
 											stiffness: 300,
 											damping: 25,
 										}}
-										className="absolute right-0 mt-4 w-72 bg-white dark:bg-white/[0.08] backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/5 py-4 z-50 overflow-hidden"
+										className="absolute right-0 mt-4 w-72 bg-white dark:bg-white/[0.08] backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/5 py-4 z-[110] overflow-hidden"
 									>
 										<div className="px-8 py-5 border-b border-gray-100 dark:border-white/5 mb-3 bg-gray-50/50 dark:bg-white/[0.02]">
 											<p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">

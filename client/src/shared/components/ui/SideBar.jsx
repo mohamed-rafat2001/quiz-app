@@ -180,18 +180,6 @@ export default function SideBar() {
 						</div>
 					</div>
 				</div>
-
-				<div className="p-8 border-t border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.02] shrink-0">
-					<button
-						onClick={() => logout()}
-						className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group font-black text-sm tracking-wide active:scale-95"
-					>
-						<div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-							<HiArrowRightOnRectangle className="text-xl" />
-						</div>
-						Sign Out
-					</button>
-				</div>
 			</div>
 		</>
 	);
