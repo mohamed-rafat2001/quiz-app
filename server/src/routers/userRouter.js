@@ -8,6 +8,7 @@ import {
 	updateMe,
 	getMe,
 	deleteMe,
+	deleteMeImage,
 	getUser,
 	updatePassword,
 	forgetPass,
@@ -39,6 +40,7 @@ userRouter
 	.route("/me")
 	.patch(fileUpload("image").single("image"), updateMe)
 	.delete(deleteMe);
+userRouter.delete("/me-image", deleteMeImage);
 userRouter.patch("/update-password", updatePassword);
 userRouter.get("/get-user/:id", getUser);
 userRouter.patch("/block-user/admin/:id", allowTo("admin"), blockUserByAdmin);

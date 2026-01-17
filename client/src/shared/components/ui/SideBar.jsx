@@ -86,8 +86,16 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
 export const UserProfile = ({ user }) => (
 	<div className="flex items-center gap-4">
 		<div className="relative group/avatar">
-			<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20 group-hover/avatar:rotate-12 transition-transform duration-500">
-				{user?.name?.charAt(0).toUpperCase()}
+			<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20 group-hover/avatar:rotate-12 transition-transform duration-500 overflow-hidden">
+				{user?.profileImg?.secure_url ? (
+					<img
+						src={user.profileImg.secure_url}
+						alt={user.name}
+						className="w-full h-full object-cover"
+					/>
+				) : (
+					user?.name?.charAt(0).toUpperCase()
+				)}
 			</div>
 			<div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-white/5 rounded-full shadow-sm" />
 		</div>

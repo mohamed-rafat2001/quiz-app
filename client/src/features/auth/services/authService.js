@@ -27,6 +27,7 @@ export async function login(data) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
+
 export async function updateMe(data, onUploadProgress) {
 	try {
 		const isFormData = data instanceof FormData;
@@ -59,6 +60,7 @@ export async function deleteMeImage() {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
+
 export async function getMe() {
 	try {
 		const response = await BaseApi.get("/user/me");
@@ -70,6 +72,7 @@ export async function getMe() {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
+
 export async function updatePassword(data) {
 	try {
 		let user = await BaseApi.patch("/user/update-password", data);

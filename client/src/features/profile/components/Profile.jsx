@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UserDetails from "./UserDetails";
 import UpdatePass from "./UpdatePass";
+import ProfileAvatar from "./ProfileAvatar";
 import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
 import { HiEnvelope } from "react-icons/hi2";
@@ -17,11 +18,7 @@ function Profile() {
 			<div className="bg-white dark:bg-white/[0.03] rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-white/5 overflow-hidden mb-8 transition-colors duration-300">
 				<div className="h-24 sm:h-32 bg-linear-to-r from-indigo-500 to-purple-600" />
 				<div className="px-6 sm:px-8 pb-6 sm:pb-8 flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 -mt-10 sm:-mt-12">
-					<div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-white/[0.05] rounded-2xl shadow-md p-1 border border-gray-100 dark:border-white/5">
-						<div className="w-full h-full bg-indigo-100 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-2xl sm:text-3xl font-black">
-							{user?.name?.charAt(0).toUpperCase()}
-						</div>
-					</div>
+					<ProfileAvatar user={user} />
 					<div className="flex-1 text-center sm:text-left mb-2">
 						<h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">
 							{user?.name}

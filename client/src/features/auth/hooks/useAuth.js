@@ -5,6 +5,7 @@ import {
 	getMe,
 	logout as logoutApi,
 	updateMe,
+	deleteMeImage,
 	updatePassword,
 	forgotPassword as forgotPasswordApi,
 	resetPassword as resetPasswordApi,
@@ -63,13 +64,28 @@ export function useUser() {
 export function useUpdateUser() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: updateMe,
+		mutationFn: ({ data, onUploadProgress }) =>
+			updateMe(data, onUploadProgress),
 		onSuccess: (user) => {
 			queryClient.setQueryData(["user"], user);
 			toast.success("Profile updated successfully!");
 		},
 		onError: (error) => {
 			toast.error(error.message || "Failed to update profile");
+		},
+	});
+}
+
+export function useDeleteUserImage() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: deleteMeImage,
+		onSuccess: (user) => {
+			queryClient.setQueryData(["user"], user);
+			toast.success("Profile image deleted!");
+		},
+		onError: (error) => {
+			toast.error(error.message || "Failed to delete image");
 		},
 	});
 }

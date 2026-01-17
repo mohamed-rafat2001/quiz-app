@@ -99,6 +99,12 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		"gender"
 	);
 	if (req.file) {
+		// delete old image from cloudinary if exists
+		const userBeforeUpdate = await UserModel.findById(req.user._id);
+		if (userBeforeUpdate?.profileImg?.public_id) {
+			await cloudinary.uploader.destroy(userBeforeUpdate.profileImg.public_id);
+		}
+
 		// upload img in cloudinary
 		const { public_id, secure_url } = await cloudinary.uploader.upload(
 			req.file.path,
@@ -111,6 +117,19 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		runValidators: true,
 	});
 	if (!user) return next(new appError("user not updated", 400));
+	response(user, 200, res);
+});
+
+// delete me image
+export const deleteMeImage = errorHandling(async (req, res, next) => {
+	const user = await UserModel.findById(req.user._id);
+	if (user?.profileImg?.public_id) {
+		await cloudinary.uploader.destroy(user.profileImg.public_id);
+	}
+
+	user.profileImg = undefined;
+	await user.save({ validateBeforeSave: false });
+
 	response(user, 200, res);
 });
 
