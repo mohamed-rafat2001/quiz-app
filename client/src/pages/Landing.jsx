@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Lenis from "lenis";
 import { useUser } from "../features/auth/hooks/useAuth";
 import { useDarkMode } from "../shared/context/DarkModeContext";
@@ -11,6 +11,12 @@ import {
 	HiUserGroup,
 	HiSun,
 	HiMoon,
+	HiChartBar,
+	HiShieldCheck,
+	HiClock,
+	HiSparkles,
+	HiRocketLaunch,
+	HiCheckCircle,
 } from "react-icons/hi2";
 
 const FEATURES = [
@@ -18,56 +24,118 @@ const FEATURES = [
 		icon: HiAcademicCap,
 		title: "Expert Content",
 		description:
-			"Curated quizzes across various subjects designed by educators.",
-		color: "bg-blue-500",
+			"Curated quizzes across various subjects designed by educators with years of teaching experience.",
+		color: "from-blue-500 to-cyan-500",
 	},
 	{
 		icon: HiBolt,
 		title: "Instant Feedback",
-		description: "Get detailed explanations and results as soon as you finish.",
-		color: "bg-yellow-500",
+		description:
+			"Get detailed explanations and results as soon as you finish with comprehensive analytics.",
+		color: "from-yellow-500 to-orange-500",
 	},
 	{
 		icon: HiUserGroup,
 		title: "Community Driven",
-		description: "Share quizzes and compete with students worldwide.",
-		color: "bg-purple-500",
+		description:
+			"Share quizzes and compete with students worldwide on our global leaderboards.",
+		color: "from-purple-500 to-pink-500",
+	},
+	{
+		icon: HiChartBar,
+		title: "Advanced Analytics",
+		description:
+			"Track your progress with detailed statistics and performance metrics over time.",
+		color: "from-green-500 to-emerald-500",
+	},
+	{
+		icon: HiShieldCheck,
+		title: "Secure & Reliable",
+		description:
+			"Your data is protected with enterprise-grade security and 99.9% uptime guarantee.",
+		color: "from-red-500 to-rose-500",
+	},
+	{
+		icon: HiClock,
+		title: "Flexible Timing",
+		description:
+			"Set custom time limits, deadlines, and allow multiple attempts for any quiz.",
+		color: "from-indigo-500 to-violet-500",
 	},
 ];
 
 const STATS = [
-	{ label: "Quizzes Taken", val: "250k+" },
-	{ label: "Active Users", val: "5k+" },
-	{ label: "Success Rate", val: "94%" },
-	{ label: "Quiz Topics", val: "1.2k+" },
+	{ label: "Quizzes Taken", val: "250k+", icon: "📝" },
+	{ label: "Active Users", val: "5k+", icon: "👥" },
+	{ label: "Success Rate", val: "94%", icon: "🎯" },
+	{ label: "Quiz Topics", val: "1.2k+", icon: "📚" },
 ];
+
+const TESTIMONIALS = [
+	{
+		name: "Sarah Johnson",
+		role: "High School Teacher",
+		text: "QuizMaster has transformed how I assess my students. The analytics are incredible!",
+		avatar: "https://i.pravatar.cc/150?u=sarah",
+	},
+	{
+		name: "Michael Chen",
+		role: "University Student",
+		text: "I improved my grades significantly using QuizMaster for exam preparation.",
+		avatar: "https://i.pravatar.cc/150?u=michael",
+	},
+	{
+		name: "Emily Brown",
+		role: "Corporate Trainer",
+		text: "Perfect for employee training assessments. Easy to use and powerful analytics.",
+		avatar: "https://i.pravatar.cc/150?u=emily",
+	},
+];
+
+// Animation variants
+const fadeInUp = {
+	hidden: { opacity: 0, y: 60 },
+	visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const staggerContainer = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: { staggerChildren: 0.1 },
+	},
+};
 
 const Navbar = () => {
 	const { data: user } = useUser();
 	const { isDarkMode, toggleDarkMode } = useDarkMode();
 
 	return (
-		<nav
-			className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-b border-gray-100 dark:border-white/5 transition-colors duration-300"
+		<motion.nav
+			initial={{ y: -100 }}
+			animate={{ y: 0 }}
+			transition={{ duration: 0.6, ease: "easeOut" }}
+			className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800 transition-colors duration-300"
 			aria-label="Main navigation"
 		>
 			<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 				<Link
 					to="/"
-					className="flex items-center gap-2"
-					aria-label="QuizApp Home"
+					className="flex items-center gap-3 group"
+					aria-label="QuizMaster Home"
 				>
-					<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-200 dark:shadow-indigo-950/20">
+					<div className="w-11 h-11 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
 						Q
 					</div>
-					<span className="text-xl font-black text-gray-900 dark:text-white tracking-tight uppercase">
-						QuizApp
+					<span className="text-xl font-black text-gray-900 dark:text-white tracking-tight">
+						QUIZ
+						<span className="text-indigo-600 dark:text-indigo-400">MASTER</span>
 					</span>
 				</Link>
-				<div className="flex items-center gap-6">
+				<div className="flex items-center gap-4">
 					<button
 						onClick={toggleDarkMode}
-						className="p-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.05] border border-gray-100 dark:border-white/5 text-indigo-600 dark:text-indigo-400 hover:scale-110 active:scale-90 transition-all duration-300 shadow-sm"
+						className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 hover:scale-110 active:scale-90 transition-all duration-300"
 						aria-label="Toggle Dark Mode"
 					>
 						{isDarkMode ? (
@@ -80,26 +148,24 @@ const Navbar = () => {
 					{user ? (
 						<Link
 							to="/app/dashboard"
-							className="flex items-center gap-3 px-5 py-2.5 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-2xl font-black hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95 group"
+							className="flex items-center gap-3 px-5 py-2.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95 group"
 						>
-							<div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-black shadow-sm group-hover:rotate-12 transition-transform">
+							<div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-bold shadow-sm group-hover:rotate-12 transition-transform">
 								{user.name.charAt(0).toUpperCase()}
 							</div>
-							<span className="text-sm">Dashboard</span>
+							<span className="text-sm font-bold">Dashboard</span>
 						</Link>
 					) : (
 						<>
 							<Link
 								to="/welcome"
-								className="text-sm font-black text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-								aria-label="Login to your account"
+								className="hidden sm:block text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
 							>
 								Login
 							</Link>
 							<Link
 								to="/welcome"
-								className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-black rounded-xl shadow-lg shadow-indigo-200 dark:shadow-indigo-950/20 hover:bg-indigo-700 transition-all active:scale-95"
-								aria-label="Get started for free"
+								className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 transition-all active:scale-95"
 							>
 								Get Started
 							</Link>
@@ -107,361 +173,416 @@ const Navbar = () => {
 					)}
 				</div>
 			</div>
-		</nav>
+		</motion.nav>
 	);
 };
 
-const Hero = ({ opacity, scale }) => {
-	const { isDarkMode } = useDarkMode();
-	const { scrollYProgress } = useScroll();
-	const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-	const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-	const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
+const Hero = () => {
+	const ref = useRef(null);
+	const { scrollYProgress } = useScroll({
+		target: ref,
+		offset: ["start start", "end start"],
+	});
+	const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+	const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
 	return (
 		<section
-			className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden bg-white dark:bg-white/[0.02] transition-colors duration-300"
-			aria-labelledby="hero-heading"
+			ref={ref}
+			className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden bg-gradient-to-br from-white via-indigo-50/50 to-purple-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
 		>
 			<motion.div
-				style={{ opacity, scale }}
-				className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+				style={{ y, opacity }}
+				className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10"
 			>
+				{/* Left Content */}
 				<div className="relative z-10">
 					<motion.div
-						initial={{ opacity: 0, x: -50 }}
+						initial={{ opacity: 0, x: -60 }}
 						animate={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.8, ease: "easeOut" }}
 					>
-						<motion.span
+						<motion.div
 							initial={{ opacity: 0, scale: 0.8 }}
 							animate={{ opacity: 1, scale: 1 }}
 							transition={{ delay: 0.2 }}
-							className="inline-block px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest rounded-full mb-6"
+							className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-sm font-bold rounded-full mb-6"
 						>
-							✨ The Ultimate Learning Platform
-						</motion.span>
-						<h1
-							id="hero-heading"
-							className="text-6xl lg:text-8xl font-black text-gray-900 dark:text-white leading-[0.9] mb-8 tracking-tighter"
-						>
-							Master Your <br />
-							<motion.span
-								initial={{ color: isDarkMode ? "#f9fafb" : "#111827" }}
-								animate={{ color: "#4f46e5" }}
-								transition={{ delay: 1, duration: 1 }}
-								className="relative inline-block"
-							>
-								Knowledge.
-								<motion.div
-									initial={{ width: 0 }}
-									animate={{ width: "100%" }}
-									transition={{ delay: 1.5, duration: 0.8 }}
-									className="absolute bottom-2 left-0 h-2 bg-indigo-100 dark:bg-indigo-900/50 -z-10"
-								/>
-							</motion.span>
+							<HiSparkles className="text-yellow-500" />
+							The #1 Quiz Platform for Education
+						</motion.div>
+
+						<h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] mb-6 tracking-tight">
+							Master Any <br />
+							<span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+								Subject
+							</span>{" "}
+							with Quizzes
 						</h1>
-						<p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg mb-10 leading-relaxed font-black">
-							Step into a world of interactive learning where quizzes meet
-							innovation. Create, share, and master any subject with our
-							comprehensive toolset designed for students and educators alike.
+
+						<p className="text-lg text-gray-600 dark:text-gray-300 max-w-lg mb-8 leading-relaxed">
+							Create engaging quizzes, track student progress, and unlock
+							powerful insights. The ultimate platform for teachers and students
+							to excel.
 						</p>
 
-						{/* New Quick Features Badges */}
-						<div className="flex flex-wrap gap-3 mb-10">
+						{/* Feature pills */}
+						<motion.div
+							initial="hidden"
+							animate="visible"
+							variants={staggerContainer}
+							className="flex flex-wrap gap-3 mb-8"
+						>
 							{[
-								"🎯 Smart Analytics",
-								"⚡ Real-time Results",
-								"📱 Mobile Ready",
-								"🏆 Global Leaderboards",
-							].map((badge, i) => (
+								{ icon: "🎯", text: "Smart Analytics" },
+								{ icon: "⚡", text: "Instant Results" },
+								{ icon: "📱", text: "Mobile Ready" },
+								{ icon: "🏆", text: "Leaderboards" },
+							].map((item, i) => (
 								<motion.span
-									key={badge}
-									initial={{ opacity: 0, y: 10 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ delay: 0.8 + i * 0.1 }}
-									className="px-4 py-2 bg-gray-50 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 text-sm font-bold rounded-2xl border border-gray-100 dark:border-white/5"
+									key={i}
+									variants={fadeInUp}
+									className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full border border-gray-200 dark:border-gray-700 shadow-sm"
 								>
-									{badge}
+									<span>{item.icon}</span>
+									{item.text}
 								</motion.span>
 							))}
-						</div>
+						</motion.div>
 
 						<div className="flex flex-col sm:flex-row gap-4">
 							<Link
 								to="/welcome"
-								className="px-10 py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-2xl shadow-indigo-200 dark:shadow-indigo-950/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 group overflow-hidden relative"
-								aria-label="Start learning now"
+								className="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/40 transition-all flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95"
 							>
-								<span className="relative z-10">Start Learning Now</span>
-								<HiArrowRight
-									className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10"
-									aria-hidden="true"
-								/>
-								<motion.div
-									whileHover={{ x: "100%" }}
-									initial={{ x: "-100%" }}
-									transition={{ duration: 0.5 }}
-									className="absolute inset-0 bg-linear-to-r from-indigo-500 to-indigo-600 z-0"
-								/>
+								<HiRocketLaunch className="text-xl group-hover:rotate-12 transition-transform" />
+								Get Started Free
+								<HiArrowRight className="group-hover:translate-x-1 transition-transform" />
 							</Link>
-							<div className="flex items-center gap-4 px-6 py-4 bg-gray-50 dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/5 transition-colors duration-300">
-								<div className="flex -space-x-3" aria-hidden="true">
+
+							<div className="flex items-center gap-4 px-6 py-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+								<div className="flex -space-x-3">
 									{[1, 2, 3, 4].map((i) => (
-										<motion.div
+										<img
 											key={i}
-											initial={{ opacity: 0, x: -10 }}
-											animate={{ opacity: 1, x: 0 }}
-											transition={{ delay: 0.5 + i * 0.1 }}
-											className="w-10 h-10 rounded-full border-2 border-white dark:border-white/10 bg-indigo-400 overflow-hidden shadow-sm"
-										>
-											<img
-												src={`https://i.pravatar.cc/150?u=user${i}`}
-												alt="User avatar"
-												className="w-full h-full object-cover"
-											/>
-										</motion.div>
+											src={`https://i.pravatar.cc/40?u=user${i}`}
+											alt=""
+											className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
+										/>
 									))}
 								</div>
-								<div className="text-sm font-black text-gray-900 dark:text-white">
-									5k+ Students Joined
+								<div>
+									<p className="text-sm font-bold text-gray-900 dark:text-white">
+										5,000+ users
+									</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400">
+										Join them today
+									</p>
 								</div>
 							</div>
 						</div>
 					</motion.div>
 				</div>
 
+				{/* Right Content - Visual */}
 				<motion.div
 					initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
 					animate={{ opacity: 1, scale: 1, rotate: 0 }}
-					transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-					className="relative"
-					aria-hidden="true"
+					transition={{ duration: 1, delay: 0.3 }}
+					className="relative hidden lg:block"
 				>
-					<motion.div
-						style={{ y: y1, rotate }}
-						className="aspect-square bg-linear-to-tr from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-[3rem] relative overflow-hidden shadow-inner transition-colors duration-300"
-					>
-						<div className="absolute inset-0 flex items-center justify-center p-12">
-							<motion.div
-								whileHover={{ rotate: 0, scale: 1.05 }}
-								className="w-full h-full bg-white dark:bg-white/[0.03] rounded-[2.5rem] shadow-2xl p-8 transform rotate-3 transition-all duration-500 border border-gray-100 dark:border-white/5"
-							>
-								<div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl mb-6 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-									<HiAcademicCap className="w-6 h-6" />
+					<div className="relative">
+						{/* Main Card */}
+						<div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-100 dark:border-gray-700 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+							<div className="flex items-center gap-3 mb-6">
+								<div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white">
+									<HiAcademicCap className="text-2xl" />
 								</div>
-								<div className="space-y-4">
-									<div className="h-6 bg-gray-100 dark:bg-gray-800 rounded-lg w-3/4 animate-pulse" />
-									<div className="h-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg w-full" />
-									<div className="h-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg w-5/6" />
-									<div className="grid grid-cols-2 gap-4 pt-4">
-										{[1, 2, 3, 4].map((i) => (
-											<div
-												key={i}
-												className={`h-12 border-2 ${
-													i === 1
-														? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30"
-														: "border-gray-100 dark:border-gray-800/50"
-												} rounded-xl flex items-center justify-center transition-colors duration-300`}
-											>
-												<div
-													className={`w-2 h-2 rounded-full ${
-														i === 1
-															? "bg-indigo-500"
-															: "bg-gray-200 dark:bg-gray-700"
-													} mr-2`}
-												/>
-												<div
-													className={`h-2 ${
-														i === 1
-															? "bg-indigo-200 dark:bg-indigo-800"
-															: "bg-gray-100 dark:bg-gray-800"
-													} rounded w-12`}
-												/>
-											</div>
-										))}
+								<div>
+									<p className="font-bold text-gray-900 dark:text-white">
+										Mathematics Quiz
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										10 Questions • 30 min
+									</p>
+								</div>
+							</div>
+							<div className="space-y-3 mb-6">
+								{[1, 2, 3, 4].map((i) => (
+									<div
+										key={i}
+										className={`p-4 rounded-xl border-2 ${
+											i === 1
+												? "border-green-500 bg-green-50 dark:bg-green-900/20"
+												: "border-gray-200 dark:border-gray-700"
+										} flex items-center gap-3`}
+									>
+										<div
+											className={`w-5 h-5 rounded-full border-2 ${
+												i === 1
+													? "border-green-500 bg-green-500"
+													: "border-gray-300 dark:border-gray-600"
+											} flex items-center justify-center`}
+										>
+											{i === 1 && (
+												<HiCheckCircle className="text-white text-xs" />
+											)}
+										</div>
+										<div
+											className={`h-3 rounded ${
+												i === 1
+													? "bg-green-300 dark:bg-green-700"
+													: "bg-gray-200 dark:bg-gray-700"
+											} w-24`}
+										/>
 									</div>
+								))}
+							</div>
+							<div className="flex justify-between items-center">
+								<div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+									<HiClock />
+									<span>15:30 remaining</span>
 								</div>
-							</motion.div>
+								<button className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold rounded-xl">
+									Submit
+								</button>
+							</div>
 						</div>
-						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,var(--tw-gradient-from)_0%,transparent_60%)] from-indigo-200/40 dark:from-indigo-800/20 pointer-events-none" />
-					</motion.div>
 
-					{/* Floating decorative elements */}
-					<motion.div
-						style={{ y: y2 }}
-						animate={{
-							y: [0, -20, 0],
-							rotate: [0, 10, 0],
-						}}
-						transition={{
-							duration: 5,
-							repeat: Infinity,
-							ease: "easeInOut",
-						}}
-						className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/50 dark:bg-yellow-900/20 rounded-full blur-2xl"
-					/>
-					<motion.div
-						style={{ y: y1 }}
-						animate={{
-							y: [0, 20, 0],
-							rotate: [0, -10, 0],
-						}}
-						transition={{
-							duration: 6,
-							repeat: Infinity,
-							ease: "easeInOut",
-						}}
-						className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-200/50 dark:bg-indigo-900/20 rounded-full blur-2xl"
-					/>
+						{/* Floating stats */}
+						<motion.div
+							animate={{ y: [0, -10, 0] }}
+							transition={{ duration: 3, repeat: Infinity }}
+							className="absolute -top-8 -right-8 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700"
+						>
+							<p className="text-2xl font-black text-green-500">98%</p>
+							<p className="text-xs text-gray-500 dark:text-gray-400">
+								Accuracy
+							</p>
+						</motion.div>
+
+						<motion.div
+							animate={{ y: [0, 10, 0] }}
+							transition={{ duration: 4, repeat: Infinity }}
+							className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700"
+						>
+							<p className="text-2xl font-black text-indigo-500">🏆</p>
+							<p className="text-xs text-gray-500 dark:text-gray-400">
+								Top 10%
+							</p>
+						</motion.div>
+					</div>
 				</motion.div>
 			</motion.div>
 
-			<div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[800px] h-[800px] bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-3xl -z-10 opacity-60 transition-colors duration-300" />
-			<div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[600px] h-[600px] bg-purple-50 dark:bg-purple-900/10 rounded-full blur-3xl -z-10 opacity-60 transition-colors duration-300" />
+			{/* Background elements */}
+			<div className="absolute top-1/4 right-0 w-96 h-96 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-3xl opacity-50" />
+			<div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-3xl opacity-50" />
 		</section>
 	);
 };
 
-const Features = () => (
-	<section
-		id="features"
-		className="py-32 px-6 bg-gray-50/50 dark:bg-white/[0.02] transition-colors duration-300 relative overflow-hidden"
-		aria-labelledby="features-heading"
-	>
-		<div className="max-w-7xl mx-auto relative z-10">
-			<div className="text-center mb-24">
-				<motion.h2
-					id="features-heading"
-					initial={{ opacity: 0, y: 20 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true }}
-					className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight"
-				>
-					Elevate Your{" "}
-					<span className="text-indigo-600 dark:text-indigo-400">Learning</span>
-				</motion.h2>
-				<p className="text-xl text-gray-600 dark:text-gray-400 font-black max-w-2xl mx-auto leading-relaxed">
-					Everything you need to master your studies and track your progress
-					effectively in one place.
-				</p>
-			</div>
+const Features = () => {
+	const ref = useRef(null);
+	const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-				{FEATURES.map((feature) => (
-					<motion.div
-						key={feature.title}
-						initial={{ opacity: 0, y: 30 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.5 }}
-						whileHover={{ y: -10, scale: 1.02 }}
-						className="bg-white dark:bg-white/[0.03] p-12 rounded-[3rem] shadow-sm hover:shadow-2xl transition-all border border-gray-100 dark:border-white/5 group cursor-default"
-					>
-						<div
-							className={`w-20 h-20 ${feature.color} rounded-3xl flex items-center justify-center text-white mb-10 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
-							aria-hidden="true"
-						>
-							<feature.icon className="w-10 h-10" />
-						</div>
-						<h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
-							{feature.title}
-						</h3>
-						<p className="text-gray-600 dark:text-gray-400 font-black leading-relaxed opacity-90">
-							{feature.description}
-						</p>
-					</motion.div>
-				))}
-			</div>
-		</div>
-		<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,var(--tw-gradient-from)_0%,transparent_70%)] from-indigo-50 dark:from-indigo-950/10 pointer-events-none" />
-	</section>
-);
-
-const Stats = () => (
-	<section
-		className="py-32 px-6 relative overflow-hidden bg-indigo-600 dark:bg-indigo-700"
-		aria-labelledby="stats-heading"
-	>
-		<div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-			<div>
-				<h2
-					id="stats-heading"
-					className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[0.9] tracking-tighter"
-				>
-					Ready to start <br /> your journey?
-				</h2>
-				<p className="text-indigo-100 text-xl font-black mb-12 leading-relaxed opacity-90">
-					Join thousands of users who have already transformed their learning
-					experience. It&apos;s free to start and easy to use.
-				</p>
-				<Link
-					to="/welcome"
-					className="inline-flex px-12 py-6 bg-white text-indigo-600 font-black rounded-2xl shadow-2xl hover:bg-gray-50 transition-all transform hover:-translate-y-1 active:scale-95"
-					aria-label="Create your free account"
-				>
-					Create Free Account
-				</Link>
-			</div>
-			<div className="grid grid-cols-2 gap-8">
-				{STATS.map((stat) => (
-					<div
-						key={stat.label}
-						className="bg-white/10 backdrop-blur-xl border border-white/20 p-10 rounded-[2.5rem] shadow-inner"
-					>
-						<div className="text-5xl font-black text-white mb-2 tracking-tighter">
-							{stat.val}
-						</div>
-						<div className="text-indigo-100 font-black text-xs uppercase tracking-[0.2em] opacity-80">
-							{stat.label}
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-
-		<div
-			className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none"
-			aria-hidden="true"
+	return (
+		<section
+			ref={ref}
+			className="py-24 px-6 bg-gray-50 dark:bg-gray-900 relative overflow-hidden"
 		>
-			<div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
-			<div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-400 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2" />
-		</div>
-	</section>
-);
+			<div className="max-w-7xl mx-auto">
+				<motion.div
+					initial={{ opacity: 0, y: 40 }}
+					animate={isInView ? { opacity: 1, y: 0 } : {}}
+					transition={{ duration: 0.6 }}
+					className="text-center mb-16"
+				>
+					<span className="inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-sm font-bold rounded-full mb-4">
+						FEATURES
+					</span>
+					<h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
+						Everything You Need to{" "}
+						<span className="text-indigo-600 dark:text-indigo-400">Excel</span>
+					</h2>
+					<p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+						Powerful tools for creating, taking, and analyzing quizzes. Built
+						for modern education.
+					</p>
+				</motion.div>
+
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{FEATURES.map((feature, index) => (
+						<motion.div
+							key={feature.title}
+							initial={{ opacity: 0, y: 40 }}
+							animate={isInView ? { opacity: 1, y: 0 } : {}}
+							transition={{ duration: 0.5, delay: index * 0.1 }}
+							whileHover={{ y: -8, scale: 1.02 }}
+							className="group bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 cursor-default"
+						>
+							<div
+								className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all`}
+							>
+								<feature.icon className="text-2xl" />
+							</div>
+							<h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+								{feature.title}
+							</h3>
+							<p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+								{feature.description}
+							</p>
+						</motion.div>
+					))}
+				</div>
+			</div>
+		</section>
+	);
+};
+
+const Testimonials = () => {
+	const ref = useRef(null);
+	const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+	return (
+		<section ref={ref} className="py-24 px-6 bg-white dark:bg-gray-900">
+			<div className="max-w-7xl mx-auto">
+				<motion.div
+					initial={{ opacity: 0, y: 40 }}
+					animate={isInView ? { opacity: 1, y: 0 } : {}}
+					className="text-center mb-16"
+				>
+					<span className="inline-block px-4 py-2 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-sm font-bold rounded-full mb-4">
+						TESTIMONIALS
+					</span>
+					<h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
+						Loved by{" "}
+						<span className="text-purple-600 dark:text-purple-400">
+							Thousands
+						</span>
+					</h2>
+				</motion.div>
+
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+					{TESTIMONIALS.map((testimonial, index) => (
+						<motion.div
+							key={testimonial.name}
+							initial={{ opacity: 0, y: 40 }}
+							animate={isInView ? { opacity: 1, y: 0 } : {}}
+							transition={{ delay: index * 0.1 }}
+							className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700"
+						>
+							<p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+								"{testimonial.text}"
+							</p>
+							<div className="flex items-center gap-4">
+								<img
+									src={testimonial.avatar}
+									alt={testimonial.name}
+									className="w-12 h-12 rounded-full"
+								/>
+								<div>
+									<p className="font-bold text-gray-900 dark:text-white">
+										{testimonial.name}
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										{testimonial.role}
+									</p>
+								</div>
+							</div>
+						</motion.div>
+					))}
+				</div>
+			</div>
+		</section>
+	);
+};
+
+const Stats = () => {
+	const ref = useRef(null);
+	const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+	return (
+		<section
+			ref={ref}
+			className="py-24 px-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden"
+		>
+			<div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+				<motion.div
+					initial={{ opacity: 0, x: -40 }}
+					animate={isInView ? { opacity: 1, x: 0 } : {}}
+				>
+					<h2 className="text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
+						Ready to Transform Your Learning?
+					</h2>
+					<p className="text-indigo-100 text-lg mb-8 leading-relaxed">
+						Join thousands of educators and students who are already using
+						QuizMaster to achieve their goals.
+					</p>
+					<Link
+						to="/welcome"
+						className="inline-flex px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all hover:scale-[1.02] active:scale-95"
+					>
+						Start for Free
+					</Link>
+				</motion.div>
+
+				<motion.div
+					initial={{ opacity: 0, x: 40 }}
+					animate={isInView ? { opacity: 1, x: 0 } : {}}
+					className="grid grid-cols-2 gap-4"
+				>
+					{STATS.map((stat, index) => (
+						<motion.div
+							key={stat.label}
+							initial={{ opacity: 0, scale: 0.8 }}
+							animate={isInView ? { opacity: 1, scale: 1 } : {}}
+							transition={{ delay: index * 0.1 }}
+							className="bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-2xl text-center"
+						>
+							<span className="text-3xl mb-2 block">{stat.icon}</span>
+							<p className="text-3xl font-black text-white">{stat.val}</p>
+							<p className="text-indigo-200 text-sm font-medium">
+								{stat.label}
+							</p>
+						</motion.div>
+					))}
+				</motion.div>
+			</div>
+
+			<div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+			<div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl" />
+		</section>
+	);
+};
 
 const Footer = () => (
-	<footer
-		className="py-24 px-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-white/[0.02] transition-colors duration-300"
-		aria-label="Footer"
-	>
+	<footer className="py-16 px-6 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
 		<div className="max-w-7xl mx-auto">
-			<div className="flex flex-col md:flex-row justify-between items-center gap-12">
+			<div className="flex flex-col md:flex-row justify-between items-center gap-8">
 				<div className="flex items-center gap-3">
-					<div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-xl shadow-indigo-500/20">
+					<div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">
 						Q
 					</div>
-					<span className="text-2xl font-black text-gray-900 dark:text-white tracking-tighter uppercase">
-						QuizApp
+					<span className="text-2xl font-black text-gray-900 dark:text-white">
+						QUIZ
+						<span className="text-indigo-600 dark:text-indigo-400">MASTER</span>
 					</span>
 				</div>
-				<nav
-					className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-sm font-black text-gray-600 dark:text-gray-400"
-					aria-label="Footer navigation"
-				>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
-						Privacy Policy
+				<nav className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-400">
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+						Privacy
 					</button>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
-						Terms of Service
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+						Terms
 					</button>
-					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer tracking-wide active:scale-95">
+					<button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
 						Contact
 					</button>
 				</nav>
-				<div className="text-sm font-black text-gray-400 dark:text-gray-600 tracking-wide">
-					© {new Date().getFullYear()} QuizApp. All rights reserved.
-				</div>
+				<p className="text-sm text-gray-500 dark:text-gray-500">
+					© {new Date().getFullYear()} QuizMaster. All rights reserved.
+				</p>
 			</div>
 		</div>
 	</footer>
@@ -469,35 +590,34 @@ const Footer = () => (
 
 const Landing = () => {
 	useEffect(() => {
+		// Initialize Lenis for smooth scrolling
 		const lenis = new Lenis({
 			duration: 1.2,
 			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+			orientation: "vertical",
 			smoothWheel: true,
+			wheelMultiplier: 1,
+			touchMultiplier: 2,
 		});
 
-		let rafId;
 		function raf(time) {
 			lenis.raf(time);
-			rafId = requestAnimationFrame(raf);
+			requestAnimationFrame(raf);
 		}
 
-		rafId = requestAnimationFrame(raf);
+		requestAnimationFrame(raf);
 
 		return () => {
 			lenis.destroy();
-			cancelAnimationFrame(rafId);
 		};
 	}, []);
 
-	const { scrollYProgress } = useScroll();
-	const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-	const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
-
 	return (
-		<div className="bg-white dark:bg-white/[0.02] overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400 transition-colors duration-300">
+		<div className="bg-white dark:bg-gray-900 overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400">
 			<Navbar />
-			<Hero opacity={opacity} scale={scale} />
+			<Hero />
 			<Features />
+			<Testimonials />
 			<Stats />
 			<Footer />
 		</div>

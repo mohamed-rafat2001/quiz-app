@@ -100,3 +100,12 @@ export async function resetPassword(data) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
 }
+
+export async function getUserById(id) {
+	try {
+		const response = await BaseApi.get(`/user/get-user/${id}`);
+		return response.data.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
+}

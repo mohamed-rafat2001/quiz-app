@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuizAnswer, useResultDetails } from "../hooks/useQuiz";
 import { useUser } from "../../auth/hooks/useAuth";
@@ -20,7 +21,7 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 	>
 		<button
 			onClick={onBack}
-			className="absolute top-8 left-8 p-3 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-white/[0.08] rounded-2xl transition-all hidden sm:flex items-center gap-2 text-sm font-black shadow-sm active:scale-95"
+			className="absolute top-8 left-8 p-3 text-gray-400 dark:text-white/40 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-white/[0.08] rounded-2xl transition-all hidden sm:flex items-center gap-2 text-sm font-black shadow-sm active:scale-95"
 		>
 			<HiArrowLeft className="text-xl" />
 			Back
@@ -41,7 +42,7 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 			{result.quizName}
 		</h1>
 		<div className="flex flex-col items-center gap-2">
-			<p className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-black uppercase tracking-[0.3em]">
+			<p className="text-[10px] sm:text-xs text-gray-400 dark:text-white/40 font-black uppercase tracking-[0.3em]">
 				Quiz Results Review
 			</p>
 			{isTeacher && result.studentId && (
@@ -58,18 +59,18 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 const ResultStats = ({ result }) => (
 	<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10 mb-12 sm:mb-16">
 		<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
-			<p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-3">
+			<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
 				Final Score
 			</p>
 			<h4 className="text-4xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">
 				{result.totalScore}{" "}
-				<span className="text-xl sm:text-2xl text-gray-300 dark:text-gray-600 font-black">
+				<span className="text-xl sm:text-2xl text-gray-300 dark:text-white/20 font-black">
 					/ {result.quizId?.quizScore || "?"}
 				</span>
 			</h4>
 		</div>
 		<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
-			<p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-3">
+			<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
 				Status
 			</p>
 			<h4
@@ -115,27 +116,52 @@ const QuestionReviewItem = ({ ans, index }) => {
 						{question?.ques}
 					</p>
 
+					{question?.image && (
+						<div className="mb-6">
+							<img
+								src={question.image.secure_url}
+								alt="Question"
+								className="max-h-64 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
+							/>
+						</div>
+					)}
+
 					<div className="space-y-3 sm:space-y-4">
 						<div
-							className={`flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border ${
+							className={`flex flex-col gap-4 p-4 sm:p-5 rounded-2xl border ${
 								isCorrect
 									? "bg-green-100/50 dark:bg-green-500/10 border-green-200/50 dark:border-green-500/10 text-green-900 dark:text-green-300"
 									: "bg-red-100/50 dark:bg-red-500/10 border-red-200/50 dark:border-red-500/10 text-red-900 dark:text-red-300"
 							}`}
 						>
-							{isCorrect ? (
-								<HiCheckCircle className="text-xl shrink-0" />
-							) : (
-								<HiXCircle className="text-xl shrink-0" />
-							)}
-							<div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 flex-1 min-w-0">
-								<span className="text-[10px] font-black uppercase tracking-[0.2em] shrink-0 opacity-60">
-									Your Answer:
-								</span>
-								<span className="text-sm sm:text-base font-bold truncate">
-									{ans.studentAnswer}
-								</span>
+							<div className="flex items-center gap-3 sm:gap-4">
+								{isCorrect ? (
+									<HiCheckCircle className="text-xl shrink-0" />
+								) : (
+									<HiXCircle className="text-xl shrink-0" />
+								)}
+								<div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 flex-1 min-w-0">
+									<span className="text-[10px] font-black uppercase tracking-[0.2em] shrink-0 opacity-60">
+										Your Answer:
+									</span>
+									<span className="text-sm sm:text-base font-bold truncate">
+										{ans.studentAnswer}
+									</span>
+								</div>
 							</div>
+
+							{ans.image && (
+								<div className="mt-2 pl-8 sm:pl-10">
+									<p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">
+										Attached Work:
+									</p>
+									<img
+										src={ans.image.secure_url}
+										alt="Student work"
+										className="max-h-48 w-auto object-contain rounded-xl border border-black/5 dark:border-white/5"
+									/>
+								</div>
+							)}
 						</div>
 
 						{!isCorrect && question?.correctAnswer && (
@@ -167,19 +193,34 @@ export default function SingleAnswer() {
 
 	const isLoading = isLoadingResult || isLoadingDetails;
 	const isTeacher = user?.role === "teacher";
+	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+	const handleNext = () => {
+		if (details && currentQuestionIndex < details.length - 1) {
+			setCurrentQuestionIndex((prev) => prev + 1);
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	};
+
+	const handlePrev = () => {
+		if (currentQuestionIndex > 0) {
+			setCurrentQuestionIndex((prev) => prev - 1);
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	};
 
 	if (isLoading) return <Loader />;
 
 	if (!result)
 		return (
 			<div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 transition-colors duration-300">
-				<div className="w-20 h-20 bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 rounded-full flex items-center justify-center mb-6 text-gray-300 dark:text-gray-600">
+				<div className="w-20 h-20 bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 rounded-full flex items-center justify-center mb-6 text-gray-300 dark:text-white/20">
 					<HiMagnifyingGlass className="text-4xl" />
 				</div>
 				<h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
 					Answer not found
 				</h3>
-				<p className="text-gray-500 dark:text-gray-400 mb-8 font-medium">
+				<p className="text-gray-500 dark:text-white/60 mb-8 font-medium">
 					The submission you are looking for does not exist or has been removed.
 				</p>
 				<button
@@ -208,16 +249,53 @@ export default function SingleAnswer() {
 					<ResultStats result={result} />
 
 					<div className="space-y-4 sm:space-y-6">
-						<div className="flex items-center gap-3 mb-6 sm:mb-8">
-							<div className="h-6 sm:h-8 w-1.5 bg-indigo-600 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.4)]"></div>
-							<h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
-								Review Questions
-							</h2>
+						<div className="flex items-center justify-between mb-6 sm:mb-8">
+							<div className="flex items-center gap-3">
+								<div className="h-6 sm:h-8 w-1.5 bg-indigo-600 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.4)]"></div>
+								<h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
+									Review Questions
+								</h2>
+							</div>
+							<div className="px-4 py-1.5 bg-gray-100 dark:bg-white/[0.05] rounded-full text-xs font-black text-gray-500 dark:text-white/60">
+								{currentQuestionIndex + 1} / {details?.length || 0}
+							</div>
 						</div>
 
-						{details?.map((ans, index) => (
-							<QuestionReviewItem key={ans._id} ans={ans} index={index} />
-						))}
+						{details && details[currentQuestionIndex] && (
+							<QuestionReviewItem
+								key={details[currentQuestionIndex]._id}
+								ans={details[currentQuestionIndex]}
+								index={currentQuestionIndex}
+							/>
+						)}
+
+						<div className="flex items-center justify-between gap-4 pt-4">
+							<button
+								onClick={handlePrev}
+								disabled={currentQuestionIndex === 0}
+								className={`px-6 py-3 rounded-xl font-black text-sm transition-all ${
+									currentQuestionIndex === 0
+										? "opacity-0 pointer-events-none"
+										: "bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/[0.1] active:scale-95"
+								}`}
+							>
+								Previous
+							</button>
+
+							<button
+								onClick={handleNext}
+								disabled={
+									!details || currentQuestionIndex === details.length - 1
+								}
+								className={`px-6 py-3 rounded-xl font-black text-sm transition-all ${
+									!details || currentQuestionIndex === details.length - 1
+										? "opacity-0 pointer-events-none"
+										: "bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 active:scale-95 shadow-lg shadow-indigo-200 dark:shadow-indigo-500/20"
+								}`}
+							>
+								Next
+							</button>
+						</div>
 					</div>
 
 					<div className="mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-gray-100 dark:border-white/5 flex justify-center">

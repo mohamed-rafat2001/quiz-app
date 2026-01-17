@@ -1,14 +1,28 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import UserDetails from "./UserDetails";
 import UpdatePass from "./UpdatePass";
 import ProfileAvatar from "./ProfileAvatar";
 import { useUser } from "../../auth/hooks/useAuth";
+import { getUserById } from "../../auth/services/authService";
 import Loader from "../../../shared/components/ui/Loader";
 import { HiEnvelope } from "react-icons/hi2";
 
 function Profile() {
+	const { id } = useParams();
 	const [activeTab, setActiveTab] = useState("details");
-	const { data: user, isLoading } = useUser();
+	const { data: currentUser, isLoading: isLoadingCurrentUser } = useUser();
+
+	const { data: fetchedUser, isLoading: isLoadingFetchedUser } = useQuery({
+		queryKey: ["user", id],
+		queryFn: () => getUserById(id),
+		enabled: !!id,
+	});
+
+	const user = id ? fetchedUser : currentUser;
+	const isLoading = id ? isLoadingFetchedUser : isLoadingCurrentUser;
+	const isOwner = !id || currentUser?._id === user?._id;
 
 	if (isLoading) return <Loader />;
 
@@ -23,7 +37,7 @@ function Profile() {
 						<h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">
 							{user?.name}
 						</h1>
-						<div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-gray-600 dark:text-gray-400 mt-1">
+						<div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-gray-600 dark:text-white/60 mt-1">
 							<span className="flex items-center gap-1 text-xs sm:text-sm font-bold">
 								<HiEnvelope className="text-indigo-500 dark:text-indigo-400" />
 								{user?.email}
@@ -37,14 +51,14 @@ function Profile() {
 
 				{/* Tab Navigation */}
 				<div className="px-6 sm:px-8 border-t border-gray-50 dark:border-white/5 flex justify-center sm:justify-start gap-6 sm:gap-8">
-					{["details", "password"].map((tab) => (
+					{["details", isOwner && "password"].filter(Boolean).map((tab) => (
 						<button
 							key={tab}
 							onClick={() => setActiveTab(tab)}
 							className={`py-4 text-sm font-black transition-all relative ${
 								activeTab === tab
 									? "text-indigo-600 dark:text-indigo-400"
-									: "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+									: "text-gray-400 dark:text-white/40 hover:text-gray-600 dark:hover:text-white/70"
 							}`}
 						>
 							{tab.charAt(0).toUpperCase() + tab.slice(1)}

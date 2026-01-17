@@ -28,7 +28,11 @@ const AdminQuizzes = lazy(() =>
 );
 const Landing = lazy(() => import("../pages/Landing"));
 const NotFound = lazy(() => import("../shared/components/ui/NotFound"));
-const ErrorElement = lazy(() => import("../shared/components/ui/NotFound").then(module => ({ default: module.ErrorElement })));
+const ErrorElement = lazy(() =>
+	import("../shared/components/ui/NotFound").then((module) => ({
+		default: module.ErrorElement,
+	}))
+);
 
 const SuspenseLayout = ({ children }) => (
 	<Suspense fallback={<Loader />}>{children}</Suspense>
@@ -96,6 +100,10 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "profile",
+				element: <Profile />,
+			},
+			{
+				path: "users/:id",
 				element: <Profile />,
 			},
 			{

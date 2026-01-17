@@ -92,6 +92,12 @@ export const createQuizSchema = z.object({
 					.min(2, "At least 2 answers required"),
 				correctAnswer: z.string().min(1, "Please select the correct answer"),
 				Score: z.number().min(1, "Score must be at least 1"),
+				image: z
+					.object({
+						public_id: z.string(),
+						secure_url: z.string(),
+					})
+					.optional(),
 			})
 		)
 		.min(1, "At least one question is required"),
@@ -103,4 +109,14 @@ export const submitQuizSchema = z.object({
 			.string({ required_error: "Please select an answer" })
 			.min(1, "Please select an answer")
 	),
+	answerImages: z
+		.array(
+			z
+				.object({
+					public_id: z.string(),
+					secure_url: z.string(),
+				})
+				.optional()
+		)
+		.optional(),
 });

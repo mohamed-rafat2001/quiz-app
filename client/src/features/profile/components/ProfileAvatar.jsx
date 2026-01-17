@@ -75,7 +75,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 									className="w-full h-full object-cover"
 								/>
 							) : (
-								<div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+								<div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-white/40">
 									<HiPhoto className="w-12 h-12 mb-2 group-hover:scale-110 transition-transform" />
 									<span className="text-xs font-black uppercase tracking-wider">
 										Choose Photo
@@ -114,7 +114,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 						<div className="flex gap-4">
 							<button
 								onClick={onClose}
-								className="flex-1 py-4 px-6 rounded-2xl bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400 font-black hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+								className="flex-1 py-4 px-6 rounded-2xl bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-white/40 font-black hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
 							>
 								Cancel
 							</button>
@@ -192,7 +192,7 @@ export default function ProfileAvatar({ user }) {
 								setIsModalOpen(true);
 								setIsOpen(false);
 							}}
-							className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all font-bold text-sm"
+							className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-white/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all font-bold text-sm"
 						>
 							<HiCamera className="w-5 h-5" />
 							Update Image
@@ -203,7 +203,7 @@ export default function ProfileAvatar({ user }) {
 								deleteImage();
 								setIsOpen(false);
 							}}
-							className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-all font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+							className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-white/40 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-all font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed"
 						>
 							<HiTrash className="w-5 h-5" />
 							Delete Image

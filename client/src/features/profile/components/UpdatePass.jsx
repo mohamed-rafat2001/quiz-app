@@ -31,11 +31,11 @@ export default function UpdatePass() {
 			</h3>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 						Current Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.password
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -52,11 +52,11 @@ export default function UpdatePass() {
 				</div>
 
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 						New Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.newPassword
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -73,11 +73,11 @@ export default function UpdatePass() {
 				</div>
 
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 						Confirm New Password
 					</label>
 					<input
-						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.confirmPass
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"

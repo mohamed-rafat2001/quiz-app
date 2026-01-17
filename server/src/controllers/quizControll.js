@@ -60,7 +60,12 @@ export const deleteQuiz = factory.deleteOneOwner(quizModel, "teacherId");
 
 // get quiz by params
 export const getQuiz = errorHandling(async (req, res, next) => {
-	const quiz = await quizModel.findById(req.params.id).populate("questions");
+	const quiz = await quizModel
+		.findById(req.params.id)
+		.populate("questions")
+		.populate("firstInQuiz.studentId", "name email image")
+		.populate("secondInQuiz.studentId", "name email image")
+		.populate("thirdInQuiz.studentId", "name email image");
 	if (!quiz) return next(new appError("quiz not found", 404));
 
 	if (req.user.role === "student") {
@@ -117,13 +122,25 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 	// Always delete keyword from query so ApiFeatures doesn't try to filter by it
 	delete req.query.keyword;
 
-	const features = new ApiFeatures(quizModel.find(filter), req.query)
+	const features = new ApiFeatures(
+		quizModel
+			.find(filter)
+			.populate("firstInQuiz.studentId", "name email image")
+			.populate("secondInQuiz.studentId", "name email image")
+			.populate("thirdInQuiz.studentId", "name email image"),
+		req.query
+	)
 		.filter()
 		.sort()
-		.limitFields()
-		.paginate();
+		.limitFields();
+
+	const total = await features.query.clone().countDocuments();
+
+	features.paginate();
 
 	const quizzes = await features.query.populate("teacherId", "name email");
+	const page = req.query.page * 1 || 1;
+	const limit = req.query.limit * 1 || 100;
 
 	// If student, attach their result for each quiz
 	if (req.user.role === "student") {
@@ -152,10 +169,10 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 				attemptCount: studentResults.length,
 			};
 		});
-		return response(quizzesWithResults, 200, res);
+		return response(quizzesWithResults, 200, res, { total, page, limit });
 	}
 
-	response(quizzes, 200, res);
+	response(quizzes, 200, res, { total, page, limit });
 });
 
 // admin get all quizs

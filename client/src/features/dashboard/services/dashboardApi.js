@@ -7,5 +7,5 @@ export const getStats = async () => {
 
 export const getTeacherQuizStats = async (params) => {
 	const response = await BaseApi.get("/dashboard/teacher-quizzes", { params });
-	return response.data.data;
+	return response.data;
 };

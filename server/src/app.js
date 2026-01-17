@@ -52,10 +52,12 @@ import userRouter from "./routers/userRouter.js";
 import quizRouter from "./routers/quizRouter.js";
 import quizAnswerRouter from "./routers/quizAnswerRouter.js";
 import dashboardRouter from "./routers/dashboardRouter.js";
+import uploadRouter from "./routers/uploadRouter.js";
 app.use("/api/user", userRouter);
 app.use("/api/teacher", quizRouter);
-app.use("/api/quiz", quizAnswerRouter);
+app.use("/api/answer", quizAnswerRouter);
 app.use("/api/dashboard", dashboardRouter);
+app.use("/api/upload", uploadRouter);
 // handeling routes not found in app
 app.all("*", (req, res, next) => {
 	res.status(404).json({

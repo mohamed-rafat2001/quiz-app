@@ -38,14 +38,14 @@ export default function Auth() {
 						<h1 className="text-4xl lg:text-5xl font-black mb-8 leading-[1.1] tracking-tighter">
 							Master Your <br /> Knowledge.
 						</h1>
-						<p className="text-indigo-100/80 text-lg mb-8 leading-relaxed font-medium">
+						<p className="text-indigo-50 text-lg mb-8 leading-relaxed font-medium">
 							Join thousands of students and teachers in our interactive quiz
 							community. Learn, compete, and grow together.
 						</p>
 					</div>
 
 					<div className="relative z-10">
-						<div className="flex gap-4 items-center bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+						<div className="flex gap-4 items-center bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
 							<div className="flex -space-x-3">
 								{[1, 2, 3, 4].map((i) => (
 									<div
@@ -60,7 +60,7 @@ export default function Auth() {
 								<span className="text-sm font-black text-white">
 									+5,000 users
 								</span>
-								<span className="text-xs text-indigo-200 font-bold">
+								<span className="text-xs text-indigo-100 font-bold">
 									Active this month
 								</span>
 							</div>
@@ -74,7 +74,7 @@ export default function Auth() {
 				</div>
 
 				{/* Right Side - Form Section */}
-				<div className="w-full md:w-7/12 p-8 sm:p-12 md:p-16 flex flex-col justify-center bg-white dark:bg-transparent transition-colors duration-300">
+				<div className="w-full md:w-7/12 p-8 sm:p-12 md:p-16 flex flex-col justify-center bg-white dark:bg-white/[0.02] transition-colors duration-300">
 					<div className="max-w-md mx-auto w-full">
 						<div className="text-center mb-12">
 							<div className="md:hidden mb-8 flex justify-center">
@@ -88,7 +88,7 @@ export default function Auth() {
 								{mode === "forgot" && "Forgot Password?"}
 								{mode === "reset" && "Reset Password"}
 							</h2>
-							<p className="text-gray-600 dark:text-gray-400 font-black text-sm uppercase tracking-widest">
+							<p className="text-gray-600 dark:text-white/70 font-black text-sm uppercase tracking-widest">
 								{mode === "login" && "Enter your credentials"}
 								{mode === "signup" && "Start your journey today"}
 								{mode === "forgot" && "Recover your account"}
@@ -98,9 +98,9 @@ export default function Auth() {
 
 						{/* Toggle Switch - Only show for Login/SignUp */}
 						{(mode === "login" || mode === "signup") && (
-							<div className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/5">
+							<div className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/10">
 								<div
-									className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-white/[0.08] rounded-xl shadow-xl transition-all duration-500 ease-out ${
+									className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-white/[0.15] rounded-xl shadow-xl transition-all duration-500 ease-out ${
 										mode === "login" ? "left-1.5" : "left-[calc(50%+3px)]"
 									}`}
 								/>
@@ -108,7 +108,7 @@ export default function Auth() {
 									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 										mode === "login"
 											? "text-indigo-600 dark:text-white"
-											: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
+											: "text-gray-500 dark:text-white/50 hover:text-gray-800 dark:hover:text-white/70"
 									}`}
 									onClick={() => setMode("login")}
 								>
@@ -118,7 +118,7 @@ export default function Auth() {
 									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 										mode === "signup"
 											? "text-indigo-600 dark:text-white"
-											: "text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400"
+											: "text-gray-500 dark:text-white/50 hover:text-gray-800 dark:hover:text-white/70"
 									}`}
 									onClick={() => setMode("signup")}
 								>

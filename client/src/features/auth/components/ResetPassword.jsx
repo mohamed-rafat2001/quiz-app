@@ -2,7 +2,12 @@ import { useForm } from "react-hook-form";
 import { useResetPassword } from "../hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema } from "../../../shared/validation/schemas";
-import { HiLockClosed, HiShieldCheck, HiArrowRight, HiArrowLeft } from "react-icons/hi2";
+import {
+	HiLockClosed,
+	HiShieldCheck,
+	HiArrowRight,
+	HiArrowLeft,
+} from "react-icons/hi2";
 
 function ResetPassword({ email, onBack }) {
 	const {
@@ -23,22 +28,25 @@ function ResetPassword({ email, onBack }) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
 			<div className="text-center mb-8">
-				<p className="text-gray-600 dark:text-gray-400 font-medium text-sm">
-					We've sent a 6-digit code to <span className="text-indigo-600 dark:text-indigo-400 font-bold">{email}</span>.
-					Enter the code and your new password below.
+				<p className="text-gray-600 dark:text-white/60 font-medium text-sm">
+					We've sent a 6-digit code to{" "}
+					<span className="text-indigo-600 dark:text-indigo-400 font-bold">
+						{email}
+					</span>
+					. Enter the code and your new password below.
 				</p>
 			</div>
 
 			<div className="space-y-2">
-				<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+				<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 					Reset Code
 				</label>
 				<div className="relative group">
-					<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
+					<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-white/40 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
 						<HiShieldCheck className="h-5 w-5" />
 					</div>
 					<input
-						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black tracking-[0.5em] text-center placeholder:tracking-normal placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold tracking-[0.5em] text-center placeholder:tracking-normal placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.resetPassCode
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 								: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -50,7 +58,7 @@ function ResetPassword({ email, onBack }) {
 					/>
 				</div>
 				{errors.resetPassCode && (
-					<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
+					<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
 						{errors.resetPassCode.message}
 					</p>
 				)}
@@ -58,15 +66,15 @@ function ResetPassword({ email, onBack }) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 						New Password
 					</label>
 					<div className="relative group">
-						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
+						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-white/40 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.newPassword
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -77,22 +85,22 @@ function ResetPassword({ email, onBack }) {
 						/>
 					</div>
 					{errors.newPassword && (
-						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
+						<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
 							{errors.newPassword.message}
 						</p>
 					)}
 				</div>
 
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 						Confirm Password
 					</label>
 					<div className="relative group">
-						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
+						<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-white/40 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.confirmPass
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -103,7 +111,7 @@ function ResetPassword({ email, onBack }) {
 						/>
 					</div>
 					{errors.confirmPass && (
-						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
+						<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
 							{errors.confirmPass.message}
 						</p>
 					)}
@@ -132,7 +140,7 @@ function ResetPassword({ email, onBack }) {
 				<button
 					type="button"
 					onClick={onBack}
-					className="w-full py-3 text-sm font-black text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+					className="w-full py-3 text-sm font-black text-gray-500 dark:text-white/60 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center justify-center gap-2 cursor-pointer"
 				>
 					<HiArrowLeft className="w-4 h-4" />
 					Back to Sign In

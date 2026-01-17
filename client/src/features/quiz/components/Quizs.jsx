@@ -1,4 +1,5 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
+import Pagination from "../../../shared/components/ui/Pagination";
 import { Link } from "react-router-dom";
 import { useQuizzes, useDeleteQuiz } from "../hooks/useQuiz";
 import { useUser } from "../../auth/hooks/useAuth";
@@ -20,6 +21,7 @@ import {
 	HiInformationCircle,
 	HiClock,
 	HiMagnifyingGlass,
+	HiTrophy,
 } from "react-icons/hi2";
 
 const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
@@ -28,7 +30,7 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 			<h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
 				{isTeacher ? "Manage Quizzes" : "Available Quizzes"}
 			</h1>
-			<p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1 font-medium">
+			<p className="text-sm sm:text-base text-gray-500 dark:text-white/60 mt-1 font-medium">
 				{isTeacher
 					? "Create, edit, and track your classroom quizzes"
 					: "Browse and take quizzes to test your knowledge"}
@@ -37,13 +39,13 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 
 		<div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
 			<div className="relative w-full sm:w-80">
-				<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+				<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40 text-lg" />
 				<input
 					type="text"
 					placeholder="Search quiz name or ID..."
 					value={searchTerm}
 					onChange={(e) => onSearchChange(e.target.value)}
-					className="w-full pl-12 pr-6 py-3.5 bg-white dark:bg-white/[0.05] border border-gray-200/60 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
+					className="w-full pl-12 pr-6 py-3.5 bg-white dark:bg-white/[0.05] border border-gray-200/60 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30"
 				/>
 			</div>
 
@@ -109,14 +111,14 @@ const QuizCard = forwardRef(
 							<div className="flex gap-2">
 								<Link
 									to={`/app/quizzes/edit/${quiz._id}`}
-									className="p-3 text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-90"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-90"
 									title="Edit Quiz"
 								>
 									<HiPencilSquare className="text-xl" />
 								</Link>
 								<Link
 									to={`/app/quizzes/submissions/${quiz._id}`}
-									className="p-3 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-90"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-90"
 									title="View Submissions"
 								>
 									<HiUsers className="text-xl" />
@@ -124,7 +126,7 @@ const QuizCard = forwardRef(
 								<button
 									onClick={() => onDelete(quiz._id)}
 									disabled={isDeleting}
-									className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all active:scale-90 disabled:opacity-50"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all active:scale-90 disabled:opacity-50"
 									title="Delete Quiz"
 								>
 									<HiTrash className="text-xl" />
@@ -143,7 +145,7 @@ const QuizCard = forwardRef(
 										{isPassed ? "Best: Passed" : "Best: Failed"}
 									</div>
 								)}
-								<div className="px-4 py-1.5 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+								<div className="px-4 py-1.5 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-white/60 rounded-full text-[10px] font-black uppercase tracking-widest">
 									{attemptsLeft} Tries Left
 								</div>
 							</div>
@@ -163,29 +165,36 @@ const QuizCard = forwardRef(
 					</h3>
 
 					<div className="space-y-3 mb-6">
-						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-							<HiQuestionMarkCircle className="text-lg text-gray-400 dark:text-gray-500" />
+						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
+							<HiQuestionMarkCircle className="text-lg text-gray-400 dark:text-white/40" />
 							<span>{quiz.questions?.length || 0} Questions</span>
 						</div>
 
-						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-							<HiClock className="text-lg text-gray-400 dark:text-gray-500" />
+						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
+							<HiClock className="text-lg text-gray-400 dark:text-white/40" />
 							<span className="capitalize">
 								{quiz.expire} {quiz.expireUnit || "minutes"} Limit
 							</span>
 						</div>
 
 						{isTeacher && (
-							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-								<HiUsers className="text-lg text-gray-400 dark:text-gray-500" />
+							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
+								<HiUsers className="text-lg text-gray-400 dark:text-white/40" />
 								<span>{quiz.numberTookQuiz || 0} Students Taken</span>
 							</div>
 						)}
 
-						{isTeacher && (
-							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-								<HiCalendar className="text-lg text-gray-400 dark:text-gray-500" />
-								<span>
+						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
+							<HiCalendar className="text-lg text-gray-400 dark:text-white/40" />
+							<div className="flex flex-col">
+								<span className="text-xs">
+									Started:{" "}
+									{new Date(quiz.createdAt).toLocaleString([], {
+										dateStyle: "short",
+										timeStyle: "short",
+									})}
+								</span>
+								<span className="text-xs">
 									Ends:{" "}
 									{new Date(quiz.expireDate).toLocaleString([], {
 										dateStyle: "short",
@@ -193,16 +202,16 @@ const QuizCard = forwardRef(
 									})}
 								</span>
 							</div>
-						)}
+						</div>
 
 						{isTeacher && (
-							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-								<HiPlay className="text-lg text-gray-400 dark:text-gray-500" />
+							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
+								<HiPlay className="text-lg text-gray-400 dark:text-white/40" />
 								<span>Max Attempts: {quiz.tries || 1}</span>
 							</div>
 						)}
 
-						{hasTaken ? (
+						{hasTaken && (
 							<div className="flex items-center gap-3 text-sm font-black">
 								<HiInformationCircle className="text-lg opacity-70" />
 								<span
@@ -213,21 +222,6 @@ const QuizCard = forwardRef(
 									}
 								>
 									Best Score: {quiz.userResult.totalScore} / {quiz.quizScore}
-								</span>
-							</div>
-						) : (
-							<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-gray-400">
-								<HiCalendar className="text-lg text-gray-400 dark:text-gray-500" />
-								<span className="flex flex-col">
-									<span className="text-[10px] uppercase font-black text-gray-400 dark:text-gray-600 tracking-widest">
-										Deadline
-									</span>
-									<span className="text-xs">
-										{new Date(quiz.expireDate).toLocaleString([], {
-											dateStyle: "short",
-											timeStyle: "short",
-										})}
-									</span>
 								</span>
 							</div>
 						)}
@@ -254,7 +248,7 @@ const QuizCard = forwardRef(
 						{isTeacher && quiz.stats && (
 							<div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5 grid grid-cols-3 gap-3">
 								<div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-3 border border-gray-100/50 dark:border-white/5">
-									<p className="text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">
+									<p className="text-[10px] text-gray-400 dark:text-white/40 font-black uppercase tracking-wider mb-1">
 										Avg Score
 									</p>
 									<p className="text-sm font-black text-indigo-600 dark:text-indigo-400">
@@ -262,7 +256,7 @@ const QuizCard = forwardRef(
 									</p>
 								</div>
 								<div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-3 border border-gray-100/50 dark:border-white/5">
-									<p className="text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">
+									<p className="text-[10px] text-gray-400 dark:text-white/40 font-black uppercase tracking-wider mb-1">
 										Highest
 									</p>
 									<p className="text-sm font-black text-indigo-600 dark:text-indigo-400">
@@ -270,7 +264,7 @@ const QuizCard = forwardRef(
 									</p>
 								</div>
 								<div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-3 border border-gray-100/50 dark:border-white/5">
-									<p className="text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">
+									<p className="text-[10px] text-gray-400 dark:text-white/40 font-black uppercase tracking-wider mb-1">
 										Subs
 									</p>
 									<p className="text-sm font-black text-indigo-600 dark:text-indigo-400">
@@ -283,8 +277,8 @@ const QuizCard = forwardRef(
 						{isTeacher && (
 							<div className="flex flex-col gap-2">
 								<div className="flex items-center gap-3 text-xs font-mono bg-gray-50 dark:bg-white/[0.03] p-2 rounded-lg border border-gray-100 dark:border-white/5">
-									<span className="text-gray-400 dark:text-gray-500">ID:</span>
-									<span className="text-gray-900 dark:text-gray-200 font-bold select-all">
+									<span className="text-gray-400 dark:text-white/40">ID:</span>
+									<span className="text-gray-900 dark:text-white/80 font-bold select-all">
 										{quiz.quizId}
 									</span>
 									<button
@@ -298,10 +292,10 @@ const QuizCard = forwardRef(
 									</button>
 								</div>
 								<div className="flex items-center gap-3 text-xs font-mono bg-gray-50 dark:bg-white/[0.03] p-2 rounded-lg border border-gray-100 dark:border-white/5">
-									<span className="text-gray-400 dark:text-gray-500">
+									<span className="text-gray-400 dark:text-white/40">
 										Pass:
 									</span>
-									<span className="text-gray-900 dark:text-gray-200 font-bold select-all">
+									<span className="text-gray-900 dark:text-white/80 font-bold select-all">
 										{quiz.quizPassword}
 									</span>
 									<button
@@ -336,7 +330,7 @@ const QuizCard = forwardRef(
 								to={`/app/quizzes/${quiz._id}`}
 								className={`flex-1 ${
 									isTeacher
-										? "bg-gray-100 dark:bg-white/[0.05] hover:bg-gray-200 dark:hover:bg-white/[0.1] text-gray-700 dark:text-gray-200"
+										? "bg-gray-100 dark:bg-white/[0.05] hover:bg-gray-200 dark:hover:bg-white/[0.1] text-gray-700 dark:text-white/80"
 										: "bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/20"
 								} font-black py-3.5 rounded-2xl text-center transition-all text-sm flex items-center justify-center gap-2 active:scale-95`}
 							>
@@ -354,7 +348,7 @@ const QuizCard = forwardRef(
 						{hasTaken && canTakeAgain && (
 							<Link
 								to={`/app/my-submissions/${quiz.userResult._id}`}
-								className="px-4 bg-gray-100 dark:bg-white/[0.05] hover:bg-gray-200 dark:hover:bg-white/[0.1] text-gray-600 dark:text-gray-400 font-black py-3.5 rounded-2xl transition-all text-sm text-center flex items-center justify-center active:scale-95"
+								className="px-4 bg-gray-100 dark:bg-white/[0.05] hover:bg-gray-200 dark:hover:bg-white/[0.1] text-gray-600 dark:text-white/40 font-black py-3.5 rounded-2xl transition-all text-sm text-center flex items-center justify-center active:scale-95"
 								title="View Best Result"
 							>
 								<HiInformationCircle className="text-lg" />
@@ -386,7 +380,7 @@ const EmptyState = ({ isTeacher }) => (
 		<h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
 			{isTeacher ? "No quizzes yet" : "No quizzes available"}
 		</h3>
-		<p className="text-gray-500 dark:text-gray-400 mt-2 mb-8 font-medium">
+		<p className="text-gray-500 dark:text-white/60 mt-2 mb-8 font-medium">
 			{isTeacher
 				? "Create your first quiz to get started"
 				: "Check back later for new quizzes from your teachers"}
@@ -407,11 +401,13 @@ export default function Quizs() {
 	const { data: user } = useUser();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
+	const [page, setPage] = useState(1);
 
-	// Debounce search term
-	React.useEffect(() => {
+	// Debounce search term and reset page
+	useEffect(() => {
 		const timer = setTimeout(() => {
 			setDebouncedSearch(searchTerm);
+			setPage(1);
 		}, 500);
 		return () => clearTimeout(timer);
 	}, [searchTerm]);
@@ -419,10 +415,13 @@ export default function Quizs() {
 	const isTeacher = user?.role === "teacher";
 
 	const {
-		data: quizzes,
+		data: response,
 		isLoading,
 		error,
-	} = useQuizzes({ keyword: debouncedSearch }, isTeacher);
+	} = useQuizzes({ keyword: debouncedSearch, page, limit: 9 }, isTeacher);
+
+	const quizzes = response?.data || [];
+	const meta = response?.meta || {};
 
 	const { mutate: deleteQuiz, isPending: isDeleting } = useDeleteQuiz();
 
@@ -474,6 +473,16 @@ export default function Quizs() {
 				</div>
 			) : (
 				<EmptyState isTeacher={isTeacher} />
+			)}
+
+			{!isLoading && quizzes.length > 0 && (
+				<Pagination
+					page={meta.page || page}
+					limit={meta.limit || 9}
+					total={meta.total || 0}
+					onPageChange={setPage}
+					className="justify-center mt-10"
+				/>
 			)}
 		</div>
 	);

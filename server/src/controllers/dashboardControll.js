@@ -29,8 +29,8 @@ export const getStats = errorHandling(async (req, res, next) => {
 		const quizzes = await quizModel.find({ teacherId });
 		const quizIds = quizzes.map((q) => q._id);
 
-		const [totalQuizzes, totalSubmissions, aggregatedStats] = await Promise.all(
-			[
+		const [totalQuizzes, totalSubmissions, aggregatedStats, uniqueStudents] =
+			await Promise.all([
 				quizModel.countDocuments({ teacherId }),
 				quizResultModel.countDocuments({ quizId: { $in: quizIds } }),
 				quizResultModel.aggregate([
@@ -44,12 +44,13 @@ export const getStats = errorHandling(async (req, res, next) => {
 						},
 					},
 				]),
-			]
-		);
+				quizResultModel.distinct("studentId", { quizId: { $in: quizIds } }),
+			]);
 
 		stats = {
 			totalQuizzes,
 			totalSubmissions,
+			totalStudentsTaken: uniqueStudents.length,
 			avgSuccessRate: aggregatedStats[0]
 				? (aggregatedStats[0].passCount / aggregatedStats[0].total) * 100
 				: 0,
@@ -106,8 +107,11 @@ export const getTeacherQuizStats = errorHandling(async (req, res, next) => {
 	const features = new ApiFeatures(quizModel.find(searchFilter), req.query)
 		.filter()
 		.sort()
-		.limitFields()
-		.paginate();
+		.limitFields();
+
+	const total = await features.query.clone().countDocuments();
+
+	features.paginate();
 
 	const quizzes = await features.query;
 
@@ -154,5 +158,8 @@ export const getTeacherQuizStats = errorHandling(async (req, res, next) => {
 		})
 	);
 
-	response(quizzesWithStats, 200, res);
+	const page = req.query.page * 1 || 1;
+	const limit = req.query.limit * 1 || 100;
+
+	response(quizzesWithStats, 200, res, { total, page, limit });
 });

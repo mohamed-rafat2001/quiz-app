@@ -34,7 +34,7 @@ export default function NotFound() {
 				<h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
 					Page Not Found
 				</h2>
-				<p className="text-gray-500 dark:text-gray-400 font-black mb-10 leading-relaxed max-w-xs mx-auto text-sm sm:text-base">
+				<p className="text-gray-500 dark:text-white/60 font-black mb-10 leading-relaxed max-w-xs mx-auto text-sm sm:text-base">
 					Oops! The page you&apos;re looking for doesn&apos;t exist or has been
 					moved to another galaxy.
 				</p>
@@ -78,7 +78,7 @@ export function ErrorElement() {
 				<h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
 					Something went wrong!
 				</h2>
-				<p className="text-gray-500 dark:text-gray-400 font-black mb-10 leading-relaxed max-w-md mx-auto text-sm sm:text-base">
+				<p className="text-gray-500 dark:text-white/60 font-black mb-10 leading-relaxed max-w-md mx-auto text-sm sm:text-base">
 					{error?.message ||
 						"An unexpected error occurred. Our team has been notified."}
 				</p>

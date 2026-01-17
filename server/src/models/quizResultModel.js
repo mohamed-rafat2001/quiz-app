@@ -83,32 +83,47 @@ quizResultSchema.statics.calcQuizStats = async function (quizId) {
 	]);
 
 	if (stats.length > 0) {
-		// For leaderboard, we still want to find unique students with the max score
-		const maxScore = stats[0].maxScore;
-		const results = await this.find({
-			quizId,
-			totalScore: maxScore,
-		}).populate("studentId", "name email");
+		// Get all unique student best scores sorted descending
+		const studentBestScores = await this.aggregate([
+			{ $match: { quizId: new mongoose.Types.ObjectId(quizId) } },
+			{
+				$group: {
+					_id: "$studentId",
+					bestScore: { $max: "$totalScore" },
+				},
+			},
+			{ $sort: { bestScore: -1 } },
+		]);
 
-		// Get unique students who achieved the max score
-		const seenStudents = new Set();
-		const firstInQuiz = [];
-		for (const res of results) {
-			const studentIdStr = res.studentId._id.toString();
-			if (!seenStudents.has(studentIdStr)) {
-				seenStudents.add(studentIdStr);
-				firstInQuiz.push({
-					studentId: res.studentId._id,
-					Score: res.totalScore,
-				});
-			}
-		}
+		// Find the top 3 distinct scores
+		const distinctScores = [
+			...new Set(studentBestScores.map((s) => s.bestScore)),
+		].slice(0, 3);
+
+		const getStudentsByScore = (score) => {
+			if (score === undefined) return [];
+			// Find unique students who achieved this specific score
+			const studentIds = studentBestScores
+				.filter((s) => s.bestScore === score)
+				.map((s) => s._id);
+
+			return studentIds.map((id) => ({
+				studentId: id,
+				Score: score,
+			}));
+		};
+
+		const firstInQuiz = getStudentsByScore(distinctScores[0]);
+		const secondInQuiz = getStudentsByScore(distinctScores[1]);
+		const thirdInQuiz = getStudentsByScore(distinctScores[2]);
 
 		await QuizModel.findByIdAndUpdate(quizId, {
 			numberTookQuiz: stats[0].numberTookQuiz,
 			averagePassing: stats[0].avgScore,
 			passingNum: stats[0].passingNum,
 			firstInQuiz,
+			secondInQuiz,
+			thirdInQuiz,
 		});
 	} else {
 		await QuizModel.findByIdAndUpdate(quizId, {
@@ -116,6 +131,8 @@ quizResultSchema.statics.calcQuizStats = async function (quizId) {
 			averagePassing: 0,
 			passingNum: 0,
 			firstInQuiz: [],
+			secondInQuiz: [],
+			thirdInQuiz: [],
 		});
 	}
 };

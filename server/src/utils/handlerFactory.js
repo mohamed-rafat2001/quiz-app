@@ -63,14 +63,20 @@ export const getAll = (Model, filter = {}, popOptions) =>
 		const features = new ApiFeatures(Model.find(combinedFilter), req.query)
 			.filter()
 			.sort()
-			.limitFields()
-			.paginate();
+			.limitFields();
+
+		const total = await features.query.clone().countDocuments();
+
+		features.paginate();
 
 		if (popOptions) features.query = features.query.populate(popOptions);
 
 		const docs = await features.query;
 
-		response(docs, 200, res);
+		const page = req.query.page * 1 || 1;
+		const limit = req.query.limit * 1 || 100;
+
+		response(docs, 200, res, { total, page, limit });
 	});
 
 export const deleteOneOwner = (Model, ownerField) =>
@@ -144,12 +150,18 @@ export const getAllOwner = (Model, ownerField, popOptions) =>
 		)
 			.filter()
 			.sort()
-			.limitFields()
-			.paginate();
+			.limitFields();
+
+		const total = await features.query.clone().countDocuments();
+
+		features.paginate();
 
 		if (popOptions) features.query = features.query.populate(popOptions);
 
 		const docs = await features.query;
 
-		response(docs, 200, res);
+		const page = req.query.page * 1 || 1;
+		const limit = req.query.limit * 1 || 100;
+
+		response(docs, 200, res, { total, page, limit });
 	});

@@ -23,7 +23,7 @@ export async function getQuiz(ID) {
 export async function getAllQuizzes(params) {
 	try {
 		let response = await BaseApi.get("/teacher/all-quizzes", { params });
-		return response.data.data;
+		return response.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
@@ -32,7 +32,7 @@ export async function getAllQuizzes(params) {
 export async function getTeacherQuizStats(params) {
 	try {
 		let response = await BaseApi.get("/dashboard/teacher-quizzes", { params });
-		return response.data.data;
+		return response.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}

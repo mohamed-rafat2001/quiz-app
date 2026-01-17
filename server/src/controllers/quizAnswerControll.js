@@ -72,6 +72,7 @@ export const quesAnswer = errorHandling(async (req, res, next) => {
 				isCorrect,
 				score,
 				resultId: quizResult._id,
+				image: qAnswer.image,
 			});
 		}
 	}
@@ -147,9 +148,12 @@ export const studentquizAnswers = errorHandling(async (req, res, next) => {
 // get all quiz results for teacher's specific quiz
 export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
 	const filter = {
-		teacherId: req.user._id,
 		quizId: req.params.id,
 	};
+
+	if (req.user.role !== "admin") {
+		filter.teacherId = req.user._id;
+	}
 	return factory.getAll(quizResultModel, filter, [
 		{ path: "studentId" },
 		{ path: "quizId" },

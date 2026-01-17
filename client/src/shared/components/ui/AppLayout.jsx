@@ -79,7 +79,7 @@ export default function AppLayout() {
 							>
 								<UserProfile user={user} />
 								<HiChevronDown
-									className={`text-gray-400 dark:text-gray-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-transform duration-500 ${
+									className={`text-gray-400 dark:text-white/40 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-transform duration-500 ${
 										isDropdownOpen ? "rotate-180" : ""
 									}`}
 								/>
@@ -99,7 +99,7 @@ export default function AppLayout() {
 										className="absolute right-0 mt-4 w-72 bg-white dark:bg-white/[0.08] backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/5 py-4 z-[110] overflow-hidden"
 									>
 										<div className="px-8 py-5 border-b border-gray-100 dark:border-white/5 mb-3 bg-gray-50/50 dark:bg-white/[0.02]">
-											<p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">
+											<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-1.5">
 												Account
 											</p>
 											<p className="font-black text-gray-900 dark:text-white truncate text-sm">
@@ -111,7 +111,7 @@ export default function AppLayout() {
 											<Link
 												to="/app/profile"
 												onClick={() => setIsDropdownOpen(false)}
-												className="flex items-center gap-4 px-6 py-4 text-sm font-black text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/[0.05] hover:text-indigo-600 dark:hover:text-white rounded-2xl transition-all group"
+												className="flex items-center gap-4 px-6 py-4 text-sm font-black text-gray-600 dark:text-white/60 hover:bg-gray-50 dark:hover:bg-white/[0.05] hover:text-indigo-600 dark:hover:text-white rounded-2xl transition-all group"
 											>
 												<HiUser className="text-xl group-hover:scale-110 transition-transform" />
 												Profile Settings

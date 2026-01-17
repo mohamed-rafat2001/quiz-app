@@ -27,9 +27,9 @@ export const Logo = ({ size = "lg" }) => (
 					size === "lg" ? "text-xl" : "text-lg"
 				}`}
 			>
-				QUIZ<span className="text-indigo-600">APP</span>
+				QUIZ<span className="text-indigo-600">MASTER</span>
 			</h1>
-			<span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1">
+			<span className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest mt-1">
 				Platform
 			</span>
 		</div>
@@ -45,12 +45,12 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
 				? `flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 ${
 						isActive
 							? "text-indigo-600 bg-indigo-50/50 dark:bg-indigo-500/10"
-							: "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+							: "text-gray-400 hover:text-gray-600 dark:text-white/40 dark:hover:text-gray-300"
 				  }`
 				: `flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group relative border-2 ${
 						isActive
 							? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 scale-[1.02] border-indigo-400/50"
-							: "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/[0.03] hover:text-indigo-600 dark:hover:text-white border-transparent hover:border-gray-200/50 dark:hover:border-white/5"
+							: "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/[0.03] hover:text-indigo-600 dark:hover:text-white border-transparent hover:border-gray-200/50 dark:hover:border-white/5"
 				  }`
 		}
 	>
@@ -169,7 +169,7 @@ export default function SideBar() {
 
 					<div className="space-y-8">
 						<div>
-							<span className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] px-6 mb-4 block">
+							<span className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] px-6 mb-4 block">
 								Main Menu
 							</span>
 							<nav className="space-y-2">

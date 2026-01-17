@@ -36,6 +36,10 @@ const questionAnswerSchema = new mongoose.Schema(
 			ref: "QuizResultModel",
 			required: [true, "Answer must belong to a quiz result"],
 		},
+		image: {
+			public_id: String,
+			secure_url: String,
+		},
 	},
 	{ timestamps: true }
 );

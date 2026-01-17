@@ -13,11 +13,11 @@ import {
 
 const FormField = ({ label, icon: Icon, error, children }) => (
 	<div className="space-y-1.5">
-		<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1">
+		<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
 			{label}
 		</label>
 		<div className="relative group">
-			<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
+			<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-white/40 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
 				<Icon className="h-5 w-5" />
 			</div>
 			{children}
@@ -32,7 +32,7 @@ const FormField = ({ label, icon: Icon, error, children }) => (
 
 const GenderSelector = ({ register, error }) => (
 	<div className="space-y-2">
-		<label className="text-sm font-black text-gray-900 dark:text-gray-200 ml-1 block">
+		<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1 block">
 			Gender
 		</label>
 		<div className="flex gap-4">
@@ -43,7 +43,7 @@ const GenderSelector = ({ register, error }) => (
 					className="peer hidden"
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-gray-400 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
 					Male
 				</div>
 			</label>
@@ -54,7 +54,7 @@ const GenderSelector = ({ register, error }) => (
 					className="peer hidden"
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-gray-400 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
 					Female
 				</div>
 			</label>
@@ -101,7 +101,7 @@ export default function UserDetails({ user }) {
 					<h3 className="text-xl font-black text-gray-900 dark:text-white">
 						Profile Information
 					</h3>
-					<p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+					<p className="text-sm text-gray-500 dark:text-white/40 font-medium">
 						Manage your account settings and profile visibility
 					</p>
 				</div>
@@ -111,7 +111,7 @@ export default function UserDetails({ user }) {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField label="Full Name" icon={HiUser} error={errors.name}>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.name
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -128,7 +128,7 @@ export default function UserDetails({ user }) {
 						error={errors.email}
 					>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.email
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -141,7 +141,7 @@ export default function UserDetails({ user }) {
 
 					<FormField label="City" icon={HiMapPin} error={errors.city}>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.city
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -154,7 +154,7 @@ export default function UserDetails({ user }) {
 
 					<FormField label="Country" icon={HiGlobeAlt} error={errors.country}>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.country
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"
@@ -171,7 +171,7 @@ export default function UserDetails({ user }) {
 						error={errors.phoneNumber}
 					>
 						<input
-							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-gray-600 ${
+							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.phoneNumber
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
 									: "border-gray-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 shadow-sm"

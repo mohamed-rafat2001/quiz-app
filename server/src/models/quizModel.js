@@ -49,6 +49,24 @@ const quizSchema = new mongoose.Schema(
 				Score: Number,
 			},
 		],
+		secondInQuiz: [
+			{
+				studentId: {
+					type: mongoose.Schema.ObjectId,
+					ref: "UserModel",
+				},
+				Score: Number,
+			},
+		],
+		thirdInQuiz: [
+			{
+				studentId: {
+					type: mongoose.Schema.ObjectId,
+					ref: "UserModel",
+				},
+				Score: Number,
+			},
+		],
 		quizId: {
 			type: String,
 			unique: true,
