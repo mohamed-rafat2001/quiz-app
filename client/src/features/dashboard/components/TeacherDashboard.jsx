@@ -24,6 +24,8 @@ import {
 	HiMagnifyingGlass,
 	HiChartBar,
 	HiChartPie,
+	HiCheckBadge,
+	HiArrowTrendingUp,
 } from "react-icons/hi2";
 
 const COLORS = ["#10b981", "#ef4444"];
@@ -66,7 +68,7 @@ const TeacherDashboard = ({
 			<StatCard
 				title="Avg Success Rate"
 				value={`${Math.round(stats?.avgSuccessRate || 0)}%`}
-				icon={HiRocketLaunch}
+				icon={HiCheckBadge}
 				color="from-orange-500 to-red-500"
 			/>
 		</motion.div>
@@ -80,7 +82,7 @@ const TeacherDashboard = ({
 				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
 			>
 				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-					<HiChartBar className="text-indigo-500" />
+					<HiArrowTrendingUp className="text-indigo-500" />
 					Recent Quizzes Performance
 				</h3>
 				<div className="h-[300px] w-full relative">
