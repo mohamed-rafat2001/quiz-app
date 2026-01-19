@@ -613,7 +613,7 @@ const Landing = () => {
 	}, []);
 
 	return (
-		<div className="bg-white dark:bg-gray-900 overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400">
+		<div className="relative bg-white dark:bg-gray-900 overflow-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/50 selection:text-indigo-600 dark:selection:text-indigo-400">
 			<Navbar />
 			<Hero />
 			<Features />

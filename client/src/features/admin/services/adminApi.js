@@ -2,7 +2,7 @@ import BaseApi from "../../../shared/api/baseApi.js";
 
 export const getAllUsers = async (params) => {
 	try {
-		const response = await BaseApi.get("/user/allUsers/admin", { params });
+		const response = await BaseApi.get("/user/all-users/admin", { params });
 		return response.data.data;
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");

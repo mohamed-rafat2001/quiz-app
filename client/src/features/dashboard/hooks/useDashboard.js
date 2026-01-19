@@ -8,9 +8,10 @@ export const useStats = () => {
 	});
 };
 
-export const useTeacherQuizStats = (params) => {
+export const useTeacherQuizStats = (params, options = {}) => {
 	return useQuery({
 		queryKey: ["teacher-quiz-stats", params],
 		queryFn: () => getTeacherQuizStats(params),
+		...options,
 	});
 };

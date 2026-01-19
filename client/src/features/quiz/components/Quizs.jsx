@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useEffect } from "react";
 import Pagination from "../../../shared/components/ui/Pagination";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useQuizzes, useDeleteQuiz } from "../hooks/useQuiz";
 import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
@@ -402,6 +402,10 @@ export default function Quizs() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 	const [page, setPage] = useState(1);
+
+	if (user?.role === "student") {
+		return <Navigate to="/app/dashboard" replace />;
+	}
 
 	// Debounce search term and reset page
 	useEffect(() => {

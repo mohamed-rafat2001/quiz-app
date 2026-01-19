@@ -133,7 +133,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 	);
 };
 
-export default function ProfileAvatar({ user }) {
+export default function ProfileAvatar({ user, isOwner }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dropdownRef = useRef(null);
@@ -151,11 +151,8 @@ export default function ProfileAvatar({ user }) {
 
 	return (
 		<div className="relative" ref={dropdownRef}>
-			<button
-				onClick={() => setIsOpen(!isOpen)}
-				className="relative group cursor-pointer"
-			>
-				<div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-1 border border-gray-100 dark:border-white/5 transition-transform duration-500 group-hover:scale-105">
+			<div className="relative group">
+				<div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-1 border border-gray-100 dark:border-white/5 transition-transform duration-500 group-hover:scale-105 overflow-hidden">
 					<div className="w-full h-full bg-indigo-100 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center overflow-hidden">
 						{user?.profileImg?.secure_url ? (
 							<img
@@ -170,22 +167,28 @@ export default function ProfileAvatar({ user }) {
 						)}
 					</div>
 				</div>
-				<div className="absolute -bottom-1 -right-1 w-8 h-8 bg-indigo-600 rounded-xl border-4 border-white dark:border-gray-900 flex items-center justify-center text-white shadow-lg transition-transform group-hover:rotate-12">
-					<HiChevronDown
-						className={`w-4 h-4 transition-transform duration-500 ${
-							isOpen ? "rotate-180" : ""
-						}`}
-					/>
-				</div>
-			</button>
+
+				{isOwner && (
+					<button
+						onClick={() => setIsOpen(!isOpen)}
+						className="absolute -bottom-1 -right-1 w-8 h-8 bg-indigo-600 rounded-xl border-4 border-white dark:border-gray-900 flex items-center justify-center text-white shadow-lg transition-all hover:scale-110 active:scale-95 group-hover:rotate-12 z-10"
+					>
+						<HiChevronDown
+							className={`w-4 h-4 transition-transform duration-500 ${
+								isOpen ? "rotate-180" : ""
+							}`}
+						/>
+					</button>
+				)}
+			</div>
 
 			<AnimatePresence>
-				{isOpen && (
+				{isOpen && isOwner && (
 					<motion.div
 						initial={{ opacity: 0, y: 10, scale: 0.95 }}
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: 10, scale: 0.95 }}
-						className="absolute top-full left-0 mt-4 w-56 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-white/5 p-2 z-[110] overflow-hidden"
+						className="absolute top-full left-0 mt-4 w-56 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-white/5 p-2 z-[110] overflow-hidden origin-top-left"
 					>
 						<button
 							onClick={() => {
@@ -197,25 +200,29 @@ export default function ProfileAvatar({ user }) {
 							<HiCamera className="w-5 h-5" />
 							Update Image
 						</button>
-						<button
-							disabled={!user?.profileImg?.secure_url || isDeleting}
-							onClick={() => {
-								deleteImage();
-								setIsOpen(false);
-							}}
-							className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-white/40 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-all font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed"
-						>
-							<HiTrash className="w-5 h-5" />
-							Delete Image
-						</button>
+						{user?.profileImg?.secure_url && (
+							<button
+								disabled={isDeleting}
+								onClick={() => {
+									deleteImage();
+									setIsOpen(false);
+								}}
+								className="w-full flex items-center gap-3 p-4 rounded-2xl text-gray-600 dark:text-white/40 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-all font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+							>
+								<HiTrash className="w-5 h-5" />
+								Delete Image
+							</button>
+						)}
 					</motion.div>
 				)}
 			</AnimatePresence>
 
-			<ImageUploadModal
-				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-			/>
+			{isOwner && (
+				<ImageUploadModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+				/>
+			)}
 		</div>
 	);
 }

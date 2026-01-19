@@ -176,7 +176,7 @@ export const allQuizs = errorHandling(async (req, res, next) => {
 });
 
 // admin get all quizs
-export const allQuizzesByAdmin = factory.getAll(quizModel);
+export const allQuizzesByAdmin = factory.getAll(quizModel, {}, "teacherId");
 // admin delete quiz
 export const deleteQuizByAdmin = factory.deleteOne(quizModel);
 // delete all quizs

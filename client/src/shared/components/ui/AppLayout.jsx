@@ -42,16 +42,16 @@ export default function AppLayout() {
 	};
 
 	return (
-		<div className="h-screen bg-gray-50/50 dark:bg-white/[0.02] flex flex-col lg:flex-row overflow-hidden transition-colors duration-300">
+		<div className="h-screen supports-[height:100dvh]:h-[100dvh] bg-gray-50/50 dark:bg-white/[0.02] flex flex-col lg:flex-row overflow-hidden transition-colors duration-300">
 			{/* Sidebar - Desktop is fixed, Mobile is top/bottom */}
-			<div className="lg:w-72 shrink-0">
+			<div className="lg:w-72 shrink-0 h-0 lg:h-auto">
 				<SideBar />
 			</div>
 
 			{/* Main Content Area */}
-			<div className="flex-1 flex flex-col min-w-0">
+			<div className="flex-1 flex flex-col min-w-0 min-h-0">
 				{/* Header - Visible on all screens */}
-				<header className="fixed lg:static top-0 left-0 right-0 h-20 bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl border-b border-gray-100 dark:border-white/5 flex items-center justify-between lg:justify-end px-6 lg:px-12 shrink-0 z-50 transition-colors duration-300">
+				<header className="fixed lg:relative top-0 left-0 right-0 h-20 bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl border-b border-gray-100 dark:border-white/5 flex items-center justify-between lg:justify-end px-6 lg:px-12 shrink-0 z-[100] transition-colors duration-300">
 					<div className="lg:hidden">
 						<Logo size="sm" />
 					</div>
@@ -96,9 +96,9 @@ export default function AppLayout() {
 											stiffness: 300,
 											damping: 25,
 										}}
-										className="absolute right-0 mt-4 w-72 bg-white dark:bg-white/[0.08] backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/5 py-4 z-[110] overflow-hidden"
+										className="absolute right-0 mt-4 w-72 bg-white dark:bg-[#111111] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 py-4 z-[110] overflow-hidden"
 									>
-										<div className="px-8 py-5 border-b border-gray-100 dark:border-white/5 mb-3 bg-gray-50/50 dark:bg-white/[0.02]">
+										<div className="px-8 py-5 border-b border-gray-100 dark:border-white/10 mb-3 bg-gray-50/50 dark:bg-white/[0.05]">
 											<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-1.5">
 												Account
 											</p>
@@ -132,7 +132,7 @@ export default function AppLayout() {
 					</div>
 				</header>
 
-				<main className="flex-1 overflow-y-auto pt-20 lg:pt-0 pb-20 lg:pb-0 scroll-smooth">
+				<main className="flex-1 overflow-y-auto pt-20 lg:pt-0 pb-20 lg:pb-0">
 					<div className="max-w-7xl mx-auto p-4 sm:p-8 lg:p-12">
 						<Suspense fallback={<Loader fullPage={false} />}>
 							<Outlet />

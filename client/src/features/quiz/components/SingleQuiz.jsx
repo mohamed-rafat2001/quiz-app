@@ -318,7 +318,9 @@ export default function SingleQuiz() {
 	useEffect(() => {
 		if (quiz && user?.role === "student" && attemptsLeft <= 0) {
 			toast.error("You have exhausted all attempts for this quiz.");
-			navigate("/app/quizzes", { replace: true });
+			navigate(user?.role === "student" ? "/app/home" : "/app/quizzes", {
+				replace: true,
+			});
 		}
 	}, [quiz, user, attemptsLeft, navigate]);
 
@@ -475,10 +477,12 @@ export default function SingleQuiz() {
 					The quiz you are looking for does not exist or has been removed.
 				</p>
 				<button
-					onClick={() => navigate("/app/quizzes")}
+					onClick={() =>
+						navigate(user?.role === "student" ? "/app/home" : "/app/quizzes")
+					}
 					className="bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-black py-4 px-10 rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-indigo-500/10 transition-all hover:scale-[1.02] active:scale-95"
 				>
-					Back to Quizzes
+					{user?.role === "student" ? "Back to Home" : "Back to Quizzes"}
 				</button>
 			</div>
 		);

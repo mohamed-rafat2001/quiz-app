@@ -14,12 +14,15 @@ export const deleteOne = (Model) =>
 		response(null, 204, res);
 	});
 
-export const updateOne = (Model) =>
+export const updateOne = (Model, popOptions) =>
 	errorHandling(async (req, res, next) => {
-		const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+		let query = Model.findByIdAndUpdate(req.params.id, req.body, {
 			new: true,
 			runValidators: true,
 		});
+
+		if (popOptions) query = query.populate(popOptions);
+		const doc = await query;
 
 		if (!doc) {
 			return next(new appError("No document found with that ID", 404));

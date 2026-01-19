@@ -101,13 +101,16 @@ const AdminDashboard = ({ stats }) => (
 							Account settings
 						</p>
 					</Link>
-					<div className="p-4 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
-						<HiPresentationChartBar className="text-2xl text-orange-600 dark:text-orange-400 mb-2" />
+					<Link
+						to="/app/dashboard"
+						className="p-4 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 hover:shadow-md transition-all group"
+					>
+						<HiPresentationChartBar className="text-2xl text-orange-600 dark:text-orange-400 mb-2 group-hover:scale-110 transition-transform" />
 						<p className="font-bold text-gray-900 dark:text-white">Analytics</p>
 						<p className="text-xs text-gray-500 dark:text-gray-400">
 							Platform insights
 						</p>
-					</div>
+					</Link>
 				</div>
 			</motion.div>
 

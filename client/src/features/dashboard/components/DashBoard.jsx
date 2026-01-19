@@ -23,11 +23,16 @@ const DashBoard = () => {
 
 	const { data: stats, isLoading } = useStats();
 
-	const { data: response, isLoading: isLoadingQuizzes } = useTeacherQuizStats({
-		keyword: debouncedSearch,
-		page,
-		limit: 5,
-	});
+	const { data: response, isLoading: isLoadingQuizzes } = useTeacherQuizStats(
+		{
+			keyword: debouncedSearch,
+			page,
+			limit: 5,
+		},
+		{
+			enabled: user?.role === "teacher",
+		}
+	);
 
 	const teacherQuizzes = response?.data || [];
 	const meta = response?.meta || {};

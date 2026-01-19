@@ -137,7 +137,6 @@ export default function SideBar() {
 		if (user?.role === "student") {
 			items.push(
 				{ to: "/app/home", icon: HiHome, label: "Start Quiz" },
-				{ to: "/app/quizzes", icon: HiListBullet, label: "Available Quizzes" },
 				{
 					to: "/app/my-submissions",
 					icon: HiClipboardDocumentCheck,

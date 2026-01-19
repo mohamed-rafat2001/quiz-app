@@ -27,7 +27,8 @@ export const createUser = errorHandling(async (req, res, next) => {
 		phoneNumber,
 		gender,
 	} = req.body;
-	if (role === "admin")
+	// validate role and prevent admin signups
+	if (role && role === "admin")
 		return next(new appError("role must be student or teacher", 400));
 	const findUser = await UserModel.findOne({ email });
 	if (findUser) return next(new appError("email already esist", 400));
@@ -36,7 +37,7 @@ export const createUser = errorHandling(async (req, res, next) => {
 		email,
 		password,
 		confirmPass,
-		role,
+		role: role === "teacher" ? "teacher" : "student",
 		city,
 		country,
 		phoneNumber,
@@ -83,8 +84,12 @@ export const logout = (req, res) => {
 const filterObj = (obj, ...data) => {
 	const newObj = {};
 	Object.keys(obj).forEach((ele) => {
-		if (data.includes(ele)) newObj[ele] = obj[ele];
+		if (data.includes(ele) && obj[ele] !== undefined && obj[ele] !== null) {
+			newObj[ele] = obj[ele];
+		}
 	});
+	// Special handling for nested data from FormData if needed
+	// But usually req.body is already flattened or contains strings
 	return newObj;
 };
 // update me
@@ -98,6 +103,7 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		"phoneNumber",
 		"gender"
 	);
+
 	if (req.file) {
 		// delete old image from cloudinary if exists
 		const userBeforeUpdate = await UserModel.findById(req.user._id);
@@ -112,10 +118,12 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		);
 		updates.profileImg = { public_id, secure_url };
 	}
+
 	const user = await UserModel.findByIdAndUpdate(req.user._id, updates, {
 		new: true,
 		runValidators: true,
 	});
+
 	if (!user) return next(new appError("user not updated", 400));
 	response(user, 200, res);
 });
