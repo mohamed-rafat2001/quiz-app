@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAdminUsers, useDeleteUser, useUpdateUser } from "../hooks/useAdmin";
+import { useAdminUsers, useDeleteUser, useUpdateUser, useCreateUserByAdmin } from "../hooks/useAdmin";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../../../shared/validation/schemas";
 import {
 	HiTrash,
 	HiShieldCheck,
@@ -11,12 +14,12 @@ import {
 	HiUserCircle,
 	HiFunnel,
 	HiArrowPath,
+	HiPlus,
+	HiXMark,
+	HiChevronDown,
+	HiChevronLeft,
+	HiChevronRight,
 } from "react-icons/hi2";
-
-const fadeInUp = {
-	hidden: { opacity: 0, y: 20 },
-	visible: { opacity: 1, y: 0 },
-};
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
 	<div className={`p-5 rounded-2xl bg-gradient-to-br ${color} text-white`}>
@@ -27,19 +30,48 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
 );
 
 export default function AdminUsers() {
-	const { data: users, isLoading, refetch } = useAdminUsers();
-	const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
-	const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [roleFilter, setRoleFilter] = useState("all");
+	const [page, setPage] = useState(1);
+	const limit = 10;
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center min-h-[400px]">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-			</div>
-		);
-	}
+	const { data, isLoading, refetch } = useAdminUsers({
+		page,
+		limit,
+		role: roleFilter !== "all" ? roleFilter : undefined,
+		name: searchTerm ? { $regex: searchTerm, $options: "i" } : undefined,
+	});
+
+	const users = data?.docs || [];
+	const total = data?.total || 0;
+	const totalPages = Math.ceil(total / limit);
+
+	const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
+	const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
+	const { mutate: createUser, isPending: isCreating } = useCreateUserByAdmin();
+
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm({
+		resolver: zodResolver(signUpSchema),
+	});
+
+	useEffect(() => {
+		setPage(1);
+	}, [searchTerm, roleFilter]);
+
+	const onCreateSubmit = (data) => {
+		createUser(data, {
+			onSuccess: () => {
+				setIsCreateModalOpen(false);
+				reset();
+			},
+		});
+	};
 
 	const handleRoleChange = (id, currentRole) => {
 		const newRole = currentRole === "student" ? "teacher" : "student";
@@ -50,21 +82,21 @@ export default function AdminUsers() {
 		updateUser({ id, data: { active: !isActive } });
 	};
 
-	// Filter users
-	const filteredUsers =
-		users?.filter((user) => {
-			const matchesSearch =
-				user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				user.email.toLowerCase().includes(searchTerm.toLowerCase());
-			const matchesRole = roleFilter === "all" || user.role === roleFilter;
-			return matchesSearch && matchesRole;
-		}) || [];
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[400px]">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+			</div>
+		);
+	}
 
-	// Stats
-	const totalStudents = users?.filter((u) => u.role === "student").length || 0;
-	const totalTeachers = users?.filter((u) => u.role === "teacher").length || 0;
-	const activeUsers = users?.filter((u) => u.active).length || 0;
-	const blockedUsers = users?.filter((u) => !u.active).length || 0;
+	// Stats from backend
+	const {
+		totalStudents = 0,
+		totalTeachers = 0,
+		activeUsers = 0,
+		blockedUsers = 0,
+	} = data?.stats || {};
 
 	return (
 		<div className="space-y-6">
@@ -82,13 +114,22 @@ export default function AdminUsers() {
 						Manage all users on the platform
 					</p>
 				</div>
-				<button
-					onClick={() => refetch()}
-					className="flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-all"
-				>
-					<HiArrowPath className={isLoading ? "animate-spin" : ""} />
-					Refresh
-				</button>
+				<div className="flex items-center gap-3">
+					<button
+						onClick={() => setIsCreateModalOpen(true)}
+						className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none"
+					>
+						<HiPlus className="text-lg" />
+						Create User
+					</button>
+					<button
+						onClick={() => refetch()}
+						className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+					>
+						<HiArrowPath className={isLoading ? "animate-spin" : ""} />
+						Refresh
+					</button>
+				</div>
 			</motion.div>
 
 			{/* Stats */}
@@ -99,7 +140,7 @@ export default function AdminUsers() {
 			>
 				<StatCard
 					title="Total Users"
-					value={users?.length || 0}
+					value={total}
 					icon={HiUsers}
 					color="from-indigo-500 to-purple-500"
 				/>
@@ -139,17 +180,18 @@ export default function AdminUsers() {
 						className="w-full pl-11 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-gray-900 dark:text-white"
 					/>
 				</div>
-				<div className="flex items-center gap-2">
-					<HiFunnel className="text-gray-400" />
+				<div className="flex items-center gap-2 relative">
+					<HiFunnel className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10" />
 					<select
 						value={roleFilter}
 						onChange={(e) => setRoleFilter(e.target.value)}
-						className="px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-gray-900 dark:text-white font-medium"
+						className="appearance-none pl-11 pr-10 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-gray-900 dark:text-white font-black cursor-pointer transition-all hover:border-gray-300 dark:hover:border-gray-600"
 					>
 						<option value="all">All Roles</option>
 						<option value="student">Students</option>
 						<option value="teacher">Teachers</option>
 					</select>
+					<HiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
 				</div>
 			</motion.div>
 
@@ -182,31 +224,35 @@ export default function AdminUsers() {
 						</thead>
 						<tbody className="divide-y divide-gray-100 dark:divide-gray-700">
 							<AnimatePresence>
-								{filteredUsers.map((user, index) => (
+								{users.map((user, index) => (
 									<motion.tr
 										key={user._id}
-										initial={{ opacity: 0, y: 10 }}
-										animate={{ opacity: 1, y: 0 }}
-										exit={{ opacity: 0, x: -20 }}
-										transition={{ delay: index * 0.03 }}
-										className="hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-colors"
+										initial={{ opacity: 0, x: -20 }}
+										animate={{ opacity: 1, x: 0 }}
+										exit={{ opacity: 0, x: 20 }}
+										transition={{ delay: index * 0.05 }}
+										className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
 									>
 										<td className="px-6 py-4">
-											<div className="flex items-center gap-4">
-												<div
-													className={`w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold shadow-sm ${
-														user.role === "teacher"
-															? "bg-gradient-to-br from-purple-500 to-pink-500"
-															: "bg-gradient-to-br from-blue-500 to-cyan-500"
-													}`}
-												>
-													{user.name.charAt(0).toUpperCase()}
+											<div className="flex items-center gap-3">
+												<div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center overflow-hidden border border-indigo-50 dark:border-indigo-500/10">
+													{user.profileImg?.secure_url ? (
+														<img
+															src={user.profileImg.secure_url}
+															alt={user.name}
+															className="w-full h-full object-cover"
+														/>
+													) : (
+														<span className="text-indigo-600 dark:text-indigo-400 font-black text-sm">
+															{user.name.charAt(0).toUpperCase()}
+														</span>
+													)}
 												</div>
 												<div>
 													<p className="font-bold text-gray-900 dark:text-white">
 														{user.name}
 													</p>
-													<p className="text-sm text-gray-500 dark:text-gray-400">
+													<p className="text-xs text-gray-500 dark:text-gray-400">
 														{user.email}
 													</p>
 												</div>
@@ -282,12 +328,247 @@ export default function AdminUsers() {
 					</table>
 				</div>
 
-				{filteredUsers.length === 0 && (
+				{users.length === 0 && (
 					<div className="py-12 text-center text-gray-500 dark:text-gray-400">
 						No users found matching your criteria.
 					</div>
 				)}
+
+				{/* Pagination UI */}
+				{totalPages > 1 && (
+					<div className="px-6 py-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between bg-gray-50/30 dark:bg-white/[0.01]">
+						<p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+							Showing <span className="font-bold text-gray-900 dark:text-white">{(page - 1) * limit + 1}</span> to <span className="font-bold text-gray-900 dark:text-white">{Math.min(page * limit, total)}</span> of <span className="font-bold text-gray-900 dark:text-white">{total}</span> users
+						</p>
+						<div className="flex items-center gap-2">
+							<button
+								onClick={() => setPage(p => Math.max(1, p - 1))}
+								disabled={page === 1}
+								className="p-2 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+							>
+								<HiChevronLeft className="text-xl" />
+							</button>
+							
+							<div className="flex items-center gap-1">
+								{[...Array(totalPages)].map((_, i) => (
+									<button
+										key={i + 1}
+										onClick={() => setPage(i + 1)}
+										className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${
+											page === i + 1
+												? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none"
+												: "text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-white/5 border border-transparent hover:border-gray-200 dark:hover:border-white/10"
+										}`}
+									>
+										{i + 1}
+									</button>
+								))}
+							</div>
+
+							<button
+								onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+								disabled={page === totalPages}
+								className="p-2 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+							>
+								<HiChevronRight className="text-xl" />
+							</button>
+						</div>
+					</div>
+				)}
 			</motion.div>
+
+			{/* Create User Modal */}
+			<AnimatePresence>
+				{isCreateModalOpen && (
+					<div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							onClick={() => setIsCreateModalOpen(false)}
+							className="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-sm"
+						/>
+						<motion.div
+							initial={{ opacity: 0, scale: 0.95, y: 20 }}
+							animate={{ opacity: 1, scale: 1, y: 0 }}
+							exit={{ opacity: 0, scale: 0.95, y: 20 }}
+							className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-white/5 overflow-hidden"
+						>
+							<div className="px-8 py-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
+								<div>
+									<h2 className="text-xl font-black text-gray-900 dark:text-white">
+										Create New User
+									</h2>
+									<p className="text-sm text-gray-500 dark:text-white/40 font-medium">
+										Add a new student or teacher to the platform
+									</p>
+								</div>
+								<button
+									onClick={() => setIsCreateModalOpen(false)}
+									className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-colors"
+								>
+									<HiXMark className="text-2xl" />
+								</button>
+							</div>
+
+							<form onSubmit={handleSubmit(onCreateSubmit)} className="p-8">
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{/* Name */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Full Name
+										</label>
+										<input
+											{...register("name")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="John Doe"
+										/>
+										{errors.name && (
+											<p className="text-xs text-red-500 font-bold ml-1">
+												{errors.name.message}
+											</p>
+										)}
+									</div>
+
+									{/* Email */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Email Address
+										</label>
+										<input
+											{...register("email")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="john@example.com"
+										/>
+										{errors.email && (
+											<p className="text-xs text-red-500 font-bold ml-1">
+												{errors.email.message}
+											</p>
+										)}
+									</div>
+
+									{/* Password */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Password
+										</label>
+										<input
+											type="password"
+											{...register("password")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="••••••••"
+										/>
+										{errors.password && (
+											<p className="text-xs text-red-500 font-bold ml-1">
+												{errors.password.message}
+											</p>
+										)}
+									</div>
+
+									{/* Confirm Password */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Confirm Password
+										</label>
+										<input
+											type="password"
+											{...register("confirmPass")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="••••••••"
+										/>
+										{errors.confirmPass && (
+											<p className="text-xs text-red-500 font-bold ml-1">
+												{errors.confirmPass.message}
+											</p>
+										)}
+									</div>
+
+									{/* Role */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Role
+										</label>
+										<select
+											{...register("role")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+										>
+											<option value="student">Student</option>
+											<option value="teacher">Teacher</option>
+										</select>
+									</div>
+
+									{/* Gender */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Gender
+										</label>
+										<select
+											{...register("gender")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+										>
+											<option value="male">Male</option>
+											<option value="female">Female</option>
+										</select>
+									</div>
+
+									{/* City */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											City
+										</label>
+										<input
+											{...register("city")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="New York"
+										/>
+									</div>
+
+									{/* Country */}
+									<div className="space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Country
+										</label>
+										<input
+											{...register("country")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="USA"
+										/>
+									</div>
+
+									{/* Phone */}
+									<div className="col-span-full space-y-2">
+										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+											Phone Number
+										</label>
+										<input
+											{...register("phoneNumber")}
+											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
+											placeholder="+1 234 567 890"
+										/>
+									</div>
+								</div>
+
+								<div className="mt-8 flex gap-3">
+									<button
+										type="button"
+										onClick={() => setIsCreateModalOpen(false)}
+										className="flex-1 px-6 py-3 rounded-xl border border-gray-200 dark:border-white/10 font-bold text-gray-600 dark:text-white/60 hover:bg-gray-50 dark:hover:bg-white/5 transition-all"
+									>
+										Cancel
+									</button>
+									<button
+										type="submit"
+										disabled={isCreating}
+										className="flex-1 px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-lg shadow-indigo-200 dark:shadow-none"
+									>
+										{isCreating ? "Creating..." : "Create User"}
+									</button>
+								</div>
+							</form>
+						</motion.div>
+					</div>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 }

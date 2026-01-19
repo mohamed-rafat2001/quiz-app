@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
 		name: {
 			type: String,
 			required: [true, "name required"],
+			unique: true,
 			trim: true,
 			minlength: 3,
 		},
@@ -38,6 +39,7 @@ const userSchema = new mongoose.Schema(
 		email: {
 			type: String,
 			required: [true, "email required"],
+			unique: true,
 			trim: true,
 			validate: [validator.isEmail, "please enter the correct email"],
 		},

@@ -44,7 +44,7 @@ userRouter.delete("/me-image", deleteMeImage);
 userRouter.patch("/update-password", updatePassword);
 userRouter.get("/get-user/:id", getUser);
 userRouter.patch("/block-user/admin/:id", allowTo("admin"), blockUserByAdmin);
-userRouter.get("/all-users/admin", allowTo("admin"), allUsers);
+userRouter.route("/all-users/admin").get(allowTo("admin"), allUsers).post(allowTo("admin"), createUser);
 userRouter
 	.route("/admin/:id")
 	.patch(allowTo("admin"), updateUserByAdmin)

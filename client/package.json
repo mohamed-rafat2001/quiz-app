@@ -23,6 +23,7 @@
 		"react-hot-toast": "^2.6.0",
 		"react-icons": "^5.5.0",
 		"react-router-dom": "^6.26.0",
+		"recharts": "^3.6.0",
 		"vite-plugin-eslint": "^1.8.1",
 		"zod": "^4.3.5"
 	},

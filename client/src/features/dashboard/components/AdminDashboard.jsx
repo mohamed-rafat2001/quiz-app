@@ -1,5 +1,18 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+	BarChart,
+	Bar,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+	PieChart,
+	Pie,
+	Cell,
+	Legend,
+} from "recharts";
 import StatCard from "./StatCard";
 import {
 	HiUsers,
@@ -12,7 +25,11 @@ import {
 	HiShieldCheck,
 	HiPresentationChartBar,
 	HiSparkles,
+	HiArrowTrendingUp,
+	HiChartPie,
 } from "react-icons/hi2";
+
+const COLORS = ["#6366f1", "#a855f7", "#ec4899", "#f97316"];
 
 const staggerContainer = {
 	hidden: { opacity: 0 },
@@ -54,12 +71,110 @@ const AdminDashboard = ({ stats }) => (
 			/>
 		</motion.div>
 
+		{/* Charts Section */}
+		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			{/* Registration Trend Chart */}
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.2 }}
+				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+			>
+				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+					<HiArrowTrendingUp className="text-indigo-500" />
+					Platform Growth (Last 6 Months)
+				</h3>
+				<div className="h-[300px] w-full relative">
+					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+						<BarChart data={stats?.combinedTrend || []}>
+							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+							<XAxis 
+								dataKey="name" 
+								axisLine={false}
+								tickLine={false}
+								tick={{ fill: '#9CA3AF', fontSize: 12 }}
+							/>
+							<YAxis 
+								axisLine={false}
+								tickLine={false}
+								tick={{ fill: '#9CA3AF', fontSize: 12 }}
+							/>
+							<Tooltip 
+								contentStyle={{ 
+									backgroundColor: '#FFF', 
+									borderRadius: '12px', 
+									border: 'none',
+									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+								}}
+							/>
+							<Legend verticalAlign="top" align="right" iconType="circle" />
+							<Bar 
+								name="New Users"
+								dataKey="users" 
+								fill="#6366f1" 
+								radius={[4, 4, 0, 0]} 
+								barSize={30}
+							/>
+							<Bar 
+								name="New Quizzes"
+								dataKey="quizzes" 
+								fill="#a855f7" 
+								radius={[4, 4, 0, 0]} 
+								barSize={30}
+							/>
+						</BarChart>
+					</ResponsiveContainer>
+				</div>
+			</motion.div>
+
+			{/* Role Distribution Chart */}
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.3 }}
+				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+			>
+				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+					<HiChartPie className="text-purple-500" />
+					User Role Distribution
+				</h3>
+				<div className="h-[300px] w-full relative">
+					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+						<PieChart>
+							<Pie
+								data={stats?.roleDistribution || []}
+								cx="50%"
+								cy="50%"
+								innerRadius={60}
+								outerRadius={80}
+								paddingAngle={5}
+								dataKey="value"
+							>
+								{stats?.roleDistribution?.map((entry, index) => (
+									<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+								))}
+							</Pie>
+							<Tooltip 
+								contentStyle={{ 
+									backgroundColor: '#FFF', 
+									borderRadius: '12px', 
+									border: 'none',
+									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+								}}
+							/>
+							<Legend verticalAlign="bottom" height={36}/>
+						</PieChart>
+					</ResponsiveContainer>
+				</div>
+			</motion.div>
+		</div>
+
 		{/* Admin Quick Actions */}
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
-				transition={{ delay: 0.2 }}
+				transition={{ delay: 0.4 }}
 				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
 			>
 				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -117,7 +232,7 @@ const AdminDashboard = ({ stats }) => (
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
-				transition={{ delay: 0.3 }}
+				transition={{ delay: 0.5 }}
 				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
 			>
 				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">

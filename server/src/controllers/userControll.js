@@ -27,28 +27,43 @@ export const createUser = errorHandling(async (req, res, next) => {
 		phoneNumber,
 		gender,
 	} = req.body;
-	// validate role and prevent admin signups
-	if (role && role === "admin")
+
+	// Check if the current user is an admin making a request to create a user
+	const isAdminCreating = req.user && req.user.role === "admin";
+
+	// validate role and prevent admin signups if not created by an admin
+	if (!isAdminCreating && role && role === "admin")
 		return next(new appError("role must be student or teacher", 400));
+
 	const findUser = await UserModel.findOne({ email });
-	if (findUser) return next(new appError("email already esist", 400));
+	if (findUser) return next(new appError("email already exists", 400));
+
+	const findName = await UserModel.findOne({ name });
+	if (findName) return next(new appError("name already exists", 400));
+
 	const user = await UserModel.create({
 		name,
 		email,
 		password,
 		confirmPass,
-		role: role === "teacher" ? "teacher" : "student",
+		role: isAdminCreating ? role : (role === "teacher" ? "teacher" : "student"),
 		city,
 		country,
 		phoneNumber,
 		gender,
 	});
-	const token = user.createToken();
-	if (process.env.STATUS === "PRODUCTION") cookiesOptions.secure = true;
-	cookies(token, res);
-	// await new Email(user).sendWelcome();
 
-	response({ user, token }, 201, res);
+	// Only generate token and set cookie if not created by an admin
+	if (!isAdminCreating) {
+		const token = user.createToken();
+		if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
+		cookies(token, res);
+		// await new Email(user).sendWelcome();
+		response({ user, token }, 201, res);
+	} else {
+		// If admin is creating, just return the user data
+		response({ user }, 201, res);
+	}
 });
 // login func
 export const loginFunc = errorHandling(async (req, res, next) => {
@@ -65,7 +80,7 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 	//create token
 	const token = user.createToken();
 	// send cookie
-	if (process.env.STATUS === "PRODUCTION") cookiesOptions.secure = true;
+	if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 	cookies(token, res);
 	//send response
 	response({ user, token }, 200, res);
@@ -103,6 +118,23 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		"phoneNumber",
 		"gender"
 	);
+
+	// Check if the new name or email already exists (excluding current user)
+	if (updates.email) {
+		const existingEmail = await UserModel.findOne({
+			email: updates.email,
+			_id: { $ne: req.user._id },
+		});
+		if (existingEmail) return next(new appError("email already exists", 400));
+	}
+
+	if (updates.name) {
+		const existingName = await UserModel.findOne({
+			name: updates.name,
+			_id: { $ne: req.user._id },
+		});
+		if (existingName) return next(new appError("name already exists", 400));
+	}
 
 	if (req.file) {
 		// delete old image from cloudinary if exists
@@ -163,7 +195,74 @@ export const deleteMe = errorHandling(async (req, res, next) => {
 });
 
 //admin get all users
-export const allUsers = factory.getAll(UserModel, { role: { $ne: "admin" } });
+export const allUsers = errorHandling(async (req, res, next) => {
+	const filter = { role: { $ne: "admin" } };
+
+	// Create features instance
+	const features = new ApiFeatures(UserModel.find(filter), req.query)
+		.filter()
+		.sort()
+		.limitFields();
+
+	// Get total count for pagination (cloning the query)
+	const total = await features.query.clone().countDocuments();
+
+	// Get stats for all users (not just current page)
+	const stats = await UserModel.aggregate([
+		{ $match: filter },
+		{
+			$group: {
+				_id: null,
+				totalStudents: {
+					$sum: { $cond: [{ $eq: ["$role", "student"] }, 1, 0] },
+				},
+				totalTeachers: {
+					$sum: { $cond: [{ $eq: ["$role", "teacher"] }, 1, 0] },
+				},
+				activeUsers: {
+					$sum: { $cond: [{ $eq: ["$active", true] }, 1, 0] },
+				},
+				blockedUsers: {
+					$sum: {
+						$cond: [
+							{
+								$or: [
+									{ $eq: ["$active", false] },
+									{ $eq: ["$block", true] },
+								],
+							},
+							1,
+							0,
+						],
+					},
+				},
+			},
+		},
+	]);
+
+	// Apply pagination
+	features.paginate();
+	const users = await features.query;
+
+	const page = req.query.page * 1 || 1;
+	const limit = req.query.limit * 1 || 10;
+
+	response(
+		{
+			docs: users,
+			total,
+			stats: stats[0] || {
+				totalStudents: 0,
+				totalTeachers: 0,
+				activeUsers: 0,
+				blockedUsers: 0,
+			},
+		},
+		200,
+		res,
+		{ total, page, limit }
+	);
+});
 // admin block user
 export const blockUserByAdmin = factory.updateOne(UserModel);
 // admin delete user
@@ -248,7 +347,7 @@ export const resetPass = errorHandling(async (req, res, next) => {
 	await user.save();
 
 	const token = user.createToken();
-	if (process.env.STATUS === "PRODUCTION") cookiesOptions.secure = true;
+	if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 	cookies(token, res);
 
 	response({ user, token }, 200, res);

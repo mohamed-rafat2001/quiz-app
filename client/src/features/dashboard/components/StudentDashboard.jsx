@@ -1,5 +1,14 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+	AreaChart,
+	Area,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+} from "recharts";
 import StatCard from "./StatCard";
 import {
 	HiClipboardDocumentList,
@@ -8,6 +17,7 @@ import {
 	HiChartBar,
 	HiPlay,
 	HiRocketLaunch,
+	HiArrowTrendingUp,
 } from "react-icons/hi2";
 
 const staggerContainer = {
@@ -49,6 +59,59 @@ const StudentDashboard = ({ stats }) => (
 				color="from-blue-500 to-cyan-500"
 				subtitle={stats?.avgScore >= 70 ? "Great job!" : "Keep practicing"}
 			/>
+		</motion.div>
+
+		{/* Performance Trend Chart */}
+		<motion.div
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.1 }}
+			className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+		>
+			<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+				<HiArrowTrendingUp className="text-indigo-500" />
+				Your Performance Trend
+			</h3>
+			<div className="h-[300px] w-full relative">
+				<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+					<AreaChart data={stats?.scoreTrend || []}>
+						<defs>
+							<linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="5%" stopColor="#6366f1" stopOpacity={0.1} />
+								<stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+							</linearGradient>
+						</defs>
+						<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+						<XAxis 
+							dataKey="name" 
+							axisLine={false}
+							tickLine={false}
+							tick={{ fill: '#9CA3AF', fontSize: 12 }}
+						/>
+						<YAxis 
+							axisLine={false}
+							tickLine={false}
+							tick={{ fill: '#9CA3AF', fontSize: 12 }}
+						/>
+						<Tooltip 
+							contentStyle={{ 
+								backgroundColor: '#FFF', 
+								borderRadius: '12px', 
+								border: 'none',
+								boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+							}}
+						/>
+						<Area
+							type="monotone"
+							dataKey="score"
+							stroke="#6366f1"
+							strokeWidth={3}
+							fillOpacity={1}
+							fill="url(#colorScore)"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
 		</motion.div>
 
 		{/* Quick Actions for Student */}

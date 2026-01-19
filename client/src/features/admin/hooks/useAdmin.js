@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	getAllUsers,
+	createUserByAdmin,
 	deleteUser,
 	updateUser,
 	getAllQuizzes,
@@ -39,6 +40,20 @@ export const useUpdateUser = () => {
 		},
 		onError: (err) => {
 			toast.error(err.response?.data?.message || "Failed to update user");
+		},
+	});
+};
+
+export const useCreateUserByAdmin = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: createUserByAdmin,
+		onSuccess: () => {
+			toast.success("User created successfully");
+			queryClient.invalidateQueries(["adminUsers"]);
+		},
+		onError: (err) => {
+			toast.error(err.message || "Failed to create user");
 		},
 	});
 };

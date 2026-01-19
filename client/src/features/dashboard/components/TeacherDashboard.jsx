@@ -1,5 +1,18 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+	BarChart,
+	Bar,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+	Legend,
+	PieChart,
+	Pie,
+	Cell,
+} from "recharts";
 import StatCard from "./StatCard";
 import Pagination from "../../../shared/components/ui/Pagination";
 import {
@@ -9,7 +22,11 @@ import {
 	HiPlus,
 	HiEye,
 	HiMagnifyingGlass,
+	HiChartBar,
+	HiChartPie,
 } from "react-icons/hi2";
+
+const COLORS = ["#10b981", "#ef4444"];
 
 const staggerContainer = {
 	hidden: { opacity: 0 },
@@ -47,12 +64,108 @@ const TeacherDashboard = ({
 				color="from-blue-500 to-cyan-500"
 			/>
 			<StatCard
-				title="Active Quizzes"
-				value={quizzes?.length || 0}
+				title="Avg Success Rate"
+				value={`${Math.round(stats?.avgSuccessRate || 0)}%`}
 				icon={HiRocketLaunch}
 				color="from-orange-500 to-red-500"
 			/>
 		</motion.div>
+
+		{/* Charts Section */}
+		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.1 }}
+				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+			>
+				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+					<HiChartBar className="text-indigo-500" />
+					Recent Quizzes Performance
+				</h3>
+				<div className="h-[300px] w-full relative">
+					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+						<BarChart data={stats?.quizPerformance || []}>
+							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+							<XAxis 
+								dataKey="name" 
+								axisLine={false}
+								tickLine={false}
+								tick={{ fill: '#9CA3AF', fontSize: 12 }}
+							/>
+							<YAxis 
+								axisLine={false}
+								tickLine={false}
+								tick={{ fill: '#9CA3AF', fontSize: 12 }}
+							/>
+							<Tooltip 
+								contentStyle={{ 
+									backgroundColor: '#FFF', 
+									borderRadius: '12px', 
+									border: 'none',
+									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+								}}
+							/>
+							<Legend verticalAlign="top" align="right" iconType="circle" />
+							<Bar 
+								name="Avg Score (%)"
+								dataKey="avgScore" 
+								fill="#6366f1" 
+								radius={[4, 4, 0, 0]} 
+								barSize={30}
+							/>
+							<Bar 
+								name="Attempts"
+								dataKey="attempts" 
+								fill="#a855f7" 
+								radius={[4, 4, 0, 0]} 
+								barSize={30}
+							/>
+						</BarChart>
+					</ResponsiveContainer>
+				</div>
+			</motion.div>
+
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.2 }}
+				className="bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+			>
+				<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+					<HiChartPie className="text-emerald-500" />
+					Overall Pass/Fail Ratio
+				</h3>
+				<div className="h-[300px] w-full relative">
+					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+						<PieChart>
+							<Pie
+								data={stats?.passFailData || []}
+								cx="50%"
+								cy="50%"
+								innerRadius={60}
+								outerRadius={80}
+								paddingAngle={5}
+								dataKey="value"
+							>
+								{stats?.passFailData?.map((entry, index) => (
+									<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+								))}
+							</Pie>
+							<Tooltip 
+								contentStyle={{ 
+									backgroundColor: '#FFF', 
+									borderRadius: '12px', 
+									border: 'none',
+									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+								}}
+							/>
+							<Legend verticalAlign="bottom" height={36}/>
+						</PieChart>
+					</ResponsiveContainer>
+				</div>
+			</motion.div>
+		</div>
 
 		{/* Create Quiz CTA */}
 		<motion.div

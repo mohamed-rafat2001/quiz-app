@@ -9,6 +9,15 @@ export const getAllUsers = async (params) => {
 	}
 };
 
+export const createUserByAdmin = async (data) => {
+	try {
+		const response = await BaseApi.post("/user/all-users/admin", data);
+		return response.data.data;
+	} catch (e) {
+		throw new Error(e.response?.data?.message || "Something went wrong");
+	}
+};
+
 export const deleteUser = async (id) => {
 	try {
 		await BaseApi.delete(`/user/admin/${id}`);
