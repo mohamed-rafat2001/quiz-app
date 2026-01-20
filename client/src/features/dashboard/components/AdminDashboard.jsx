@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -36,8 +37,17 @@ const staggerContainer = {
 	visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
-const AdminDashboard = ({ stats }) => (
-	<div className="space-y-6">
+const AdminDashboard = ({ stats }) => {
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) return null;
+
+	return (
+		<div className="space-y-6">
 		{/* Admin Stats Grid */}
 		<motion.div
 			variants={staggerContainer}
@@ -85,7 +95,7 @@ const AdminDashboard = ({ stats }) => (
 					Platform Growth (Last 6 Months)
 				</h3>
 				<div className="h-[300px] w-full relative">
-					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+					<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
 						<BarChart data={stats?.combinedTrend || []}>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
 							<XAxis 
@@ -139,7 +149,7 @@ const AdminDashboard = ({ stats }) => (
 					User Role Distribution
 				</h3>
 				<div className="h-[300px] w-full relative">
-					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+					<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
 						<PieChart>
 							<Pie
 								data={stats?.roleDistribution || []}
@@ -269,6 +279,7 @@ const AdminDashboard = ({ stats }) => (
 			</motion.div>
 		</div>
 	</div>
-);
+	);
+};
 
 export default AdminDashboard;

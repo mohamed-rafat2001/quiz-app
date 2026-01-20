@@ -86,7 +86,7 @@ const TeacherDashboard = ({
 					Recent Quizzes Performance
 				</h3>
 				<div className="h-[300px] w-full relative">
-					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+					<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
 						<BarChart data={stats?.quizPerformance || []}>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
 							<XAxis 
@@ -139,7 +139,7 @@ const TeacherDashboard = ({
 					Overall Pass/Fail Ratio
 				</h3>
 				<div className="h-[300px] w-full relative">
-					<ResponsiveContainer width="100%" height="100%" minWidth={0}>
+					<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
 						<PieChart>
 							<Pie
 								data={stats?.passFailData || []}
