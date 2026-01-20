@@ -165,6 +165,10 @@ const Navbar = () => {
 							</Link>
 							<Link
 								to="/welcome"
+								onMouseEnter={() => {
+									// Preload Auth component
+									import("../shared/components/ui/Auth");
+								}}
 								className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 transition-all active:scale-95"
 							>
 								Get Started
@@ -203,9 +207,9 @@ const Hero = () => {
 						transition={{ duration: 0.8, ease: "easeOut" }}
 					>
 						<motion.div
-							initial={{ opacity: 0, scale: 0.8 }}
+							initial={{ opacity: 0, scale: 0.95 }}
 							animate={{ opacity: 1, scale: 1 }}
-							transition={{ delay: 0.2 }}
+							transition={{ delay: 0.1 }}
 							className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-sm font-bold rounded-full mb-6"
 						>
 							<HiSparkles className="text-yellow-500" />
@@ -227,10 +231,7 @@ const Hero = () => {
 						</p>
 
 						{/* Feature pills */}
-						<motion.div
-							initial="hidden"
-							animate="visible"
-							variants={staggerContainer}
+						<div
 							className="flex flex-wrap gap-3 mb-8"
 						>
 							{[
@@ -241,18 +242,24 @@ const Hero = () => {
 							].map((item, i) => (
 								<motion.span
 									key={i}
-									variants={fadeInUp}
+									initial={{ opacity: 0, y: 10 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ delay: 0.2 + i * 0.05 }}
 									className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full border border-gray-200 dark:border-gray-700 shadow-sm"
 								>
 									<span>{item.icon}</span>
 									{item.text}
 								</motion.span>
 							))}
-						</motion.div>
+						</div>
 
 						<div className="flex flex-col sm:flex-row gap-4">
 							<Link
 								to="/welcome"
+								onMouseEnter={() => {
+									// Preload Auth component
+									import("../shared/components/ui/Auth");
+								}}
 								className="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/40 transition-all flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95"
 							>
 								<HiRocketLaunch className="text-xl group-hover:rotate-12 transition-transform" />
@@ -268,6 +275,9 @@ const Hero = () => {
 											src={`https://i.pravatar.cc/40?u=user${i}`}
 											alt=""
 											className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
+											loading="eager"
+											width="36"
+											height="36"
 										/>
 									))}
 								</div>
@@ -482,6 +492,8 @@ const Testimonials = () => {
 									className="w-12 h-12 rounded-full"
 									referrerPolicy="no-referrer"
 									loading="lazy"
+									width="48"
+									height="48"
 								/>
 								<div>
 									<p className="font-bold text-gray-900 dark:text-white">
@@ -592,6 +604,13 @@ const Footer = () => (
 
 const Landing = () => {
 	useEffect(() => {
+		// SEO Meta Tags
+		document.title = "QuizMaster | The #1 Quiz Platform for Education";
+		const metaDescription = document.querySelector('meta[name="description"]');
+		if (metaDescription) {
+			metaDescription.setAttribute("content", "Master any subject with QuizMaster. Create engaging quizzes, track progress, and unlock powerful insights for teachers and students.");
+		}
+
 		// Initialize Lenis for smooth scrolling
 		const lenis = new Lenis({
 			duration: 1.2,
@@ -602,15 +621,17 @@ const Landing = () => {
 			touchMultiplier: 2,
 		});
 
+		let rafId;
 		function raf(time) {
 			lenis.raf(time);
-			requestAnimationFrame(raf);
+			rafId = requestAnimationFrame(raf);
 		}
 
-		requestAnimationFrame(raf);
+		rafId = requestAnimationFrame(raf);
 
 		return () => {
 			lenis.destroy();
+			cancelAnimationFrame(rafId);
 		};
 	}, []);
 
