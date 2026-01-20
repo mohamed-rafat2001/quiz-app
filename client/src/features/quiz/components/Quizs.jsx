@@ -70,6 +70,8 @@ const QuizCard = forwardRef(
 			? (quiz.tries || 1) - (quiz.attemptCount || 0)
 			: 0;
 		const canTakeAgain = !isTeacher && attemptsLeft > 0;
+		const isStarted = new Date(quiz.startDate) <= new Date();
+		const isExpired = new Date(quiz.expireDate) <= new Date();
 
 		return (
 			<motion.div
@@ -187,9 +189,9 @@ const QuizCard = forwardRef(
 						<div className="flex items-center gap-3 text-sm font-bold text-gray-500 dark:text-white/60">
 							<HiCalendar className="text-lg text-gray-400 dark:text-white/40" />
 							<div className="flex flex-col">
-								<span className="text-xs">
-									Started:{" "}
-									{new Date(quiz.createdAt).toLocaleString([], {
+								<span className={`text-xs ${!isStarted && !isTeacher ? "text-amber-600 dark:text-amber-400" : ""}`}>
+									Starts:{" "}
+									{new Date(quiz.startDate).toLocaleString([], {
 										dateStyle: "short",
 										timeStyle: "short",
 									})}
@@ -327,10 +329,22 @@ const QuizCard = forwardRef(
 							</Link>
 						) : (
 							<Link
-								to={`/app/quizzes/${quiz._id}`}
+								to={!isTeacher && !isStarted ? "#" : `/app/quizzes/${quiz._id}`}
+								onClick={(e) => {
+									if (!isTeacher && !isStarted) {
+										e.preventDefault();
+										toast.error(
+											`This quiz will start on ${new Date(
+												quiz.startDate
+											).toLocaleString()}`
+										);
+									}
+								}}
 								className={`flex-1 ${
 									isTeacher
 										? "bg-gray-100 dark:bg-white/[0.05] hover:bg-gray-200 dark:hover:bg-white/[0.1] text-gray-700 dark:text-white/80"
+										: !isStarted
+										? "bg-gray-200 dark:bg-white/5 text-gray-400 dark:text-white/20 cursor-not-allowed"
 										: "bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/20"
 								} font-black py-3.5 rounded-2xl text-center transition-all text-sm flex items-center justify-center gap-2 active:scale-95`}
 							>
@@ -338,6 +352,8 @@ const QuizCard = forwardRef(
 								<span>
 									{isTeacher
 										? "Preview"
+										: !isStarted
+										? "Upcoming"
 										: hasTaken && canTakeAgain
 										? "Retake Quiz"
 										: "Start Quiz"}

@@ -14,7 +14,7 @@ import ApiFeatures from "../utils/apiFeatures.js";
 export const createQuiz = errorHandling(async (req, res, next) => {
 	const teacherId = req.user._id;
 	const quizId = uniqid();
-	let { questions, expire, quizName, expireUnit, expireDate, tries } = req.body;
+	let { questions, expire, quizName, expireUnit, expireDate, startDate, tries } = req.body;
 
 	if (!questions || (Array.isArray(questions) && questions.length === 0))
 		return next(new appError("please enter the question", 400));
@@ -29,6 +29,7 @@ export const createQuiz = errorHandling(async (req, res, next) => {
 		expire,
 		expireUnit,
 		expireDate,
+		startDate: startDate || Date.now(),
 		tries,
 	});
 
@@ -69,6 +70,14 @@ export const getQuiz = errorHandling(async (req, res, next) => {
 	if (!quiz) return next(new appError("quiz not found", 404));
 
 	if (req.user.role === "student") {
+		const now = new Date();
+		if (now < new Date(quiz.startDate)) {
+			return next(new appError("This quiz has not started yet", 400));
+		}
+		if (now > new Date(quiz.expireDate)) {
+			return next(new appError("This quiz has already expired", 400));
+		}
+
 		const results = await quizResultModel.find({
 			studentId: req.user._id,
 			quizId: quiz._id,
@@ -96,6 +105,7 @@ export const getQuizByPass = errorHandling(async (req, res, next) => {
 			quizId,
 			quizPassword,
 			expireDate: { $gt: Date.now() },
+			startDate: { $lte: Date.now() },
 		})
 		.populate("questions");
 	if (!quiz) return next(new appError("quiz not found", 404));

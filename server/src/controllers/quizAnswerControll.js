@@ -22,6 +22,14 @@ export const quesAnswer = errorHandling(async (req, res, next) => {
 	const quiz = await quizModel.findById(_id).populate("questions");
 	if (!quiz) return next(new appError("Quiz not found", 404));
 
+	const now = new Date();
+	if (now < new Date(quiz.startDate)) {
+		return next(new appError("This quiz has not started yet", 400));
+	}
+	if (now > new Date(quiz.expireDate)) {
+		return next(new appError("This quiz has already expired", 400));
+	}
+
 	// check if student already reached max tries
 	const attemptCount = await quizResultModel.countDocuments({
 		quizId: _id,

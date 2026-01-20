@@ -90,6 +90,11 @@ const quizSchema = new mongoose.Schema(
 			type: Date,
 			required: [true, "Quiz deadline is required"],
 		},
+		startDate: {
+			type: Date,
+			required: [true, "Start date is required"],
+			default: Date.now,
+		},
 		tries: {
 			type: Number,
 			default: 1,

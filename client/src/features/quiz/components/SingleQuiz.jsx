@@ -315,14 +315,24 @@ export default function SingleQuiz() {
 			? (quiz.tries || 1) - (quiz.attemptCount || 0)
 			: 1;
 
+	// Check if quiz has started
+	const isStarted = quiz ? new Date(quiz.startDate) <= new Date() : true;
+
 	useEffect(() => {
-		if (quiz && user?.role === "student" && attemptsLeft <= 0) {
-			toast.error("You have exhausted all attempts for this quiz.");
-			navigate(user?.role === "student" ? "/app/home" : "/app/quizzes", {
-				replace: true,
-			});
+		if (quiz && user?.role === "student") {
+			if (attemptsLeft <= 0) {
+				toast.error("You have exhausted all attempts for this quiz.");
+				navigate("/app/home", { replace: true });
+			} else if (!isStarted) {
+				toast.error(
+					`This quiz will start on ${new Date(
+						quiz.startDate
+					).toLocaleString()}`
+				);
+				navigate("/app/home", { replace: true });
+			}
 		}
-	}, [quiz, user, attemptsLeft, navigate]);
+	}, [quiz, user, attemptsLeft, isStarted, navigate]);
 
 	// Watch all answers to calculate progress
 	const watchedAnswers = useWatch({

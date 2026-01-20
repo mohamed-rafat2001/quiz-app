@@ -78,6 +78,7 @@ export const createQuizSchema = z.object({
 	expire: z.number().min(1, "Time limit must be at least 1"),
 	expireUnit: z.enum(["minutes", "hours"]).default("minutes"),
 	expireDate: z.string().min(1, "Quiz deadline is required"),
+	startDate: z.string().min(1, "Start date is required"),
 	tries: z
 		.number()
 		.min(1, "Attempts must be at least 1")

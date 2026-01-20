@@ -86,7 +86,23 @@ const QuizBasicInfo = ({ register, errors }) => (
 			</div>
 			<div className="space-y-2">
 				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
-					Quiz Deadline
+					Quiz Start Date <span className="text-red-500">*</span>
+				</label>
+				<input
+					type="datetime-local"
+					{...register("startDate")}
+					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
+				/>
+				{errors.startDate && (
+					<p className="text-xs text-red-500 ml-1 font-medium flex items-center gap-1">
+						<HiExclamationTriangle className="text-sm" />
+						{errors.startDate.message}
+					</p>
+				)}
+			</div>
+			<div className="space-y-2">
+				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+					Quiz Deadline <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="datetime-local"
@@ -424,6 +440,7 @@ export default function CreateQuiz() {
 			expire: 60,
 			expireUnit: "minutes",
 			expireDate: "",
+			startDate: new Date().toISOString().slice(0, 16),
 			tries: 1,
 			questions: [
 				{
@@ -438,15 +455,19 @@ export default function CreateQuiz() {
 
 	useEffect(() => {
 		if (isEditSession && quiz) {
-			const formattedDate = quiz.expireDate
+			const formattedExpireDate = quiz.expireDate
 				? new Date(quiz.expireDate).toISOString().slice(0, 16)
 				: "";
+			const formattedStartDate = quiz.startDate
+				? new Date(quiz.startDate).toISOString().slice(0, 16)
+				: new Date().toISOString().slice(0, 16);
 
 			reset({
 				quizName: quiz.quizName,
 				expire: quiz.expire,
 				expireUnit: quiz.expireUnit || "minutes",
-				expireDate: formattedDate,
+				expireDate: formattedExpireDate,
+				startDate: formattedStartDate,
 				tries: quiz.tries,
 				questions: quiz.questions.map((q) => ({
 					ques: q.ques,
