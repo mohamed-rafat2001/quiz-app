@@ -49,13 +49,8 @@ const TeacherDashboard = ({
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsMounted(true);
-		}, 500);
-		return () => clearTimeout(timer);
+		setIsMounted(true);
 	}, []);
-
-	if (!isMounted) return null;
 
 	return (
 		<div className="space-y-6">
@@ -98,10 +93,10 @@ const TeacherDashboard = ({
 					<HiArrowTrendingUp className="text-indigo-500" />
 					Recent Quizzes Performance
 				</h3>
-				<div className="h-[300px] w-full relative min-h-[300px]">
+				<div className="h-[300px] w-full relative">
 					{isMounted && (
-						<ResponsiveContainer width="100%" height="100%" debounce={100}>
-						<BarChart data={stats?.quizPerformance || []}>
+						<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+							<BarChart data={stats?.quizPerformance || []}>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
 							<XAxis 
 								dataKey="name" 
@@ -153,10 +148,10 @@ const TeacherDashboard = ({
 					<HiChartPie className="text-emerald-500" />
 					Overall Pass/Fail Ratio
 				</h3>
-				<div className="h-[300px] w-full relative min-h-[300px]">
+				<div className="h-[300px] w-full relative">
 					{isMounted && (
-						<ResponsiveContainer width="100%" height="100%" debounce={100}>
-						<PieChart>
+						<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+							<PieChart>
 							<Pie
 								data={stats?.passFailData || []}
 								cx="50%"

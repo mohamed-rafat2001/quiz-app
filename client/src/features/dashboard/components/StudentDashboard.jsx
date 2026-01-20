@@ -27,13 +27,8 @@ const StudentDashboard = ({ stats }) => {
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsMounted(true);
-		}, 500);
-		return () => clearTimeout(timer);
+		setIsMounted(true);
 	}, []);
-
-	if (!isMounted) return null;
 
 	return (
 		<div className="space-y-6">
@@ -81,10 +76,10 @@ const StudentDashboard = ({ stats }) => {
 					<HiArrowTrendingUp className="text-indigo-500" />
 					Your Performance Trend
 				</h3>
-				<div className="h-[300px] w-full relative min-h-[300px]">
+				<div className="h-[300px] w-full relative">
 					{isMounted && (
-						<ResponsiveContainer width="100%" height="100%" debounce={100}>
-						<AreaChart data={stats?.scoreTrend || []}>
+						<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+							<AreaChart data={stats?.scoreTrend || []}>
 							<defs>
 								<linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">
 									<stop offset="5%" stopColor="#6366f1" stopOpacity={0.1} />

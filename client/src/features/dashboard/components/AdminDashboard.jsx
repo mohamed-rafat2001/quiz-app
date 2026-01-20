@@ -41,13 +41,8 @@ const AdminDashboard = ({ stats }) => {
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsMounted(true);
-		}, 500);
-		return () => clearTimeout(timer);
+		setIsMounted(true);
 	}, []);
-
-	if (!isMounted) return null;
 
 	return (
 		<div className="space-y-6">
@@ -97,10 +92,10 @@ const AdminDashboard = ({ stats }) => {
 					<HiArrowTrendingUp className="text-indigo-500" />
 					Platform Growth (Last 6 Months)
 				</h3>
-				<div className="h-[300px] w-full relative min-h-[300px]">
+				<div className="h-[300px] w-full relative">
 					{isMounted && (
-						<ResponsiveContainer width="100%" height="100%" debounce={100}>
-						<BarChart data={stats?.combinedTrend || []}>
+						<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+							<BarChart data={stats?.combinedTrend || []}>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
 							<XAxis 
 								dataKey="name" 
@@ -153,10 +148,10 @@ const AdminDashboard = ({ stats }) => {
 					<HiChartPie className="text-purple-500" />
 					User Role Distribution
 				</h3>
-				<div className="h-[300px] w-full relative min-h-[300px]">
+				<div className="h-[300px] w-full relative">
 					{isMounted && (
-						<ResponsiveContainer width="100%" height="100%" debounce={100}>
-						<PieChart>
+						<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+							<PieChart>
 							<Pie
 								data={stats?.roleDistribution || []}
 								cx="50%"
