@@ -72,13 +72,13 @@ app.use("/api/v1/teacher", quizRouter);
 app.use("/api/v1/answer", quizAnswerRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/upload", uploadRouter);
+
 // handling routes not found in app
 app.all("*", (req, res, next) => {
 	res.status(404).json({
 		status: "fail",
 		message: `this route: ${req.originalUrl} not found in app`,
 	});
-	next();
 });
 
 // global error

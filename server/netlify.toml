@@ -1,14 +1,14 @@
 [build]
-  command = "npm run build"
-  publish = "../client/dist"
+  command = "npm install"
+  publish = "src"
   functions = "netlify/functions"
 
 [functions]
   node_bundler = "esbuild"
 
 [[redirects]]
-  from = "/api/v1/*"
-  to = "/.netlify/functions/api/api/v1/:splat"
+  from = "/*"
+  to = "/.netlify/functions/api"
   status = 200
 
 [[redirects]]

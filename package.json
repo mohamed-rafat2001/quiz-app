@@ -1,8 +1,0 @@
-{
-  "name": "quiz-app-root",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "cd client && npm install --production=false && npm run build",
-    "install-all": "npm install && cd client && npm install --production=false && cd ../server && npm install"
-  }
-}
