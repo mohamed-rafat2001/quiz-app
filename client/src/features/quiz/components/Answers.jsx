@@ -16,7 +16,9 @@ const SubmissionHeader = () => (
 );
 
 const SubmissionRow = ({ answer, index }) => {
-	const isResultHidden = answer.score === undefined;
+	const score = answer.score !== undefined ? answer.score : answer.totalScore;
+	const isPass = answer.isPass !== undefined ? answer.isPass : answer.status;
+	const isResultHidden = score === undefined;
 
 	return (
 		<motion.tr
@@ -35,7 +37,7 @@ const SubmissionRow = ({ answer, index }) => {
 			</td>
 			<td className="px-6 py-5 text-center">
 				<span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
-					{isResultHidden ? "?" : answer.score}
+					{isResultHidden ? "?" : score}
 				</span>
 			</td>
 			<td className="px-6 py-5 text-center">
@@ -43,12 +45,12 @@ const SubmissionRow = ({ answer, index }) => {
 					className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${
 						isResultHidden
 							? "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/40"
-							: answer.isPass
+							: isPass
 							? "bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400"
 							: "bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400"
 					}`}
 				>
-					{isResultHidden ? "Pending" : answer.isPass ? "Passed" : "Failed"}
+					{isResultHidden ? "Pending" : isPass ? "Passed" : "Failed"}
 				</span>
 			</td>
 			<td className="px-6 py-5 text-sm font-bold text-gray-500 dark:text-white/60">

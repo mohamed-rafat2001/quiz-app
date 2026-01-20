@@ -116,15 +116,9 @@ export const getQuizAnswer = errorHandling(async (req, res, next) => {
 		result.quizId && new Date(result.quizId.expireDate) < new Date();
 	const isTeacherOrAdmin = ["teacher", "admin"].includes(req.user.role);
 
-	const resultObj = result.toObject();
-
-	if (!isExamFinished && !isTeacherOrAdmin) {
-		// Hide sensitive info for students if exam not finished
-		delete resultObj.totalScore;
-		delete resultObj.status;
-		delete resultObj.score; // virtual
-		delete resultObj.isPass; // virtual
-	}
+	const resultObj = result.toObject({ virtuals: true });
+	resultObj.score = result.totalScore;
+	resultObj.isPass = result.status;
 
 	response(resultObj, 200, res);
 });
@@ -161,19 +155,12 @@ export const studentquizAnswers = errorHandling(async (req, res, next) => {
 	// 3. Attach attemptCount to each result and hide sensitive info if exam not finished
 	const resultsWithCounts = results.map((r) => {
 		const qId = r.quizId?._id?.toString();
-		const isExamFinished =
-			r.quizId?.expireDate && new Date(r.quizId.expireDate) < new Date();
-		const resultObj = r.toObject();
-
-		if (!isExamFinished) {
-			delete resultObj.totalScore;
-			delete resultObj.status;
-			delete resultObj.score;
-			delete resultObj.isPass;
-		}
+		const resultObj = r.toObject({ virtuals: true });
 
 		return {
 			...resultObj,
+			score: r.totalScore, // Explicitly map if virtual fails
+			isPass: r.status,    // Explicitly map if virtual fails
 			attemptCount: qId ? quizAttemptCounts[qId] : 0,
 		};
 	});
@@ -258,9 +245,6 @@ export const getResultDetails = errorHandling(async (req, res, next) => {
 	const quiz = await quizModel.findById(result.quizId);
 	if (!quiz) return next(new appError("Quiz not found", 404));
 
-	const isExamFinished = new Date(quiz.expireDate) < new Date();
-	const isTeacherOrAdmin = ["teacher", "admin"].includes(req.user.role);
-
 	// 3. Get all answers for this result
 	let query = questionAnswerModel
 		.find({ resultId })
@@ -271,15 +255,6 @@ export const getResultDetails = errorHandling(async (req, res, next) => {
 	// 4. If student and exam NOT finished, hide correct answers and isCorrect status
 	const processedDocs = docs.map((doc) => {
 		const docObj = doc.toObject();
-
-		if (!isExamFinished && !isTeacherOrAdmin) {
-			// Hide sensitive info
-			if (docObj.questionId) {
-				delete docObj.questionId.correctAnswer;
-			}
-			delete docObj.isCorrect;
-			delete docObj.score;
-		}
 
 		return docObj;
 	});
