@@ -19,9 +19,12 @@ app.use((req, res, next) => {
 	next();
 });
 // share api with frontEnd
+const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+const sanitizedClientUrl = clientUrl.endsWith("/") ? clientUrl.slice(0, -1) : clientUrl;
+
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL || "http://localhost:5173",
+		origin: sanitizedClientUrl,
 		credentials: true,
 		methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 		allowedHeaders: ["Content-Type", "Authorization"],
