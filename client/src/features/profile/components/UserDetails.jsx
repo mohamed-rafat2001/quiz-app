@@ -149,12 +149,12 @@ export default function UserDetails({ user }) {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						label="Full Name"
-						id="name"
+						id="profile-name"
 						icon={HiUser}
 						error={errors.name}
 					>
 						<input
-							id="name"
+							id="profile-name"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.name
@@ -164,17 +164,19 @@ export default function UserDetails({ user }) {
 							type="text"
 							placeholder="Your Name"
 							{...register("name")}
+							name="name"
+							autoComplete="name"
 						/>
 					</FormField>
 
 					<FormField
 						label="Email Address"
-						id="email"
+						id="profile-email"
 						icon={HiEnvelope}
 						error={errors.email}
 					>
 						<input
-							id="email"
+							id="profile-email"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.email
@@ -184,12 +186,14 @@ export default function UserDetails({ user }) {
 							type="email"
 							placeholder="name@example.com"
 							{...register("email")}
+							name="email"
+							autoComplete="email"
 						/>
 					</FormField>
 
-					<FormField label="City" id="city" icon={HiMapPin} error={errors.city}>
+					<FormField label="City" id="profile-city" icon={HiMapPin} error={errors.city}>
 						<input
-							id="city"
+							id="profile-city"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.city
@@ -199,17 +203,19 @@ export default function UserDetails({ user }) {
 							type="text"
 							placeholder="Your City"
 							{...register("city")}
+							name="city"
+							autoComplete="address-level2"
 						/>
 					</FormField>
 
 					<FormField
 						label="Country"
-						id="country"
+						id="profile-country"
 						icon={HiGlobeAlt}
 						error={errors.country}
 					>
 						<input
-							id="country"
+							id="profile-country"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.country
@@ -219,17 +225,19 @@ export default function UserDetails({ user }) {
 							type="text"
 							placeholder="Your Country"
 							{...register("country")}
+							name="country"
+							autoComplete="country-name"
 						/>
 					</FormField>
 
 					<FormField
 						label="Phone Number"
-						id="phoneNumber"
+						id="profile-phoneNumber"
 						icon={HiPhone}
 						error={errors.phoneNumber}
 					>
 						<input
-							id="phoneNumber"
+							id="profile-phoneNumber"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.phoneNumber
@@ -239,6 +247,8 @@ export default function UserDetails({ user }) {
 							type="tel"
 							placeholder="Your Phone Number"
 							{...register("phoneNumber")}
+							name="phoneNumber"
+							autoComplete="tel"
 						/>
 					</FormField>
 

@@ -201,6 +201,8 @@ export default function AdminUsers() {
 					<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 					<input
 						id="admin-search-users"
+						name="admin-search-users"
+						autoComplete="off"
 						type="text"
 						placeholder="Search users by name or email..."
 						value={searchTerm}
@@ -215,6 +217,8 @@ export default function AdminUsers() {
 					<HiFunnel className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10" />
 					<select
 						id="admin-filter-role"
+						name="admin-filter-role"
+						autoComplete="off"
 						value={roleFilter}
 						onChange={(e) => setRoleFilter(e.target.value)}
 						className="appearance-none pl-11 pr-10 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-gray-900 dark:text-white font-black cursor-pointer transition-all hover:border-gray-300 dark:hover:border-gray-600"
@@ -446,6 +450,8 @@ export default function AdminUsers() {
 										<input
 											id="admin-create-name"
 											{...register("name")}
+											name="name"
+											autoComplete="name"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="John Doe"
 										/>
@@ -464,6 +470,8 @@ export default function AdminUsers() {
 										<input
 											id="admin-create-email"
 											{...register("email")}
+											name="email"
+											autoComplete="email"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="john@example.com"
 										/>
@@ -483,6 +491,8 @@ export default function AdminUsers() {
 											id="admin-create-password"
 											type="password"
 											{...register("password")}
+											name="password"
+											autoComplete="new-password"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="••••••••"
 										/>
@@ -502,6 +512,8 @@ export default function AdminUsers() {
 											id="admin-create-confirmPass"
 											type="password"
 											{...register("confirmPass")}
+											name="confirmPass"
+											autoComplete="new-password"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="••••••••"
 										/>
@@ -520,6 +532,8 @@ export default function AdminUsers() {
 										<select
 											id="admin-create-role"
 											{...register("role")}
+											name="role"
+											autoComplete="off"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
 										>
 											<option value="student" className="dark:bg-gray-900">Student</option>
@@ -535,6 +549,8 @@ export default function AdminUsers() {
 										<select
 											id="admin-create-gender"
 											{...register("gender")}
+											name="gender"
+											autoComplete="off"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
 										>
 											<option value="male" className="dark:bg-gray-900">Male</option>
@@ -550,6 +566,8 @@ export default function AdminUsers() {
 										<input
 											id="admin-create-city"
 											{...register("city")}
+											name="city"
+											autoComplete="address-level2"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="New York"
 										/>
@@ -563,6 +581,8 @@ export default function AdminUsers() {
 										<input
 											id="admin-create-country"
 											{...register("country")}
+											name="country"
+											autoComplete="country-name"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="USA"
 										/>
@@ -576,6 +596,8 @@ export default function AdminUsers() {
 										<input
 											id="admin-create-phone"
 											{...register("phoneNumber")}
+											name="phoneNumber"
+											autoComplete="tel"
 											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="+1 234 567 890"
 										/>

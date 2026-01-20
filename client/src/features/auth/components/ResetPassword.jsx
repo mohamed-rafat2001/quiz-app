@@ -39,7 +39,7 @@ function ResetPassword({ email, onBack }) {
 
 			<div className="space-y-2">
 				<label
-					htmlFor="resetPassCode"
+					htmlFor="reset-code"
 					className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
 				>
 					Reset Code
@@ -49,7 +49,7 @@ function ResetPassword({ email, onBack }) {
 						<HiShieldCheck className="h-5 w-5" />
 					</div>
 					<input
-						id="resetPassCode"
+						id="reset-code"
 						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold tracking-[0.5em] text-center placeholder:tracking-normal placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.resetPassCode
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -60,14 +60,16 @@ function ResetPassword({ email, onBack }) {
 						placeholder="000000"
 						aria-invalid={errors.resetPassCode ? "true" : "false"}
 						aria-describedby={
-							errors.resetPassCode ? "resetPassCode-error" : undefined
+							errors.resetPassCode ? "reset-code-error" : undefined
 						}
 						{...register("resetPassCode")}
+						name="resetPassCode"
+						autoComplete="one-time-code"
 					/>
 				</div>
 				{errors.resetPassCode && (
 					<p
-						id="resetPassCode-error"
+						id="reset-code-error"
 						role="alert"
 						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
 					>
@@ -79,7 +81,7 @@ function ResetPassword({ email, onBack }) {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="space-y-2">
 					<label
-						htmlFor="newPassword"
+						htmlFor="reset-new-password"
 						className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
 					>
 						New Password
@@ -89,7 +91,7 @@ function ResetPassword({ email, onBack }) {
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
-							id="newPassword"
+							id="reset-new-password"
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.newPassword
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -99,14 +101,16 @@ function ResetPassword({ email, onBack }) {
 							placeholder="••••••••"
 							aria-invalid={errors.newPassword ? "true" : "false"}
 							aria-describedby={
-								errors.newPassword ? "newPassword-error" : undefined
+								errors.newPassword ? "reset-new-password-error" : undefined
 							}
 							{...register("newPassword")}
+							name="newPassword"
+							autoComplete="new-password"
 						/>
 					</div>
 					{errors.newPassword && (
 						<p
-							id="newPassword-error"
+							id="reset-new-password-error"
 						role="alert"
 						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
 					>
@@ -117,7 +121,7 @@ function ResetPassword({ email, onBack }) {
 
 				<div className="space-y-2">
 					<label
-						htmlFor="confirmPass"
+						htmlFor="reset-confirm-password"
 						className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
 					>
 						Confirm Password
@@ -127,7 +131,7 @@ function ResetPassword({ email, onBack }) {
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
-							id="confirmPass"
+							id="reset-confirm-password"
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.confirmPass
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -137,14 +141,16 @@ function ResetPassword({ email, onBack }) {
 							placeholder="••••••••"
 							aria-invalid={errors.confirmPass ? "true" : "false"}
 							aria-describedby={
-								errors.confirmPass ? "confirmPass-error" : undefined
+								errors.confirmPass ? "reset-confirm-password-error" : undefined
 							}
 							{...register("confirmPass")}
+							name="confirmPass"
+							autoComplete="new-password"
 						/>
 					</div>
 					{errors.confirmPass && (
 						<p
-							id="confirmPass-error"
+							id="reset-confirm-password-error"
 						role="alert"
 						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
 					>

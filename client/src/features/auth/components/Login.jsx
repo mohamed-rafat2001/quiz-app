@@ -23,7 +23,7 @@ function Login({ onForgotPassword }) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6" aria-busy={isPending}>
 			<div className="space-y-2">
-				<label htmlFor="email" className="text-sm font-black text-gray-900 dark:text-white/60 ml-1">
+				<label htmlFor="login-email" className="text-sm font-black text-gray-900 dark:text-white/60 ml-1">
 					Email Address
 				</label>
 				<div className="relative group">
@@ -31,7 +31,7 @@ function Login({ onForgotPassword }) {
 						<HiEnvelope className="h-5 w-5" aria-hidden="true" />
 					</div>
 					<input
-						id="email"
+						id="login-email"
 						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.email
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -40,12 +40,14 @@ function Login({ onForgotPassword }) {
 						type="email"
 						placeholder="name@example.com"
 						aria-invalid={errors.email ? "true" : "false"}
-						aria-describedby={errors.email ? "email-error" : undefined}
+						aria-describedby={errors.email ? "login-email-error" : undefined}
 						{...register("email")}
+						name="email"
+						autoComplete="email"
 					/>
 				</div>
 				{errors.email && (
-					<p id="email-error" className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake" role="alert">
+					<p id="login-email-error" className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake" role="alert">
 						{errors.email.message}
 					</p>
 				)}
@@ -53,7 +55,7 @@ function Login({ onForgotPassword }) {
 
 			<div className="space-y-2">
 				<div className="flex justify-between items-center ml-1">
-					<label htmlFor="password" className="text-sm font-black text-gray-900 dark:text-white/60">
+					<label htmlFor="login-password" className="text-sm font-black text-gray-900 dark:text-white/60">
 						Password
 					</label>
 					<button
@@ -70,7 +72,7 @@ function Login({ onForgotPassword }) {
 						<HiLockClosed className="h-5 w-5" aria-hidden="true" />
 					</div>
 					<input
-						id="password"
+						id="login-password"
 						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.password
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -79,12 +81,14 @@ function Login({ onForgotPassword }) {
 						type="password"
 						placeholder="••••••••"
 						aria-invalid={errors.password ? "true" : "false"}
-						aria-describedby={errors.password ? "password-error" : undefined}
+						aria-describedby={errors.password ? "login-password-error" : undefined}
 						{...register("password")}
+						name="password"
+						autoComplete="current-password"
 					/>
 				</div>
 				{errors.password && (
-					<p id="password-error" className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake" role="alert">
+					<p id="login-password-error" className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake" role="alert">
 						{errors.password.message}
 					</p>
 				)}

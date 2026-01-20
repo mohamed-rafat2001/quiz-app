@@ -54,6 +54,8 @@ export default function StartQuiz() {
 							type="text"
 							placeholder="Enter Quiz ID"
 							{...register("quizId")}
+							name="quizId"
+							autoComplete="on"
 						/>
 						{errors.quizId && (
 							<motion.p
@@ -83,6 +85,8 @@ export default function StartQuiz() {
 							type="password"
 							placeholder="••••••••"
 							{...register("quizPassword")}
+							name="quizPassword"
+							autoComplete="current-password"
 						/>
 						{errors.quizPassword && (
 							<motion.p

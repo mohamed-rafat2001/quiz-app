@@ -48,6 +48,8 @@ const RoleSelector = ({ register, error }) => (
 					id="role-student"
 					className="sr-only peer"
 					{...register("role")}
+					name="role"
+					autoComplete="off"
 				/>
 				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Student
@@ -60,6 +62,8 @@ const RoleSelector = ({ register, error }) => (
 					id="role-teacher"
 					className="sr-only peer"
 					{...register("role")}
+					name="role"
+					autoComplete="off"
 				/>
 				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Teacher
@@ -87,6 +91,8 @@ const GenderSelector = ({ register, error }) => (
 					id="gender-male"
 					className="sr-only peer"
 					{...register("gender")}
+					name="gender"
+					autoComplete="off"
 				/>
 				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Male
@@ -99,6 +105,8 @@ const GenderSelector = ({ register, error }) => (
 					id="gender-female"
 					className="sr-only peer"
 					{...register("gender")}
+					name="gender"
+					autoComplete="off"
 				/>
 				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Female
@@ -170,9 +178,9 @@ function SignUp() {
 						transition={{ duration: 0.3 }}
 						className="space-y-4"
 					>
-						<FormField label="Full Name" id="name" icon={HiUser} error={errors.name}>
+						<FormField label="Full Name" id="signup-name" icon={HiUser} error={errors.name}>
 							<input
-								id="name"
+								id="signup-name"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.name
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -181,19 +189,21 @@ function SignUp() {
 								type="text"
 								placeholder="John Doe"
 								aria-invalid={errors.name ? "true" : "false"}
-								aria-describedby={errors.name ? "name-error" : undefined}
+								aria-describedby={errors.name ? "signup-name-error" : undefined}
 								{...register("name")}
+								name="name"
+								autoComplete="name"
 							/>
 						</FormField>
 
 						<FormField
 							label="Email Address"
-							id="email"
+							id="signup-email"
 							icon={HiEnvelope}
 							error={errors.email}
 						>
 							<input
-								id="email"
+								id="signup-email"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.email
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -202,20 +212,22 @@ function SignUp() {
 								type="email"
 								placeholder="name@example.com"
 								aria-invalid={errors.email ? "true" : "false"}
-								aria-describedby={errors.email ? "email-error" : undefined}
+								aria-describedby={errors.email ? "signup-email-error" : undefined}
 								{...register("email")}
+								name="email"
+								autoComplete="email"
 							/>
 						</FormField>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								label="Password"
-								id="password"
+								id="signup-password"
 								icon={HiLockClosed}
 								error={errors.password}
 							>
 								<input
-									id="password"
+									id="signup-password"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.password
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -224,19 +236,21 @@ function SignUp() {
 									type="password"
 									placeholder="••••••••"
 									aria-invalid={errors.password ? "true" : "false"}
-									aria-describedby={errors.password ? "password-error" : undefined}
+									aria-describedby={errors.password ? "signup-password-error" : undefined}
 									{...register("password")}
+									name="password"
+									autoComplete="new-password"
 								/>
 							</FormField>
 
 							<FormField
 								label="Confirm Password"
-								id="confirmPass"
+								id="signup-confirmPass"
 								icon={HiLockClosed}
 								error={errors.confirmPass}
 							>
 								<input
-									id="confirmPass"
+									id="signup-confirmPass"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.confirmPass
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -245,8 +259,10 @@ function SignUp() {
 									type="password"
 									placeholder="••••••••"
 									aria-invalid={errors.confirmPass ? "true" : "false"}
-									aria-describedby={errors.confirmPass ? "confirmPass-error" : undefined}
+									aria-describedby={errors.confirmPass ? "signup-confirmPass-error" : undefined}
 									{...register("confirmPass")}
+									name="confirmPass"
+									autoComplete="new-password"
 								/>
 							</FormField>
 						</div>
@@ -272,9 +288,9 @@ function SignUp() {
 						className="space-y-4"
 					>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<FormField label="City" id="city" icon={HiMapPin} error={errors.city}>
+							<FormField label="City" id="signup-city" icon={HiMapPin} error={errors.city}>
 								<input
-									id="city"
+									id="signup-city"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.city
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -283,19 +299,21 @@ function SignUp() {
 									type="text"
 									placeholder="New York"
 									aria-invalid={errors.city ? "true" : "false"}
-									aria-describedby={errors.city ? "city-error" : undefined}
+									aria-describedby={errors.city ? "signup-city-error" : undefined}
 									{...register("city")}
+									name="city"
+									autoComplete="address-level2"
 								/>
 							</FormField>
 
 							<FormField
 								label="Country"
-								id="country"
+								id="signup-country"
 								icon={HiGlobeAlt}
 								error={errors.country}
 							>
 								<input
-									id="country"
+									id="signup-country"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.country
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -304,20 +322,22 @@ function SignUp() {
 									type="text"
 									placeholder="United States"
 									aria-invalid={errors.country ? "true" : "false"}
-									aria-describedby={errors.country ? "country-error" : undefined}
+									aria-describedby={errors.country ? "signup-country-error" : undefined}
 									{...register("country")}
+									name="country"
+									autoComplete="country-name"
 								/>
 							</FormField>
 						</div>
 
 						<FormField
 							label="Phone Number"
-							id="phoneNumber"
+							id="signup-phoneNumber"
 							icon={HiPhone}
 							error={errors.phoneNumber}
 						>
 							<input
-								id="phoneNumber"
+								id="signup-phoneNumber"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.phoneNumber
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -326,8 +346,10 @@ function SignUp() {
 								type="tel"
 								placeholder="+1 (555) 000-0000"
 								aria-invalid={errors.phoneNumber ? "true" : "false"}
-								aria-describedby={errors.phoneNumber ? "phoneNumber-error" : undefined}
+								aria-describedby={errors.phoneNumber ? "signup-phoneNumber-error" : undefined}
 								{...register("phoneNumber")}
+								name="phoneNumber"
+								autoComplete="tel"
 							/>
 						</FormField>
 

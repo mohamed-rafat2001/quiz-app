@@ -90,6 +90,8 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 						</button>
 
 						<input
+							id="profile-image-upload"
+							name="profile-image-upload"
 							type="file"
 							ref={fileInputRef}
 							onChange={handleFileChange}

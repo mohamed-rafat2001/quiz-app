@@ -35,7 +35,7 @@ function ForgotPassword({ onBack, onSuccess }) {
 
 			<div className="space-y-2">
 				<label
-					htmlFor="email"
+					htmlFor="forgot-email"
 					className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
 				>
 					Email Address
@@ -45,7 +45,7 @@ function ForgotPassword({ onBack, onSuccess }) {
 						<HiEnvelope className="h-5 w-5" />
 					</div>
 					<input
-						id="email"
+						id="forgot-email"
 						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.email
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -54,13 +54,15 @@ function ForgotPassword({ onBack, onSuccess }) {
 						type="email"
 						placeholder="name@example.com"
 						aria-invalid={errors.email ? "true" : "false"}
-						aria-describedby={errors.email ? "email-error" : undefined}
+						aria-describedby={errors.email ? "forgot-email-error" : undefined}
 						{...register("email")}
+						name="email"
+						autoComplete="email"
 					/>
 				</div>
 				{errors.email && (
 					<p
-						id="email-error"
+						id="forgot-email-error"
 						role="alert"
 						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
 					>

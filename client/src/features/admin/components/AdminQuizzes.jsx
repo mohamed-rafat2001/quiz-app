@@ -132,6 +132,8 @@ export default function AdminQuizzes() {
 					<input
 						id="admin-search-quizzes"
 						type="text"
+						name="admin-search-quizzes"
+						autoComplete="off"
 						placeholder="Search quizzes by name or teacher..."
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}

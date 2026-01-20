@@ -228,6 +228,8 @@ const TeacherDashboard = ({
 					<input
 						id="teacher-search-quizzes"
 						type="text"
+						name="teacher-search-quizzes"
+						autoComplete="off"
 						placeholder="Search quizzes..."
 						value={searchTerm}
 						onChange={(e) => onSearchChange(e.target.value)}

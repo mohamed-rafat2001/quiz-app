@@ -50,6 +50,8 @@ const QuizBasicInfo = ({ register, errors }) => (
 				<input
 					id="quizName"
 					{...register("quizName")}
+					name="quizName"
+					autoComplete="on"
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
 					placeholder="e.g. Mathematics Midterm"
 				/>
@@ -74,11 +76,15 @@ const QuizBasicInfo = ({ register, errors }) => (
 						{...register("expire", {
 							valueAsNumber: true,
 						})}
+						name="expire"
+						autoComplete="off"
 						placeholder="e.g. 60"
 						className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
 					/>
 					<select
 						{...register("expireUnit")}
+						name="expireUnit"
+						autoComplete="off"
 						aria-label="Time unit"
 						className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all cursor-pointer"
 					>
@@ -104,6 +110,8 @@ const QuizBasicInfo = ({ register, errors }) => (
 					id="startDate"
 					type="datetime-local"
 					{...register("startDate")}
+					name="startDate"
+					autoComplete="off"
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
 				/>
 				{errors.startDate && (
@@ -124,6 +132,8 @@ const QuizBasicInfo = ({ register, errors }) => (
 					id="expireDate"
 					type="datetime-local"
 					{...register("expireDate")}
+					name="expireDate"
+					autoComplete="off"
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
 				/>
 				{errors.expireDate && (
@@ -146,6 +156,8 @@ const QuizBasicInfo = ({ register, errors }) => (
 					{...register("tries", {
 						valueAsNumber: true,
 					})}
+					name="tries"
+					autoComplete="off"
 					defaultValue={1}
 					min={1}
 					max={10}
@@ -240,7 +252,12 @@ const AnswerOptions = ({
 			)}
 
 			{/* Hidden input for form validation */}
-			<input type="hidden" {...register(`questions.${index}.correctAnswer`)} />
+			<input
+				type="hidden"
+				id={`question-${index}-correctAnswer`}
+				{...register(`questions.${index}.correctAnswer`)}
+				name={`questions.${index}.correctAnswer`}
+			/>
 
 			{errors.questions?.[index]?.correctAnswer && (
 				<p className="text-xs text-red-500 ml-1 font-medium flex items-center gap-1">
@@ -328,6 +345,7 @@ const QuestionImageUpload = ({ index, control, setValue, questionText }) => {
 					</div>
 					<input
 						id={`question-${index}-image`}
+						name={`question-${index}-image`}
 						type="file"
 						className="hidden"
 						accept="image/*"
@@ -383,6 +401,8 @@ const QuestionCard = forwardRef(
 						<input
 							id={`question-${index}`}
 							{...register(`questions.${index}.ques`)}
+							name={`questions.${index}.ques`}
+							autoComplete="off"
 							className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
 							placeholder="Type your question here..."
 						/>
@@ -401,66 +421,70 @@ const QuestionCard = forwardRef(
 					</div>
 				</div>
 
-			{/* Answer Options */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-0 sm:ml-14">
-				{/* Left: Answer Choices */}
-				<div className="space-y-3">
-					<p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1">
-						Answer Choices <span className="text-red-500">*</span>
-					</p>
-					<div className="space-y-2">
-						{[0, 1, 2, 3].map((choiceIndex) => (
-							<div key={choiceIndex} className="relative">
-								<label
-									htmlFor={`question-${index}-choice-${choiceIndex}`}
-									className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 dark:text-gray-500 cursor-text"
-								>
-									{String.fromCharCode(65 + choiceIndex)}.
-								</label>
-								<input
-									id={`question-${index}-choice-${choiceIndex}`}
-									aria-label={`Choice ${String.fromCharCode(65 + choiceIndex)}`}
-									{...register(`questions.${index}.answers.${choiceIndex}`)}
-									className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500"
-									placeholder={`Option ${choiceIndex + 1}`}
-								/>
-							</div>
-						))}
+				{/* Answer Options */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-0 sm:ml-14">
+					{/* Left: Answer Choices */}
+					<div className="space-y-3">
+						<p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1">
+							Answer Choices <span className="text-red-500">*</span>
+						</p>
+						<div className="space-y-2">
+							{[0, 1, 2, 3].map((choiceIndex) => (
+								<div key={choiceIndex} className="relative">
+									<label
+										htmlFor={`question-${index}-choice-${choiceIndex}`}
+										className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 dark:text-gray-500 cursor-text"
+									>
+										{String.fromCharCode(65 + choiceIndex)}.
+									</label>
+									<input
+										id={`question-${index}-choice-${choiceIndex}`}
+										aria-label={`Choice ${String.fromCharCode(65 + choiceIndex)}`}
+										{...register(`questions.${index}.answers.${choiceIndex}`)}
+										name={`questions.${index}.answers.${choiceIndex}`}
+										autoComplete="off"
+										className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500"
+										placeholder={`Option ${choiceIndex + 1}`}
+									/>
+								</div>
+							))}
+						</div>
 					</div>
-				</div>
 
-				{/* Right: Correct Answer + Points */}
-				<div className="space-y-6">
-					<AnswerOptions
-						control={control}
-						index={index}
-						register={register}
-						errors={errors}
-						setValue={setValue}
-						getValues={getValues}
-					/>
-
-					<div className="space-y-2">
-						<label
-							htmlFor={`question-${index}-points`}
-							className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1"
-						>
-							Points
-						</label>
-						<input
-							id={`question-${index}-points`}
-							type="number"
-							{...register(`questions.${index}.Score`, {
-								valueAsNumber: true,
-							})}
-							min={1}
-							className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm"
-							placeholder="1"
+					{/* Right: Correct Answer + Points */}
+					<div className="space-y-6">
+						<AnswerOptions
+							control={control}
+							index={index}
+							register={register}
+							errors={errors}
+							setValue={setValue}
+							getValues={getValues}
 						/>
+
+						<div className="space-y-2">
+							<label
+								htmlFor={`question-${index}-points`}
+								className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1"
+							>
+								Points
+							</label>
+							<input
+								id={`question-${index}-points`}
+								type="number"
+								{...register(`questions.${index}.Score`, {
+									valueAsNumber: true,
+								})}
+								name={`questions.${index}.Score`}
+								autoComplete="off"
+								min={1}
+								className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm"
+								placeholder="1"
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
-		</motion.div>
+			</motion.div>
 	);
 	}
 );

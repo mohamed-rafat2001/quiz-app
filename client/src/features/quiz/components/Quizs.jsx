@@ -49,6 +49,8 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 				<input
 					id="quiz-search"
 					type="text"
+					name="quiz-search"
+					autoComplete="off"
 					placeholder="Search quiz name or ID..."
 					value={searchTerm}
 					onChange={(e) => onSearchChange(e.target.value)}

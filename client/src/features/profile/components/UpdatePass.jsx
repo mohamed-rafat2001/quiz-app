@@ -47,6 +47,8 @@ export default function UpdatePass() {
 						type="password"
 						placeholder="••••••••"
 						{...register("password")}
+						name="password"
+						autoComplete="current-password"
 					/>
 					{errors.password && (
 						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
@@ -72,6 +74,8 @@ export default function UpdatePass() {
 						type="password"
 						placeholder="••••••••"
 						{...register("newPassword")}
+						name="newPassword"
+						autoComplete="new-password"
 					/>
 					{errors.newPassword && (
 						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
@@ -97,6 +101,8 @@ export default function UpdatePass() {
 						type="password"
 						placeholder="••••••••"
 						{...register("confirmPass")}
+						name="confirmPass"
+						autoComplete="new-password"
 					/>
 					{errors.confirmPass && (
 						<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">

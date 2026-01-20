@@ -196,6 +196,8 @@ const AnswerImageUpload = ({ index, control, setValue }) => {
 					</span>
 					<input
 						id={`answer-image-${index}`}
+						name={`answer-image-${index}`}
+						autoComplete="off"
 						type="file"
 						className="hidden"
 						accept="image/*"
@@ -249,6 +251,8 @@ const QuestionItem = ({ el, index, register, error, control, setValue }) => (
 						id={`question-${index}-answer-${i}`}
 						className="peer hidden"
 						{...register(`answer[${index}]`)}
+						name={`answer[${index}]`}
+						autoComplete="off"
 						value={JSON.stringify({
 							answer: answer,
 							_id: el._id,
