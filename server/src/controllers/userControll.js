@@ -8,9 +8,11 @@ import * as factory from "../utils/handlerFactory.js";
 import ApiFeatures from "../utils/apiFeatures.js";
 
 // generate cookies
-const getCookieOptions = () => {
+const getCookieOptions = (isLogout = false) => {
 	const options = {
-		expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+		expires: isLogout
+			? new Date(0) // Expire immediately
+			: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
 		httpOnly: true,
 		path: "/",
 	};
@@ -99,7 +101,7 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 
 // logout func
 export const logout = (req, res) => {
-	res.cookie("jwt", "loggedout", getCookieOptions());
+	res.cookie("jwt", "loggedout", getCookieOptions(true));
 	res.status(200).json({ status: "success" });
 };
 

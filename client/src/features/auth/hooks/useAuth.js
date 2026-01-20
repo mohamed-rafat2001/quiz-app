@@ -137,13 +137,12 @@ export function useLogout() {
 
 	const { mutate: logout } = useMutation({
 		mutationFn: logoutApi,
-		onSuccess: () => {
+		onSettled: () => {
+			// Clear all query data and redirect regardless of success/error
 			queryClient.setQueryData(["user"], null);
 			queryClient.removeQueries();
-			navigate("/", { replace: true });
-		},
-		onError: (error) => {
-			toast.error(error.message || "Failed to logout");
+			navigate("/welcome", { replace: true });
+			toast.success("Logged out successfully");
 		},
 	});
 
