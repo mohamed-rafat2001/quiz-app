@@ -551,6 +551,23 @@ export default function SingleQuiz() {
 				<h1 className="text-4xl sm:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
 					{quiz.quizName}
 				</h1>
+				{quiz.userResult && (
+					<motion.div
+						initial={{ opacity: 0, scale: 0.9 }}
+						animate={{ opacity: 1, scale: 1 }}
+						className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl mb-6 border font-black ${
+							quiz.userResult.status
+								? "bg-green-50 dark:bg-green-500/10 border-green-100 dark:border-green-500/20 text-green-700 dark:text-green-400"
+								: "bg-red-50 dark:bg-red-500/10 border-red-100 dark:border-red-500/20 text-red-700 dark:text-red-400"
+						}`}
+					>
+						<HiInformationCircle className="text-xl" />
+						<span>
+							Best Previous Score: {quiz.userResult.totalScore} /{" "}
+							{quiz.quizScore}
+						</span>
+					</motion.div>
+				)}
 				<div className="flex items-center justify-center gap-3 text-gray-500 dark:text-white/60 font-black text-sm uppercase tracking-widest">
 					<HiCheckCircle className="text-indigo-600 dark:text-indigo-400 text-xl" />
 					<span>Select the best answer for each question</span>

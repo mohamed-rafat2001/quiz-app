@@ -96,10 +96,23 @@ export const getQuiz = errorHandling(async (req, res, next) => {
 			quizId: quiz._id,
 		});
 
+		// Find the best result for this student on this specific quiz
+		const bestResult = results.reduce((prev, current) => {
+			return prev.totalScore > current.totalScore ? prev : current;
+		}, results[0] || null);
+
 		return response(
 			{
 				...quiz.toObject(),
 				attemptCount: results.length,
+				userResult: bestResult
+					? {
+							status: bestResult.status,
+							totalScore: bestResult.totalScore,
+							createdAt: bestResult.createdAt,
+							_id: bestResult._id,
+					  }
+					: null,
 			},
 			200,
 			res
