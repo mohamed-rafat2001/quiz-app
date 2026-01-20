@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useUser, useLogout } from "../../../features/auth/hooks/useAuth";
 import {
@@ -84,39 +85,39 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
 	</NavLink>
 );
 
-export const UserProfile = ({ user }) => (
-	<div className="flex items-center gap-4">
-		<div className="relative group/avatar">
-			<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20 group-hover/avatar:rotate-12 transition-transform duration-500 overflow-hidden">
-				{user?.profileImg?.secure_url ? (
-					<img
-						src={user.profileImg.secure_url}
-						alt={user.name}
-						className="w-full h-full object-cover"
-						referrerPolicy="no-referrer"
-						loading="lazy"
-						onError={(e) => {
-							e.target.onerror = null;
-							e.target.style.display = 'none';
-							e.target.parentElement.innerHTML = user?.name?.charAt(0).toUpperCase() || '?';
-						}}
-					/>
-				) : (
-					user?.name?.charAt(0).toUpperCase()
-				)}
+export const UserProfile = ({ user }) => {
+	const [error, setError] = React.useState(false);
+
+	return (
+		<div className="flex items-center gap-4">
+			<div className="relative group/avatar">
+				<div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20 group-hover/avatar:rotate-12 transition-transform duration-500 overflow-hidden">
+					{user?.profileImg?.secure_url && !error ? (
+						<img
+							src={user.profileImg.secure_url}
+							alt={user.name}
+							className="w-full h-full object-cover"
+							referrerPolicy="no-referrer"
+							loading="lazy"
+							onError={() => setError(true)}
+						/>
+					) : (
+						<span>{user?.name?.charAt(0).toUpperCase()}</span>
+					)}
+				</div>
+				<div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full shadow-sm" />
 			</div>
-			<div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-white/5 rounded-full shadow-sm" />
+			<div className="min-w-0 hidden sm:block">
+				<p className="font-black text-gray-900 dark:text-white text-sm truncate leading-tight tracking-tight">
+					{user?.name}
+				</p>
+				<p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-[0.15em] mt-1 opacity-70">
+					{user?.role}
+				</p>
+			</div>
 		</div>
-		<div className="min-w-0 hidden sm:block">
-			<p className="font-black text-gray-900 dark:text-white text-sm truncate leading-tight tracking-tight">
-				{user?.name}
-			</p>
-			<p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-[0.15em] mt-1 opacity-70">
-				{user?.role}
-			</p>
-		</div>
-	</div>
-);
+	);
+};
 
 export default function SideBar() {
 	const { data: user } = useUser();

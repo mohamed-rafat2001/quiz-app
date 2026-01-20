@@ -355,7 +355,7 @@ const QuestionCard = forwardRef(
 						<input
 							{...register(`questions.${index}.ques`)}
 							className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
-							placeholder="Enter your question here..."
+							placeholder="Type your question here..."
 						/>
 						{errors.questions?.[index]?.ques && (
 							<p className="text-xs text-red-500 font-medium flex items-center gap-1">

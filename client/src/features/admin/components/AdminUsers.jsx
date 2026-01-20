@@ -30,6 +30,29 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
 	</div>
 );
 
+const UserAvatar = ({ user }) => {
+	const [error, setError] = useState(false);
+
+	if (user.profileImg?.secure_url && !error) {
+		return (
+			<img
+				src={user.profileImg.secure_url}
+				alt={`Profile picture of ${user.name}`}
+				className="w-full h-full object-cover"
+				referrerPolicy="no-referrer"
+				loading="lazy"
+				onError={() => setError(true)}
+			/>
+		);
+	}
+
+	return (
+		<span className="text-indigo-600 dark:text-indigo-400 font-black text-sm">
+			{user.name.charAt(0).toUpperCase()}
+		</span>
+	);
+};
+
 export default function AdminUsers() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [roleFilter, setRoleFilter] = useState("all");
@@ -200,7 +223,7 @@ export default function AdminUsers() {
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
-				className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden"
+				className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden relative"
 			>
 				<div className="overflow-x-auto">
 					<table className="w-full">
@@ -224,7 +247,7 @@ export default function AdminUsers() {
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-							<AnimatePresence>
+							<AnimatePresence mode="popLayout">
 								{users.map((user, index) => (
 									<motion.tr
 										key={user._id}
@@ -235,29 +258,12 @@ export default function AdminUsers() {
 										className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
 									>
 										<td className="px-6 py-4">
-											<Link 
+											<Link
 												to={`/app/users/${user._id}`}
 												className="flex items-center gap-3 group"
 											>
 												<div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center overflow-hidden border border-indigo-50 dark:border-indigo-500/10 group-hover:ring-2 group-hover:ring-indigo-500/20 transition-all">
-													{user.profileImg?.secure_url ? (
-														<img
-															src={user.profileImg.secure_url}
-															alt={`Profile picture of ${user.name}`}
-															className="w-full h-full object-cover"
-															referrerPolicy="no-referrer"
-															loading="lazy"
-															onError={(e) => {
-																e.target.onerror = null;
-																e.target.style.display = 'none';
-																e.target.parentElement.innerHTML = `<span class="text-indigo-600 dark:text-indigo-400 font-black text-sm">${user.name.charAt(0).toUpperCase()}</span>`;
-															}}
-														/>
-													) : (
-														<span className="text-indigo-600 dark:text-indigo-400 font-black text-sm">
-															{user.name.charAt(0).toUpperCase()}
-														</span>
-													)}
+													<UserAvatar user={user} />
 												</div>
 												<div className="flex flex-col">
 													<p className="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
