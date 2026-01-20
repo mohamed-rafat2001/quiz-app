@@ -396,13 +396,13 @@ export default function SingleQuiz() {
 			mutate(
 				{ id, questions },
 				{
-					onSuccess: () => {
+					onSuccess: (data) => {
 						toast.success(
 							isAuto
 								? "Answers submitted automatically!"
 								: "Quiz submitted successfully!"
 						);
-						navigate("/app/my-submissions", { replace: true });
+						navigate(`/app/my-submissions/${data._id}`, { replace: true });
 					},
 					onError: (err) => {
 						toast.error(err.message || "Failed to submit answers");
