@@ -13,7 +13,7 @@ import {
 } from "react-icons/hi2";
 
 export const Logo = ({ size = "lg" }) => (
-	<Link to="/" className="flex items-center gap-3 group">
+	<Link to="/" className="flex items-center gap-3 group" aria-label="QuizMaster Homepage">
 		<div
 			className={`${
 				size === "lg" ? "w-12 h-12 text-2xl" : "w-10 h-10 text-xl"
@@ -161,32 +161,38 @@ export default function SideBar() {
 	return (
 		<>
 			{/* Mobile Bottom Navigation */}
-			<div className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/90 dark:bg-white/[0.03] backdrop-blur-xl border-t border-gray-100 dark:border-white/5 flex items-center justify-around px-4 pb-2 z-50 transition-colors duration-300">
+			<nav 
+				className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/90 dark:bg-white/[0.03] backdrop-blur-xl border-t border-gray-100 dark:border-white/5 flex items-center justify-around px-4 pb-2 z-50 transition-colors duration-300"
+				aria-label="Mobile navigation"
+			>
 				{navItems.map((item) => (
 					<NavItem key={item.to} {...item} mobile />
 				))}
-			</div>
+			</nav>
 
-			<div className="hidden lg:flex fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-white/[0.02] border-r border-gray-100 dark:border-white/5 flex-col z-50 transition-colors duration-300">
+			<aside className="hidden lg:flex fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-white/[0.02] border-r border-gray-100 dark:border-white/5 flex-col z-50 transition-colors duration-300">
 				<div className="p-8 flex-1 overflow-y-auto custom-scrollbar min-h-0">
 					<div className="mb-12">
 						<Logo />
 					</div>
 
 					<div className="space-y-8">
-						<div>
-							<span className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] px-6 mb-4 block">
+						<section aria-labelledby="main-menu-heading">
+							<span 
+								id="main-menu-heading"
+								className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] px-6 mb-4 block"
+							>
 								Main Menu
 							</span>
-							<nav className="space-y-2">
+							<nav className="space-y-2" aria-label="Main navigation">
 								{navItems.map((item) => (
 									<NavItem key={item.to} {...item} />
 								))}
 							</nav>
-						</div>
+						</section>
 					</div>
 				</div>
-			</div>
+			</aside>
 		</>
 	);
 }

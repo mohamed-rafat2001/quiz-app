@@ -16,19 +16,19 @@ import {
 } from "react-icons/hi2";
 import { motion, AnimatePresence } from "framer-motion";
 
-const FormField = ({ label, icon: Icon, error, children }) => (
+const FormField = ({ label, id, icon: Icon, error, children }) => (
 	<div className="space-y-1.5">
-		<label className="text-sm font-black text-gray-900 dark:text-white/60 ml-1">
+		<label htmlFor={id} className="text-sm font-black text-gray-900 dark:text-white/60 ml-1">
 			{label}
 		</label>
 		<div className="relative group">
 			<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 dark:text-white/40 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">
-				<Icon className="h-5 w-5" />
+				<Icon className="h-5 w-5" aria-hidden="true" />
 			</div>
 			{children}
 		</div>
 		{error && (
-			<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
+			<p id={`${id}-error`} className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake" role="alert">
 				{error.message}
 			</p>
 		)}
@@ -36,19 +36,19 @@ const FormField = ({ label, icon: Icon, error, children }) => (
 );
 
 const RoleSelector = ({ register, error }) => (
-	<div className="space-y-2">
-		<label className="text-sm font-black text-gray-900 dark:text-white/60 ml-1 block">
+	<fieldset className="space-y-2 border-none p-0 m-0">
+		<legend className="text-sm font-black text-gray-900 dark:text-white/60 ml-1 block mb-2">
 			I am a:
-		</label>
+		</legend>
 		<div className="flex gap-4">
 			<label className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="student"
-					className="peer hidden"
+					className="sr-only peer"
 					{...register("role")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Student
 				</div>
 			</label>
@@ -56,36 +56,36 @@ const RoleSelector = ({ register, error }) => (
 				<input
 					type="radio"
 					value="teacher"
-					className="peer hidden"
+					className="sr-only peer"
 					{...register("role")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Teacher
 				</div>
 			</label>
 		</div>
 		{error && (
-			<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black">
+			<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black" role="alert">
 				{error.message}
 			</p>
 		)}
-	</div>
+	</fieldset>
 );
 
 const GenderSelector = ({ register, error }) => (
-	<div className="space-y-2">
-		<label className="text-sm font-black text-gray-900 dark:text-white/60 ml-1 block">
+	<fieldset className="space-y-2 border-none p-0 m-0">
+		<legend className="text-sm font-black text-gray-900 dark:text-white/60 ml-1 block mb-2">
 			Gender:
-		</label>
+		</legend>
 		<div className="flex gap-4">
 			<label className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="male"
-					className="peer hidden"
+					className="sr-only peer"
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Male
 				</div>
 			</label>
@@ -93,20 +93,20 @@ const GenderSelector = ({ register, error }) => (
 				<input
 					type="radio"
 					value="female"
-					className="peer hidden"
+					className="sr-only peer"
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/10 text-gray-500 dark:text-white/60 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-500 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2">
 					Female
 				</div>
 			</label>
 		</div>
 		{error && (
-			<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black">
+			<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black" role="alert">
 				{error.message}
 			</p>
 		)}
-	</div>
+	</fieldset>
 );
 
 function SignUp() {

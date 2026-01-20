@@ -1,15 +1,8 @@
-import { motion } from "framer-motion";
 import { HiArrowTrendingUp, HiArrowTrendingDown } from "react-icons/hi2";
 
-const fadeInUp = {
-	hidden: { opacity: 0, y: 20 },
-	visible: { opacity: 1, y: 0 },
-};
-
 const StatCard = ({ title, value, icon: Icon, color, subtitle, trend }) => (
-	<motion.div
-		variants={fadeInUp}
-		className="bg-white dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all"
+	<div
+		className="bg-white dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
 	>
 		<div className="flex items-center justify-between">
 			<div className="flex items-center gap-4">
@@ -41,7 +34,7 @@ const StatCard = ({ title, value, icon: Icon, color, subtitle, trend }) => (
 				</div>
 			)}
 		</div>
-	</motion.div>
+	</div>
 );
 
 export default StatCard;
