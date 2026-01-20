@@ -80,15 +80,15 @@ export const getQuiz = errorHandling(async (req, res, next) => {
 		quiz = await query(quizModel.findOne({ quizId: id }));
 	}
 
-	if (!quiz) return next(new appError("quiz not found", 404));
+	if (!quiz) return next(new appError("The requested quiz could not be found. Please check the ID.", 404));
 
 	if (req.user.role === "student") {
 		const now = new Date();
 		if (now < new Date(quiz.startDate)) {
-			return next(new appError("This quiz has not started yet", 400));
+			return next(new appError(`This quiz has not started yet. It will be available on ${new Date(quiz.startDate).toLocaleString()}`, 400));
 		}
 		if (now > new Date(quiz.expireDate)) {
-			return next(new appError("This quiz has already expired", 400));
+			return next(new appError("This quiz has already expired and is no longer available.", 400));
 		}
 
 		const results = await quizResultModel.find({

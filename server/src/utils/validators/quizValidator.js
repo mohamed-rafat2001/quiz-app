@@ -44,6 +44,6 @@ export const createQuizValidator = [
 ];
 
 export const getQuizValidator = [
-	check("id").isMongoId().withMessage("Invalid quiz ID format"),
+	check("id").notEmpty().withMessage("Quiz ID is required"),
 	validatorMiddleware,
 ];
