@@ -9,6 +9,7 @@ import {
 	HiCheckCircle,
 	HiXCircle,
 	HiArrowLeft,
+	HiInformationCircle,
 } from "react-icons/hi2";
 
 const ResultHeader = ({ result, isTeacher, onBack }) => (
@@ -56,39 +57,52 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 	</div>
 );
 
-const ResultStats = ({ result }) => (
-	<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10 mb-12 sm:mb-16">
-		<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
-			<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
-				Final Score
-			</p>
-			<h4 className="text-4xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">
-				{result.totalScore}{" "}
-				<span className="text-xl sm:text-2xl text-gray-300 dark:text-white/20 font-black">
-					/ {result.quizId?.quizScore || "?"}
-				</span>
-			</h4>
+const ResultStats = ({ result }) => {
+	const isResultHidden = result.totalScore === undefined;
+
+	return (
+		<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10 mb-12 sm:mb-16">
+			<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
+				<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
+					Final Score
+				</p>
+				<h4 className="text-4xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">
+					{isResultHidden ? (
+						<span className="text-2xl sm:text-3xl opacity-40">Hidden</span>
+					) : (
+						<>
+							{result.totalScore}{" "}
+							<span className="text-xl sm:text-2xl text-gray-300 dark:text-white/20 font-black">
+								/ {result.quizId?.quizScore || "?"}
+							</span>
+						</>
+					)}
+				</h4>
+			</div>
+			<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
+				<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
+					Status
+				</p>
+				<h4
+					className={`text-3xl sm:text-4xl font-black tracking-tight ${
+						isResultHidden
+							? "text-gray-400 dark:text-white/20"
+							: result.status
+							? "text-green-600 dark:text-green-400"
+							: "text-red-600 dark:text-red-400"
+					}`}
+				>
+					{isResultHidden ? "PENDING" : result.status ? "PASSED" : "FAILED"}
+				</h4>
+			</div>
 		</div>
-		<div className="text-center p-8 sm:p-10 rounded-[2.5rem] bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 shadow-sm transition-colors">
-			<p className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] mb-3">
-				Status
-			</p>
-			<h4
-				className={`text-3xl sm:text-4xl font-black tracking-tight ${
-					result.status
-						? "text-green-600 dark:text-green-400"
-						: "text-red-600 dark:text-red-400"
-				}`}
-			>
-				{result.status ? "PASSED" : "FAILED"}
-			</h4>
-		</div>
-	</div>
-);
+	);
+};
 
 const QuestionReviewItem = ({ ans, index }) => {
 	const question = ans.questionId;
 	const isCorrect = ans.isCorrect;
+	const isResultHidden = isCorrect === undefined;
 
 	return (
 		<motion.div
@@ -96,7 +110,9 @@ const QuestionReviewItem = ({ ans, index }) => {
 			animate={{ opacity: 1, x: 0 }}
 			transition={{ delay: index * 0.1 }}
 			className={`p-6 sm:p-10 rounded-[2.5rem] border-2 transition-all duration-300 ${
-				isCorrect
+				isResultHidden
+					? "border-gray-100 dark:border-white/5 bg-gray-50/20 dark:bg-white/[0.02]"
+					: isCorrect
 					? "border-green-100 dark:border-green-500/10 bg-green-50/20 dark:bg-green-500/[0.02]"
 					: "border-red-100 dark:border-red-500/10 bg-red-50/20 dark:bg-red-500/[0.02]"
 			}`}
@@ -104,7 +120,9 @@ const QuestionReviewItem = ({ ans, index }) => {
 			<div className="flex items-start gap-5 sm:gap-8">
 				<span
 					className={`shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm sm:text-base shadow-sm ${
-						isCorrect
+						isResultHidden
+							? "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/40"
+							: isCorrect
 							? "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400"
 							: "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400"
 					}`}
@@ -129,13 +147,17 @@ const QuestionReviewItem = ({ ans, index }) => {
 					<div className="space-y-3 sm:space-y-4">
 						<div
 							className={`flex flex-col gap-4 p-4 sm:p-5 rounded-2xl border ${
-								isCorrect
+								isResultHidden
+									? "bg-gray-100/50 dark:bg-white/5 border-gray-200/50 dark:border-white/5 text-gray-600 dark:text-white/60"
+									: isCorrect
 									? "bg-green-100/50 dark:bg-green-500/10 border-green-200/50 dark:border-green-500/10 text-green-900 dark:text-green-300"
 									: "bg-red-100/50 dark:bg-red-500/10 border-red-200/50 dark:border-red-500/10 text-red-900 dark:text-red-300"
 							}`}
 						>
 							<div className="flex items-center gap-3 sm:gap-4">
-								{isCorrect ? (
+								{isResultHidden ? (
+									<HiMagnifyingGlass className="text-xl shrink-0" />
+								) : isCorrect ? (
 									<HiCheckCircle className="text-xl shrink-0" />
 								) : (
 									<HiXCircle className="text-xl shrink-0" />
@@ -164,18 +186,29 @@ const QuestionReviewItem = ({ ans, index }) => {
 							)}
 						</div>
 
-						{!isCorrect && question?.correctAnswer && (
-							<div className="flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border bg-green-100/50 dark:bg-green-500/10 border-green-200/50 dark:border-green-500/10 text-green-900 dark:text-green-300">
-								<HiCheckCircle className="text-xl shrink-0" />
-								<div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 flex-1 min-w-0">
-									<span className="text-[10px] font-black uppercase tracking-[0.2em] shrink-0 opacity-60">
-										Correct Answer:
-									</span>
-									<span className="text-sm sm:text-base font-bold truncate">
-										{question.correctAnswer}
-									</span>
-								</div>
+						{isResultHidden ? (
+							<div className="flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border bg-indigo-50/50 dark:bg-indigo-500/5 border-indigo-100 dark:border-indigo-500/10 text-indigo-700 dark:text-indigo-400">
+								<HiInformationCircle className="text-xl shrink-0" />
+								<p className="text-xs sm:text-sm font-bold">
+									Correct answer and feedback will be available once the exam
+									period ends.
+								</p>
 							</div>
+						) : (
+							!isCorrect &&
+							question?.correctAnswer && (
+								<div className="flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border bg-green-100/50 dark:bg-green-500/10 border-green-200/50 dark:border-green-500/10 text-green-900 dark:text-green-300">
+									<HiCheckCircle className="text-xl shrink-0" />
+									<div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 flex-1 min-w-0">
+										<span className="text-[10px] font-black uppercase tracking-[0.2em] shrink-0 opacity-60">
+											Correct Answer:
+										</span>
+										<span className="text-sm sm:text-base font-bold truncate">
+											{question.correctAnswer}
+										</span>
+									</div>
+								</div>
+							)
 						)}
 					</div>
 				</div>

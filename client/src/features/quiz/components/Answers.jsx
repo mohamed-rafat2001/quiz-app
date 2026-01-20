@@ -15,62 +15,69 @@ const SubmissionHeader = () => (
 	</div>
 );
 
-const SubmissionRow = ({ answer, index }) => (
-	<motion.tr
-		initial={{ opacity: 0, y: 10 }}
-		animate={{ opacity: 1, y: 0 }}
-		transition={{ delay: index * 0.05 }}
-		className="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors group"
-	>
-		<td className="px-6 py-5 text-sm font-black text-gray-400 dark:text-white/40">
-			{index + 1}
-		</td>
-		<td className="px-6 py-5">
-			<span className="text-sm font-black text-gray-900 dark:text-white/80 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-				{answer.quizId?.quizName || "Unknown Quiz"}
-			</span>
-		</td>
-		<td className="px-6 py-5 text-center">
-			<span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
-				{answer.score}
-			</span>
-		</td>
-		<td className="px-6 py-5 text-center">
-			<span
-				className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${
-					answer.isPass
-						? "bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400"
-						: "bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400"
-				}`}
-			>
-				{answer.isPass ? "Passed" : "Failed"}
-			</span>
-		</td>
-		<td className="px-6 py-5 text-sm font-bold text-gray-500 dark:text-white/60">
-			{new Date(answer.createdAt).toLocaleDateString()}
-		</td>
-		<td className="px-6 py-5">
-			<div className="flex items-center justify-center gap-3">
-				<Link
-					to={`/app/my-submissions/${answer._id}`}
-					className="p-2.5 text-gray-400 dark:text-white/40 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-95"
-					title="View Details"
+const SubmissionRow = ({ answer, index }) => {
+	const isResultHidden = answer.score === undefined;
+
+	return (
+		<motion.tr
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: index * 0.05 }}
+			className="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors group"
+		>
+			<td className="px-6 py-5 text-sm font-black text-gray-400 dark:text-white/40">
+				{index + 1}
+			</td>
+			<td className="px-6 py-5">
+				<span className="text-sm font-black text-gray-900 dark:text-white/80 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+					{answer.quizId?.quizName || "Unknown Quiz"}
+				</span>
+			</td>
+			<td className="px-6 py-5 text-center">
+				<span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
+					{isResultHidden ? "?" : answer.score}
+				</span>
+			</td>
+			<td className="px-6 py-5 text-center">
+				<span
+					className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${
+						isResultHidden
+							? "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/40"
+							: answer.isPass
+							? "bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400"
+							: "bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400"
+					}`}
 				>
-					<HiEye className="text-xl" />
-				</Link>
-				{answer.quizId && answer.attemptCount < (answer.quizId.tries || 1) && (
+					{isResultHidden ? "Pending" : answer.isPass ? "Passed" : "Failed"}
+				</span>
+			</td>
+			<td className="px-6 py-5 text-sm font-bold text-gray-500 dark:text-white/60">
+				{new Date(answer.createdAt).toLocaleDateString()}
+			</td>
+			<td className="px-6 py-5">
+				<div className="flex items-center justify-center gap-3">
 					<Link
-						to={`/app/quizzes/${answer.quizId._id}`}
-						className="p-2.5 text-gray-400 dark:text-white/40 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-95"
-						title="Retake Quiz"
+						to={`/app/my-submissions/${answer._id}`}
+						className="p-2.5 text-gray-400 dark:text-white/40 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-95"
+						title="View Details"
 					>
-						<HiArrowPath className="text-xl" />
+						<HiEye className="text-xl" />
 					</Link>
-				)}
-			</div>
-		</td>
-	</motion.tr>
-);
+					{answer.quizId &&
+						answer.attemptCount < (answer.quizId.tries || 1) && (
+							<Link
+								to={`/app/quizzes/${answer.quizId._id}`}
+								className="p-2.5 text-gray-400 dark:text-white/40 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-95"
+								title="Retake Quiz"
+							>
+								<HiArrowPath className="text-xl" />
+							</Link>
+						)}
+				</div>
+			</td>
+		</motion.tr>
+	);
+};
 
 const EmptyState = () => (
 	<div className="py-24 text-center bg-white dark:bg-white/[0.03] rounded-[2.5rem] border-2 border-dashed border-gray-100 dark:border-white/5 transition-colors duration-300">

@@ -100,8 +100,25 @@ export const quesAnswer = errorHandling(async (req, res, next) => {
 });
 
 // get quiz result by params
-export const getQuizAnswer = factory.getOne(quizResultModel, {
-	path: "quizId",
+export const getQuizAnswer = errorHandling(async (req, res, next) => {
+	const result = await quizResultModel.findById(req.params.id).populate("quizId");
+	if (!result) return next(new appError("Result not found", 404));
+
+	const isExamFinished =
+		result.quizId && new Date(result.quizId.expireDate) < new Date();
+	const isTeacherOrAdmin = ["teacher", "admin"].includes(req.user.role);
+
+	const resultObj = result.toObject();
+
+	if (!isExamFinished && !isTeacherOrAdmin) {
+		// Hide sensitive info for students if exam not finished
+		delete resultObj.totalScore;
+		delete resultObj.status;
+		delete resultObj.score; // virtual
+		delete resultObj.isPass; // virtual
+	}
+
+	response(resultObj, 200, res);
 });
 
 // get all quiz results for student
@@ -130,14 +147,25 @@ export const studentquizAnswers = errorHandling(async (req, res, next) => {
 
 	const results = await features.query.populate({
 		path: "quizId",
-		select: "quizName tries",
+		select: "quizName tries expireDate",
 	});
 
-	// 3. Attach attemptCount to each result
+	// 3. Attach attemptCount to each result and hide sensitive info if exam not finished
 	const resultsWithCounts = results.map((r) => {
 		const qId = r.quizId?._id?.toString();
+		const isExamFinished =
+			r.quizId?.expireDate && new Date(r.quizId.expireDate) < new Date();
+		const resultObj = r.toObject();
+
+		if (!isExamFinished) {
+			delete resultObj.totalScore;
+			delete resultObj.status;
+			delete resultObj.score;
+			delete resultObj.isPass;
+		}
+
 		return {
-			...r.toObject(),
+			...resultObj,
 			attemptCount: qId ? quizAttemptCounts[qId] : 0,
 		};
 	});
@@ -212,10 +240,41 @@ export const getTeacherQuizAnswers = errorHandling(async (req, res, next) => {
 
 // get individual question answers for a specific result
 export const getResultDetails = errorHandling(async (req, res, next) => {
-	const filter = { resultId: req.params.id };
-	return factory.getAll(questionAnswerModel, filter, "questionId")(
-		req,
-		res,
-		next
-	);
+	const resultId = req.params.id;
+
+	// 1. Get the quiz result to find the quizId
+	const result = await quizResultModel.findById(resultId);
+	if (!result) return next(new appError("Result not found", 404));
+
+	// 2. Get the quiz to check the expireDate
+	const quiz = await quizModel.findById(result.quizId);
+	if (!quiz) return next(new appError("Quiz not found", 404));
+
+	const isExamFinished = new Date(quiz.expireDate) < new Date();
+	const isTeacherOrAdmin = ["teacher", "admin"].includes(req.user.role);
+
+	// 3. Get all answers for this result
+	let query = questionAnswerModel
+		.find({ resultId })
+		.populate("questionId");
+
+	const docs = await query;
+
+	// 4. If student and exam NOT finished, hide correct answers and isCorrect status
+	const processedDocs = docs.map((doc) => {
+		const docObj = doc.toObject();
+
+		if (!isExamFinished && !isTeacherOrAdmin) {
+			// Hide sensitive info
+			if (docObj.questionId) {
+				delete docObj.questionId.correctAnswer;
+			}
+			delete docObj.isCorrect;
+			delete docObj.score;
+		}
+
+		return docObj;
+	});
+
+	response(processedDocs, 200, res);
 });
