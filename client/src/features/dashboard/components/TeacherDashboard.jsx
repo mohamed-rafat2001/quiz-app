@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -44,8 +45,17 @@ const TeacherDashboard = ({
 	page,
 	onPageChange,
 	meta,
-}) => (
-	<div className="space-y-6">
+}) => {
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) return null;
+
+	return (
+		<div className="space-y-6">
 		{/* Teacher Stats */}
 		<motion.div
 			variants={staggerContainer}
@@ -309,6 +319,7 @@ const TeacherDashboard = ({
 			)}
 		</motion.div>
 	</div>
-);
+	);
+};
 
 export default TeacherDashboard;
