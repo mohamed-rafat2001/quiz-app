@@ -22,6 +22,7 @@ import {
 	HiClock,
 	HiMagnifyingGlass,
 } from "react-icons/hi2";
+import ConfirmModal from "../../../shared/components/ui/ConfirmModal";
 
 const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 	<div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 mb-8 sm:mb-10">
@@ -433,6 +434,7 @@ export default function Quizs() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 	const [page, setPage] = useState(1);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, quizId: null });
 
 	// Debounce search term and reset page
 	useEffect(() => {
@@ -461,13 +463,7 @@ export default function Quizs() {
 	}
 
 	const handleDelete = (id) => {
-		if (
-			window.confirm(
-				"Are you sure you want to delete this quiz? This action cannot be undone."
-			)
-		) {
-			deleteQuiz(id);
-		}
+		setDeleteModal({ isOpen: true, quizId: id });
 	};
 
 	if (isLoading && !debouncedSearch) return <Loader />;
@@ -519,6 +515,17 @@ export default function Quizs() {
 					className="justify-center mt-10"
 				/>
 			)}
+
+			{/* Confirm Delete Modal */}
+			<ConfirmModal
+				isOpen={deleteModal.isOpen}
+				onClose={() => setDeleteModal({ isOpen: false, quizId: null })}
+				onConfirm={() => deleteQuiz(deleteModal.quizId)}
+				isPending={isDeleting}
+				title="Delete Quiz"
+				message="Are you sure you want to delete this quiz? This action cannot be undone and all associated results will be lost."
+				confirmText="Delete Quiz"
+			/>
 		</div>
 	);
 }

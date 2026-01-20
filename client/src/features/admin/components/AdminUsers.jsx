@@ -21,6 +21,7 @@ import {
 	HiChevronLeft,
 	HiChevronRight,
 } from "react-icons/hi2";
+import ConfirmModal from "../../../shared/components/ui/ConfirmModal";
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
 	<div className={`p-5 rounded-2xl bg-gradient-to-br ${color} text-white`}>
@@ -59,6 +60,7 @@ export default function AdminUsers() {
 	const [page, setPage] = useState(1);
 	const limit = 10;
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, userId: null });
 
 	const { data, isLoading, refetch } = useAdminUsers({
 		page,
@@ -333,15 +335,7 @@ export default function AdminUsers() {
 													{user.active ? <HiUserMinus /> : <HiShieldCheck />}
 												</button>
 												<button
-													onClick={() => {
-														if (
-															window.confirm(
-																"Are you sure you want to delete this user?"
-															)
-														) {
-															deleteUser(user._id);
-														}
-													}}
+													onClick={() => setDeleteModal({ isOpen: true, userId: user._id })}
 													disabled={isDeleting}
 													className="p-2.5 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/30 transition-all hover:scale-105"
 													title="Delete User"
@@ -632,6 +626,17 @@ export default function AdminUsers() {
 					</div>
 				)}
 			</AnimatePresence>
+
+			{/* Confirm Delete Modal */}
+			<ConfirmModal
+				isOpen={deleteModal.isOpen}
+				onClose={() => setDeleteModal({ isOpen: false, userId: null })}
+				onConfirm={() => deleteUser(deleteModal.userId)}
+				isPending={isDeleting}
+				title="Delete User"
+				message="Are you sure you want to delete this user? This action cannot be undone and all user data will be permanently removed."
+				confirmText="Delete User"
+			/>
 		</div>
 	);
 }

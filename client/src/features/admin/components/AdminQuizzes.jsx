@@ -13,6 +13,7 @@ import {
 	HiClock,
 } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import ConfirmModal from "../../../shared/components/ui/ConfirmModal";
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
 	<div className={`p-5 rounded-2xl bg-gradient-to-br ${color} text-white`}>
@@ -26,6 +27,7 @@ export default function AdminQuizzes() {
 	const { data: quizzes, isLoading, refetch } = useAdminQuizzes();
 	const { mutate: deleteQuiz, isPending: isDeleting } = useDeleteQuizAdmin();
 	const [searchTerm, setSearchTerm] = useState("");
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, quizId: null });
 
 	if (isLoading) {
 		return (
@@ -237,15 +239,7 @@ export default function AdminQuizzes() {
 										<HiEye />
 									</Link>
 									<button
-										onClick={() => {
-											if (
-												window.confirm(
-													"Are you sure you want to delete this quiz?"
-												)
-											) {
-												deleteQuiz(quiz._id);
-											}
-										}}
+										onClick={() => setDeleteModal({ isOpen: true, quizId: quiz._id })}
 										disabled={isDeleting}
 										className="p-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all"
 										title="Delete Quiz"
@@ -358,11 +352,7 @@ export default function AdminQuizzes() {
 													<HiEye />
 												</Link>
 												<button
-													onClick={() => {
-														if (window.confirm("Delete this quiz?")) {
-															deleteQuiz(quiz._id);
-														}
-													}}
+													onClick={() => setDeleteModal({ isOpen: true, quizId: quiz._id })}
 													className="p-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all"
 												>
 													<HiTrash />
@@ -376,6 +366,16 @@ export default function AdminQuizzes() {
 					</div>
 				</motion.div>
 			)}
+			{/* Confirm Delete Modal */}
+			<ConfirmModal
+				isOpen={deleteModal.isOpen}
+				onClose={() => setDeleteModal({ isOpen: false, quizId: null })}
+				onConfirm={() => deleteQuiz(deleteModal.quizId)}
+				isPending={isDeleting}
+				title="Delete Quiz"
+				message="Are you sure you want to delete this quiz? This action cannot be undone and all associated results will be lost."
+				confirmText="Delete Quiz"
+			/>
 		</div>
 	);
 }
