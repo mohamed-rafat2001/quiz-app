@@ -197,19 +197,15 @@ const Hero = () => {
 		>
 			<motion.div
 				style={{ y, opacity }}
-				className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10"
+				className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 will-change-transform"
 			>
 				{/* Left Content */}
 				<div className="relative z-10">
-					<motion.div
-						initial={{ opacity: 0, x: -60 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.8, ease: "easeOut" }}
-					>
+					<div>
 						<motion.div
 							initial={{ opacity: 0, scale: 0.95 }}
 							animate={{ opacity: 1, scale: 1 }}
-							transition={{ delay: 0.1 }}
+							transition={{ duration: 0.4 }}
 							className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-sm font-bold rounded-full mb-6"
 						>
 							<HiSparkles className="text-yellow-500" />
@@ -240,16 +236,13 @@ const Hero = () => {
 								{ icon: "📱", text: "Mobile Ready" },
 								{ icon: "🏆", text: "Leaderboards" },
 							].map((item, i) => (
-								<motion.span
+								<span
 									key={i}
-									initial={{ opacity: 0, y: 10 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ delay: 0.2 + i * 0.05 }}
 									className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full border border-gray-200 dark:border-gray-700 shadow-sm"
 								>
 									<span>{item.icon}</span>
 									{item.text}
-								</motion.span>
+								</span>
 							))}
 						</div>
 
@@ -291,7 +284,7 @@ const Hero = () => {
 								</div>
 							</div>
 						</div>
-					</motion.div>
+					</div>
 				</div>
 
 				{/* Right Content - Visual */}
@@ -423,13 +416,10 @@ const Features = () => {
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{FEATURES.map((feature, index) => (
-						<motion.div
+						<div
 							key={feature.title}
-							initial={{ opacity: 0, y: 40 }}
-							animate={isInView ? { opacity: 1, y: 0 } : {}}
-							transition={{ duration: 0.5, delay: index * 0.1 }}
-							whileHover={{ y: -8, scale: 1.02 }}
-							className="group bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 cursor-default"
+							style={{ transitionDelay: `${index * 50}ms` }}
+							className={`group bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 cursor-default ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
 						>
 							<div
 								className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all`}
@@ -442,7 +432,7 @@ const Features = () => {
 							<p className="text-gray-600 dark:text-gray-400 leading-relaxed">
 								{feature.description}
 							</p>
-						</motion.div>
+						</div>
 					))}
 				</div>
 			</div>
@@ -475,12 +465,10 @@ const Testimonials = () => {
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					{TESTIMONIALS.map((testimonial, index) => (
-						<motion.div
+						<div
 							key={testimonial.name}
-							initial={{ opacity: 0, y: 40 }}
-							animate={isInView ? { opacity: 1, y: 0 } : {}}
-							transition={{ delay: index * 0.1 }}
-							className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700"
+							style={{ transitionDelay: `${index * 100}ms` }}
+							className={`bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-500 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
 						>
 							<p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
 								"{testimonial.text}"
@@ -504,7 +492,7 @@ const Testimonials = () => {
 									</p>
 								</div>
 							</div>
-						</motion.div>
+						</div>
 					))}
 				</div>
 			</div>
@@ -522,10 +510,7 @@ const Stats = () => {
 			className="py-24 px-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden"
 		>
 			<div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-				<motion.div
-					initial={{ opacity: 0, x: -40 }}
-					animate={isInView ? { opacity: 1, x: 0 } : {}}
-				>
+				<div className={isInView ? "opacity-100 translate-x-0 transition-all duration-700" : "opacity-0 -translate-x-10"}>
 					<h2 className="text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
 						Ready to Transform Your Learning?
 					</h2>
@@ -539,29 +524,22 @@ const Stats = () => {
 					>
 						Start for Free
 					</Link>
-				</motion.div>
+				</div>
 
-				<motion.div
-					initial={{ opacity: 0, x: 40 }}
-					animate={isInView ? { opacity: 1, x: 0 } : {}}
-					className="grid grid-cols-2 gap-4"
-				>
+				<div className="grid grid-cols-2 gap-4">
 					{STATS.map((stat, index) => (
-						<motion.div
+						<div
 							key={stat.label}
-							initial={{ opacity: 0, scale: 0.8 }}
-							animate={isInView ? { opacity: 1, scale: 1 } : {}}
-							transition={{ delay: index * 0.1 }}
-							className="bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-2xl text-center"
+							className={`bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-2xl text-center transition-all duration-500 delay-${index * 100} ${isInView ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
 						>
 							<span className="text-3xl mb-2 block">{stat.icon}</span>
 							<p className="text-3xl font-black text-white">{stat.val}</p>
 							<p className="text-indigo-200 text-sm font-medium">
 								{stat.label}
 							</p>
-						</motion.div>
+						</div>
 					))}
-				</motion.div>
+				</div>
 			</div>
 
 			<div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />

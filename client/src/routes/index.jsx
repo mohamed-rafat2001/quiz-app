@@ -26,7 +26,7 @@ const AdminUsers = lazy(() =>
 const AdminQuizzes = lazy(() =>
 	import("../features/admin/components/AdminQuizzes")
 );
-const Landing = lazy(() => import("../pages/Landing"));
+import Landing from "../pages/Landing";
 const NotFound = lazy(() => import("../shared/components/ui/NotFound"));
 const ErrorElement = lazy(() =>
 	import("../shared/components/ui/NotFound").then((module) => ({
