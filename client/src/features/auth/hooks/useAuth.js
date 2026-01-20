@@ -138,11 +138,21 @@ export function useLogout() {
 	const { mutate: logout } = useMutation({
 		mutationFn: logoutApi,
 		onSettled: () => {
-			// Clear all query data and redirect regardless of success/error
+			// 1) Completely clear the React Query cache
+			queryClient.clear();
+
+			// 2) Explicitly set user to null
 			queryClient.setQueryData(["user"], null);
-			queryClient.removeQueries();
+
+			// 3) Redirect to welcome page
 			navigate("/welcome", { replace: true });
+
+			// 4) Success message
 			toast.success("Logged out successfully");
+
+			// 5) Force a page reload as a last resort to clear all memory state
+			// Only if absolutely necessary, but let's try without first.
+			// window.location.href = '/welcome';
 		},
 	});
 

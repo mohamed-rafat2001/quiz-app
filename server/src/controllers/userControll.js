@@ -101,7 +101,12 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 
 // logout func
 export const logout = (req, res) => {
+	// 1) Clear cookie by setting it to a past date
 	res.cookie("jwt", "loggedout", getCookieOptions(true));
+
+	// 2) Also use clearCookie for good measure
+	res.clearCookie("jwt", getCookieOptions(true));
+
 	res.status(200).json({ status: "success" });
 };
 

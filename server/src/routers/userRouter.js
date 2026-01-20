@@ -27,7 +27,7 @@ import {
 //auth
 userRouter.route("/sign-up").post(signupValidator, createUser);
 userRouter.route("/login").post(loginValidator, loginFunc);
-userRouter.get("/logout", logout);
+userRouter.post("/logout", logout);
 userRouter.post("/forget-password", forgetPass);
 userRouter.patch("/reset-password", resetPass);
 

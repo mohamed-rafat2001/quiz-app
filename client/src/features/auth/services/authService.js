@@ -12,7 +12,7 @@ export async function signUp(data) {
 
 export async function logout() {
 	try {
-		await BaseApi.get("/user/logout");
+		await BaseApi.post("/user/logout");
 	} catch (e) {
 		throw new Error(e.response?.data?.message || "Something went wrong");
 	}
