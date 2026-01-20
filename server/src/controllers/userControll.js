@@ -5,6 +5,7 @@ import cloudinary from "../utils/cloudinary.js";
 import Email from "../utils/Email.js";
 import response from "../utils/handelResponse.js";
 import * as factory from "../utils/handlerFactory.js";
+import ApiFeatures from "../utils/apiFeatures.js";
 
 // generate cookies
 const cookiesOptions = {
