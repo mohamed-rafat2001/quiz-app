@@ -41,7 +41,10 @@ const AdminDashboard = ({ stats }) => {
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		setIsMounted(true);
+		const timer = setTimeout(() => {
+			setIsMounted(true);
+		}, 500);
+		return () => clearTimeout(timer);
 	}, []);
 
 	return (

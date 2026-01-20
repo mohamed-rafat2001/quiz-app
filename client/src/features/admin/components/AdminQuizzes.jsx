@@ -170,19 +170,22 @@ export default function AdminQuizzes() {
 							</div>
 
 							{/* Teacher Info */}
-							<div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-								<div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+							<Link 
+								to={`/app/users/${quiz.teacherId?._id}`}
+								className="flex items-center gap-3 mb-4 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all group/teacher"
+							>
+								<div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-sm group-hover/teacher:scale-110 transition-transform">
 									{quiz.teacherId?.name?.charAt(0) || "?"}
 								</div>
 								<div className="min-w-0">
-									<p className="text-sm font-bold text-gray-900 dark:text-white truncate">
+									<p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/teacher:text-indigo-600 dark:group-hover/teacher:text-indigo-400">
 										{quiz.teacherId?.name || "Unknown"}
 									</p>
 									<p className="text-xs text-gray-500 dark:text-gray-400 truncate">
 										{quiz.teacherId?.email}
 									</p>
 								</div>
-							</div>
+							</Link>
 
 							{/* Quiz Stats */}
 							<div className="grid grid-cols-3 gap-2 mb-4">

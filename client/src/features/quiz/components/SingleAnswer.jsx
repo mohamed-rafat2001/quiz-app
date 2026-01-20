@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuizAnswer, useResultDetails } from "../hooks/useQuiz";
 import { useUser } from "../../auth/hooks/useAuth";
 import Loader from "../../../shared/components/ui/Loader";
@@ -47,11 +47,14 @@ const ResultHeader = ({ result, isTeacher, onBack }) => (
 				Quiz Results Review
 			</p>
 			{isTeacher && result.studentId && (
-				<div className="flex items-center gap-2 mt-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full">
-					<span className="text-xs font-black text-indigo-600 dark:text-indigo-400">
+				<Link 
+					to={`/app/users/${result.studentId._id}`}
+					className="flex items-center gap-2 mt-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all group"
+				>
+					<span className="text-xs font-black text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">
 						Student: {result.studentId.name}
 					</span>
-				</div>
+				</Link>
 			)}
 		</div>
 	</div>

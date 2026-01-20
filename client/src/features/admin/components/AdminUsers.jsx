@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useAdminUsers, useDeleteUser, useUpdateUser, useCreateUserByAdmin } from "../hooks/useAdmin";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -234,8 +235,11 @@ export default function AdminUsers() {
 										className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
 									>
 										<td className="px-6 py-4">
-											<div className="flex items-center gap-3">
-												<div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center overflow-hidden border border-indigo-50 dark:border-indigo-500/10">
+											<Link 
+												to={`/app/users/${user._id}`}
+												className="flex items-center gap-3 group"
+											>
+												<div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center overflow-hidden border border-indigo-50 dark:border-indigo-500/10 group-hover:ring-2 group-hover:ring-indigo-500/20 transition-all">
 													{user.profileImg?.secure_url ? (
 														<img
 															src={user.profileImg.secure_url}
@@ -255,15 +259,15 @@ export default function AdminUsers() {
 														</span>
 													)}
 												</div>
-												<div>
-													<p className="font-bold text-gray-900 dark:text-white">
+												<div className="flex flex-col">
+													<p className="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
 														{user.name}
 													</p>
 													<p className="text-xs text-gray-500 dark:text-gray-400">
 														{user.email}
 													</p>
 												</div>
-											</div>
+											</Link>
 										</td>
 										<td className="px-6 py-4 text-center">
 											<button
