@@ -10,6 +10,7 @@ import {
 	HiClock,
 	HiCheckCircle,
 	HiExclamationTriangle,
+	HiInformationCircle,
 	HiPhoto,
 	HiXMark,
 } from "react-icons/hi2";
