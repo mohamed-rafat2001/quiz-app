@@ -71,10 +71,12 @@ const quizSchema = new mongoose.Schema(
 			type: String,
 			unique: true,
 			index: true,
+			trim: true,
 		},
 		quizPassword: {
 			type: String,
 			required: true,
+			trim: true,
 		},
 		expire: {
 			type: Number,

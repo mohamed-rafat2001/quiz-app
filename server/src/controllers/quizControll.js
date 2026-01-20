@@ -61,12 +61,25 @@ export const deleteQuiz = factory.deleteOneOwner(quizModel, "teacherId");
 
 // get quiz by params
 export const getQuiz = errorHandling(async (req, res, next) => {
-	const quiz = await quizModel
-		.findById(req.params.id)
-		.populate("questions")
-		.populate("firstInQuiz.studentId", "name email image")
-		.populate("secondInQuiz.studentId", "name email image")
-		.populate("thirdInQuiz.studentId", "name email image");
+	const { id } = req.params;
+
+	// Try finding by MongoDB _id first, then by custom quizId
+	let quiz;
+	const query = (q) =>
+		q
+			.populate("questions")
+			.populate("firstInQuiz.studentId", "name email image")
+			.populate("secondInQuiz.studentId", "name email image")
+			.populate("thirdInQuiz.studentId", "name email image");
+
+	if (mongoose.Types.ObjectId.isValid(id)) {
+		quiz = await query(quizModel.findById(id));
+	}
+
+	if (!quiz) {
+		quiz = await query(quizModel.findOne({ quizId: id }));
+	}
+
 	if (!quiz) return next(new appError("quiz not found", 404));
 
 	if (req.user.role === "student") {
@@ -100,15 +113,28 @@ export const getQuizByPass = errorHandling(async (req, res, next) => {
 	const { quizPassword, quizId } = req.body;
 	if (!quizPassword || !quizId)
 		return next(new appError("please enter the password and Id", 400));
+
+	// 1) Find the quiz by ID and Password first
 	const quiz = await quizModel
 		.findOne({
 			quizId,
 			quizPassword,
-			expireDate: { $gt: Date.now() },
-			startDate: { $lte: Date.now() },
 		})
 		.populate("questions");
-	if (!quiz) return next(new appError("quiz not found", 404));
+
+	if (!quiz) return next(new appError("Invalid Quiz ID or Password", 404));
+
+	// 2) Check if it has started
+	const now = new Date();
+	if (now < new Date(quiz.startDate)) {
+		return next(new appError("This quiz has not started yet", 400));
+	}
+
+	// 3) Check if it has expired
+	if (now > new Date(quiz.expireDate)) {
+		return next(new appError("This quiz has already expired", 400));
+	}
+
 	response(quiz, 200, res);
 });
 // get all quizs
