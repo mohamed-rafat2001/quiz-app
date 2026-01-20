@@ -415,27 +415,27 @@ export default function AdminUsers() {
 							initial={{ opacity: 0, scale: 0.95, y: 20 }}
 							animate={{ opacity: 1, scale: 1, y: 0 }}
 							exit={{ opacity: 0, scale: 0.95, y: 20 }}
-							className="relative w-full max-w-2xl bg-white dark:bg-[#111111] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/10 overflow-hidden"
+							className="relative w-full max-w-lg bg-white dark:bg-[#111111] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-white/10 overflow-hidden"
 						>
-							<div className="px-8 py-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
+							<div className="px-6 py-4 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
 								<div>
-									<h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-3">
-										<div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-											<HiPlus className="text-xl" />
+									<h2 className="text-lg font-black text-gray-900 dark:text-white flex items-center gap-3">
+										<div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+											<HiPlus className="text-lg" />
 										</div>
 										Create New User
 									</h2>
 								</div>
 								<button
 									onClick={() => setIsCreateModalOpen(false)}
-									className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-all active:scale-90"
+									className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-all active:scale-90"
 								>
-									<HiXMark className="text-2xl" />
+									<HiXMark className="text-xl" />
 								</button>
 							</div>
 
-							<form onSubmit={handleSubmit(onCreateSubmit)} className="p-8">
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+							<form onSubmit={handleSubmit(onCreateSubmit)} className="p-6">
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									{/* Name */}
 									<div className="space-y-2">
 										<label htmlFor="admin-create-name" className="text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest ml-1">
@@ -446,7 +446,7 @@ export default function AdminUsers() {
 											{...register("name")}
 											name="name"
 											autoComplete="name"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="John Doe"
 										/>
 										{errors.name && (
@@ -466,7 +466,7 @@ export default function AdminUsers() {
 											{...register("email")}
 											name="email"
 											autoComplete="email"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="john@example.com"
 										/>
 										{errors.email && (
@@ -487,7 +487,7 @@ export default function AdminUsers() {
 											{...register("password")}
 											name="password"
 											autoComplete="new-password"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="••••••••"
 										/>
 										{errors.password && (
@@ -508,7 +508,7 @@ export default function AdminUsers() {
 											{...register("confirmPass")}
 											name="confirmPass"
 											autoComplete="new-password"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="••••••••"
 										/>
 										{errors.confirmPass && (
@@ -528,7 +528,7 @@ export default function AdminUsers() {
 											{...register("role")}
 											name="role"
 											autoComplete="off"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
 										>
 											<option value="student" className="dark:bg-gray-900">Student</option>
 											<option value="teacher" className="dark:bg-gray-900">Teacher</option>
@@ -545,7 +545,7 @@ export default function AdminUsers() {
 											{...register("gender")}
 											name="gender"
 											autoComplete="off"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white appearance-none cursor-pointer"
 										>
 											<option value="male" className="dark:bg-gray-900">Male</option>
 											<option value="female" className="dark:bg-gray-900">Female</option>
@@ -562,7 +562,7 @@ export default function AdminUsers() {
 											{...register("city")}
 											name="city"
 											autoComplete="address-level2"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="New York"
 										/>
 									</div>
@@ -577,7 +577,7 @@ export default function AdminUsers() {
 											{...register("country")}
 											name="country"
 											autoComplete="country-name"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="USA"
 										/>
 									</div>
@@ -592,28 +592,28 @@ export default function AdminUsers() {
 											{...register("phoneNumber")}
 											name="phoneNumber"
 											autoComplete="tel"
-											className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
+											className="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 outline-none transition-all dark:text-white placeholder:text-gray-400"
 											placeholder="+1 234 567 890"
 										/>
 									</div>
 								</div>
 
-								<div className="mt-10 flex gap-4">
+								<div className="mt-8 flex gap-3">
 									<button
 										type="button"
 										onClick={() => setIsCreateModalOpen(false)}
-										className="flex-1 px-6 py-4 rounded-2xl border border-gray-200 dark:border-white/10 font-black text-gray-600 dark:text-white/60 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all active:scale-95"
+										className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 font-bold text-gray-600 dark:text-white/60 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all active:scale-95 text-sm"
 									>
 										Cancel
 									</button>
 									<button
 										type="submit"
 										disabled={isCreating}
-										className="flex-1 px-6 py-4 rounded-2xl bg-indigo-600 text-white font-black hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2"
+										className="flex-1 px-4 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2 text-sm"
 									>
 										{isCreating ? (
 											<>
-												<div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+												<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
 												Creating...
 											</>
 										) : (
