@@ -110,28 +110,32 @@ const TeacherDashboard = ({
 								tick={{ fill: '#9CA3AF', fontSize: 12 }}
 							/>
 							<Tooltip 
+								cursor={{ fill: 'transparent' }}
 								contentStyle={{ 
-									backgroundColor: '#FFF', 
-									borderRadius: '12px', 
-									border: 'none',
-									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+									backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+									borderRadius: '16px', 
+									border: '1px solid #F3F4F6',
+									boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+									padding: '12px'
 								}}
+								itemStyle={{ fontWeight: '800', fontSize: '12px' }}
+								labelStyle={{ fontWeight: '900', color: '#111827', marginBottom: '4px' }}
 							/>
 							<Legend verticalAlign="top" align="right" iconType="circle" />
-							<Bar 
-								name="Avg Score (%)"
-								dataKey="avgScore" 
-								fill="#6366f1" 
-								radius={[4, 4, 0, 0]} 
-								barSize={30}
-							/>
-							<Bar 
-								name="Attempts"
-								dataKey="attempts" 
-								fill="#a855f7" 
-								radius={[4, 4, 0, 0]} 
-								barSize={30}
-							/>
+								<Bar 
+									name="Avg Score (%)"
+									dataKey="avgScore" 
+									fill="#6366f1" 
+									radius={[6, 6, 0, 0]} 
+									barSize={24}
+								/>
+								<Bar 
+									name="Attempts"
+									dataKey="attempts" 
+									fill="#a855f7" 
+									radius={[6, 6, 0, 0]} 
+									barSize={24}
+								/>
 						</BarChart>
 					</ResponsiveContainer>
 					)}
@@ -167,11 +171,13 @@ const TeacherDashboard = ({
 							</Pie>
 							<Tooltip 
 								contentStyle={{ 
-									backgroundColor: '#FFF', 
-									borderRadius: '12px', 
-									border: 'none',
-									boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+									backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+									borderRadius: '16px', 
+									border: '1px solid #F3F4F6',
+									boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+									padding: '12px'
 								}}
+								itemStyle={{ fontWeight: '800', fontSize: '12px' }}
 							/>
 							<Legend verticalAlign="bottom" height={36}/>
 						</PieChart>

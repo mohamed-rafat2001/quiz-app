@@ -27,7 +27,14 @@ export default function AppLayout() {
 			}
 		};
 		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
+		
+		// Prevent double scrollbar by locking body scroll
+		document.body.style.overflow = "hidden";
+		
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+			document.body.style.overflow = "auto";
+		};
 	}, []);
 
 	if (isUserLoading) return <Loader />;

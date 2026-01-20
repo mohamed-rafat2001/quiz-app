@@ -30,9 +30,6 @@ export const Logo = ({ size = "lg" }) => (
 			>
 				QUIZ<span className="text-indigo-600">MASTER</span>
 			</h1>
-			<span className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest mt-1">
-				Platform
-			</span>
 		</div>
 	</Link>
 );
@@ -179,17 +176,11 @@ export default function SideBar() {
 
 					<div className="space-y-8">
 						<section aria-labelledby="main-menu-heading">
-							<span 
-								id="main-menu-heading"
-								className="text-[10px] font-black text-gray-400 dark:text-white/40 uppercase tracking-[0.2em] px-6 mb-4 block"
-							>
-								Main Menu
-							</span>
-							<nav className="space-y-2" aria-label="Main navigation">
+							<div className="space-y-1">
 								{navItems.map((item) => (
 									<NavItem key={item.to} {...item} />
 								))}
-							</nav>
+							</div>
 						</section>
 					</div>
 				</div>
