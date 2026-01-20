@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { useUser, useLogout } from "../../../features/auth/hooks/useAuth";
+import { useUser } from "../../../features/auth/hooks/useAuth";
 import {
 	HiHome,
 	HiUser,
@@ -10,7 +10,7 @@ import {
 	HiAcademicCap,
 	HiChartBar,
 	HiPlusCircle,
-	HiArrowRightOnRectangle,
+	
 } from "react-icons/hi2";
 
 export const Logo = ({ size = "lg" }) => (
@@ -118,7 +118,6 @@ export const UserProfile = ({ user }) => {
 
 export default function SideBar() {
 	const { data: user } = useUser();
-	const { mutate: logout } = useLogout();
 
 	const getNavItems = () => {
 		const items = [
@@ -185,10 +184,6 @@ export default function SideBar() {
 					</div>
 				</div>
 
-				{/* Sidebar Footer */}
-				<div className="p-8 border-t border-gray-100 dark:border-white/5">
-					<UserProfile user={user} />
-				</div>
 			</aside>
 		</>
 	);
