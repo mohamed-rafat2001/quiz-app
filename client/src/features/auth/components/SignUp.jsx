@@ -166,8 +166,9 @@ function SignUp() {
 						transition={{ duration: 0.3 }}
 						className="space-y-4"
 					>
-						<FormField label="Full Name" icon={HiUser} error={errors.name}>
+						<FormField label="Full Name" id="name" icon={HiUser} error={errors.name}>
 							<input
+								id="name"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.name
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -175,16 +176,20 @@ function SignUp() {
 								}`}
 								type="text"
 								placeholder="John Doe"
+								aria-invalid={errors.name ? "true" : "false"}
+								aria-describedby={errors.name ? "name-error" : undefined}
 								{...register("name")}
 							/>
 						</FormField>
 
 						<FormField
 							label="Email Address"
+							id="email"
 							icon={HiEnvelope}
 							error={errors.email}
 						>
 							<input
+								id="email"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.email
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -192,6 +197,8 @@ function SignUp() {
 								}`}
 								type="email"
 								placeholder="name@example.com"
+								aria-invalid={errors.email ? "true" : "false"}
+								aria-describedby={errors.email ? "email-error" : undefined}
 								{...register("email")}
 							/>
 						</FormField>
@@ -199,10 +206,12 @@ function SignUp() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								label="Password"
+								id="password"
 								icon={HiLockClosed}
 								error={errors.password}
 							>
 								<input
+									id="password"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.password
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -210,16 +219,20 @@ function SignUp() {
 									}`}
 									type="password"
 									placeholder="••••••••"
+									aria-invalid={errors.password ? "true" : "false"}
+									aria-describedby={errors.password ? "password-error" : undefined}
 									{...register("password")}
 								/>
 							</FormField>
 
 							<FormField
 								label="Confirm Password"
+								id="confirmPass"
 								icon={HiLockClosed}
 								error={errors.confirmPass}
 							>
 								<input
+									id="confirmPass"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.confirmPass
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -227,6 +240,8 @@ function SignUp() {
 									}`}
 									type="password"
 									placeholder="••••••••"
+									aria-invalid={errors.confirmPass ? "true" : "false"}
+									aria-describedby={errors.confirmPass ? "confirmPass-error" : undefined}
 									{...register("confirmPass")}
 								/>
 							</FormField>
@@ -253,8 +268,9 @@ function SignUp() {
 						className="space-y-4"
 					>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<FormField label="City" icon={HiMapPin} error={errors.city}>
+							<FormField label="City" id="city" icon={HiMapPin} error={errors.city}>
 								<input
+									id="city"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.city
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -262,16 +278,20 @@ function SignUp() {
 									}`}
 									type="text"
 									placeholder="New York"
+									aria-invalid={errors.city ? "true" : "false"}
+									aria-describedby={errors.city ? "city-error" : undefined}
 									{...register("city")}
 								/>
 							</FormField>
 
 							<FormField
 								label="Country"
+								id="country"
 								icon={HiGlobeAlt}
 								error={errors.country}
 							>
 								<input
+									id="country"
 									className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 										errors.country
 											? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -279,6 +299,8 @@ function SignUp() {
 									}`}
 									type="text"
 									placeholder="United States"
+									aria-invalid={errors.country ? "true" : "false"}
+									aria-describedby={errors.country ? "country-error" : undefined}
 									{...register("country")}
 								/>
 							</FormField>
@@ -286,10 +308,12 @@ function SignUp() {
 
 						<FormField
 							label="Phone Number"
+							id="phoneNumber"
 							icon={HiPhone}
 							error={errors.phoneNumber}
 						>
 							<input
+								id="phoneNumber"
 								className={`w-full pl-11 pr-4 py-3 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 									errors.phoneNumber
 										? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -297,6 +321,8 @@ function SignUp() {
 								}`}
 								type="tel"
 								placeholder="+1 (555) 000-0000"
+								aria-invalid={errors.phoneNumber ? "true" : "false"}
+								aria-describedby={errors.phoneNumber ? "phoneNumber-error" : undefined}
 								{...register("phoneNumber")}
 							/>
 						</FormField>

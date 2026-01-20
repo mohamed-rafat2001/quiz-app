@@ -38,7 +38,10 @@ function ResetPassword({ email, onBack }) {
 			</div>
 
 			<div className="space-y-2">
-				<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+				<label
+					htmlFor="resetPassCode"
+					className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+				>
 					Reset Code
 				</label>
 				<div className="relative group">
@@ -46,6 +49,7 @@ function ResetPassword({ email, onBack }) {
 						<HiShieldCheck className="h-5 w-5" />
 					</div>
 					<input
+						id="resetPassCode"
 						className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold tracking-[0.5em] text-center placeholder:tracking-normal placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 							errors.resetPassCode
 								? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -54,11 +58,19 @@ function ResetPassword({ email, onBack }) {
 						type="text"
 						maxLength={6}
 						placeholder="000000"
+						aria-invalid={errors.resetPassCode ? "true" : "false"}
+						aria-describedby={
+							errors.resetPassCode ? "resetPassCode-error" : undefined
+						}
 						{...register("resetPassCode")}
 					/>
 				</div>
 				{errors.resetPassCode && (
-					<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
+					<p
+						id="resetPassCode-error"
+						role="alert"
+						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
+					>
 						{errors.resetPassCode.message}
 					</p>
 				)}
@@ -66,7 +78,10 @@ function ResetPassword({ email, onBack }) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+					<label
+						htmlFor="newPassword"
+						className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+					>
 						New Password
 					</label>
 					<div className="relative group">
@@ -74,6 +89,7 @@ function ResetPassword({ email, onBack }) {
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
+							id="newPassword"
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.newPassword
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -81,18 +97,29 @@ function ResetPassword({ email, onBack }) {
 							}`}
 							type="password"
 							placeholder="••••••••"
+							aria-invalid={errors.newPassword ? "true" : "false"}
+							aria-describedby={
+								errors.newPassword ? "newPassword-error" : undefined
+							}
 							{...register("newPassword")}
 						/>
 					</div>
 					{errors.newPassword && (
-						<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
-							{errors.newPassword.message}
-						</p>
+						<p
+							id="newPassword-error"
+						role="alert"
+						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
+					>
+						{errors.newPassword.message}
+					</p>
 					)}
 				</div>
 
 				<div className="space-y-2">
-					<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+					<label
+						htmlFor="confirmPass"
+						className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+					>
 						Confirm Password
 					</label>
 					<div className="relative group">
@@ -100,6 +127,7 @@ function ResetPassword({ email, onBack }) {
 							<HiLockClosed className="h-5 w-5" />
 						</div>
 						<input
+							id="confirmPass"
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.confirmPass
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -107,13 +135,21 @@ function ResetPassword({ email, onBack }) {
 							}`}
 							type="password"
 							placeholder="••••••••"
+							aria-invalid={errors.confirmPass ? "true" : "false"}
+							aria-describedby={
+								errors.confirmPass ? "confirmPass-error" : undefined
+							}
 							{...register("confirmPass")}
 						/>
 					</div>
 					{errors.confirmPass && (
-						<p className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake">
-							{errors.confirmPass.message}
-						</p>
+						<p
+							id="confirmPass-error"
+						role="alert"
+						className="text-xs text-red-600 dark:text-red-400 ml-1 font-black animate-shake"
+					>
+						{errors.confirmPass.message}
+					</p>
 					)}
 				</div>
 			</div>

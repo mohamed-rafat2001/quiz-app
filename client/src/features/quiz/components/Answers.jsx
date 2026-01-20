@@ -58,19 +58,21 @@ const SubmissionRow = ({ answer, index }) => {
 				<div className="flex items-center justify-center gap-3">
 					<Link
 						to={`/app/my-submissions/${answer._id}`}
-						className="p-2.5 text-gray-400 dark:text-white/40 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-95"
+						className="p-2.5 text-gray-400 dark:text-white/40 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-95 focus:ring-2 focus:ring-indigo-500/40 outline-none"
 						title="View Details"
+						aria-label={`View details for quiz: ${answer.quizId?.quizName || "Unknown Quiz"}`}
 					>
-						<HiEye className="text-xl" />
+						<HiEye className="text-xl" aria-hidden="true" />
 					</Link>
 					{answer.quizId &&
 						answer.attemptCount < (answer.quizId.tries || 1) && (
 							<Link
 								to={`/app/quizzes/${answer.quizId._id}`}
-								className="p-2.5 text-gray-400 dark:text-white/40 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-95"
+								className="p-2.5 text-gray-400 dark:text-white/40 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-95 focus:ring-2 focus:ring-green-500/40 outline-none"
 								title="Retake Quiz"
+								aria-label={`Retake quiz: ${answer.quizId?.quizName || "Unknown Quiz"}`}
 							>
-								<HiArrowPath className="text-xl" />
+								<HiArrowPath className="text-xl" aria-hidden="true" />
 							</Link>
 						)}
 				</div>
@@ -107,22 +109,40 @@ export default function Answers() {
 					<table className="w-full text-left border-collapse min-w-[800px]">
 						<thead>
 							<tr className="bg-gray-50/50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/5">
-								<th className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									#
 								</th>
-								<th className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									Quiz Name
 								</th>
-								<th className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									Score
 								</th>
-								<th className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									Status
 								</th>
-								<th className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									Date
 								</th>
-								<th className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest">
+								<th
+									scope="col"
+									className="px-6 py-5 text-center text-xs font-black text-gray-400 dark:text-white/40 uppercase tracking-widest"
+								>
 									Actions
 								</th>
 							</tr>

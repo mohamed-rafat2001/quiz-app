@@ -39,10 +39,14 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 
 		<div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
 			<div className="relative w-full sm:w-80">
-				<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40 text-lg" />
+				<HiMagnifyingGlass
+					className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40 text-lg"
+					aria-hidden="true"
+				/>
 				<input
 					type="text"
 					placeholder="Search quiz name or ID..."
+					aria-label="Search quizzes by name or ID"
 					value={searchTerm}
 					onChange={(e) => onSearchChange(e.target.value)}
 					className="w-full pl-12 pr-6 py-3.5 bg-white dark:bg-white/[0.05] border border-gray-200/60 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30"
@@ -52,9 +56,12 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 			{isTeacher && (
 				<Link
 					to="/app/quizzes/create"
-					className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-8 rounded-2xl shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/20 transition-all flex items-center justify-center gap-2 whitespace-nowrap group active:scale-95"
+					className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-8 rounded-2xl shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/20 transition-all flex items-center justify-center gap-2 whitespace-nowrap group active:scale-95 focus:ring-4 focus:ring-indigo-500/20 outline-none"
 				>
-					<HiPlus className="text-xl group-hover:rotate-90 transition-transform duration-300" />
+					<HiPlus
+						className="text-xl group-hover:rotate-90 transition-transform duration-300"
+						aria-hidden="true"
+					/>
 					<span>New Quiz</span>
 				</Link>
 			)}
@@ -113,25 +120,28 @@ const QuizCard = forwardRef(
 							<div className="flex gap-2">
 								<Link
 									to={`/app/quizzes/edit/${quiz._id}`}
-									className="p-3 text-gray-400 dark:text-white/40 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-90"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-500/10 rounded-xl transition-all active:scale-90 focus:ring-2 focus:ring-green-500/40 outline-none"
 									title="Edit Quiz"
+									aria-label={`Edit quiz: ${quiz.quizName}`}
 								>
-									<HiPencilSquare className="text-xl" />
+									<HiPencilSquare className="text-xl" aria-hidden="true" />
 								</Link>
 								<Link
 									to={`/app/quizzes/submissions/${quiz._id}`}
-									className="p-3 text-gray-400 dark:text-white/40 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-90"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-90 focus:ring-2 focus:ring-indigo-500/40 outline-none"
 									title="View Submissions"
+									aria-label={`View submissions for: ${quiz.quizName}`}
 								>
-									<HiUsers className="text-xl" />
+									<HiUsers className="text-xl" aria-hidden="true" />
 								</Link>
 								<button
 									onClick={() => onDelete(quiz._id)}
 									disabled={isDeleting}
-									className="p-3 text-gray-400 dark:text-white/40 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all active:scale-90 disabled:opacity-50"
+									className="p-3 text-gray-400 dark:text-white/40 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all active:scale-90 disabled:opacity-50 focus:ring-2 focus:ring-red-500/40 outline-none"
 									title="Delete Quiz"
+									aria-label={`Delete quiz: ${quiz.quizName}`}
 								>
-									<HiTrash className="text-xl" />
+									<HiTrash className="text-xl" aria-hidden="true" />
 								</button>
 							</div>
 						) : (
@@ -288,7 +298,8 @@ const QuizCard = forwardRef(
 											navigator.clipboard.writeText(quiz.quizId);
 											toast.success("Quiz ID copied!");
 										}}
-										className="ml-auto text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-black"
+										className="ml-auto text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-black focus:ring-2 focus:ring-indigo-500/40 outline-none rounded-md px-1"
+										aria-label={`Copy Quiz ID: ${quiz.quizId}`}
 									>
 										Copy
 									</button>
@@ -305,7 +316,8 @@ const QuizCard = forwardRef(
 											navigator.clipboard.writeText(quiz.quizPassword);
 											toast.success("Password copied!");
 										}}
-										className="ml-auto text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-black"
+										className="ml-auto text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-black focus:ring-2 focus:ring-indigo-500/40 outline-none rounded-md px-1"
+										aria-label={`Copy Quiz Password: ${quiz.quizPassword}`}
 									>
 										Copy
 									</button>

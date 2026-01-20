@@ -98,13 +98,21 @@ export default function Auth() {
 
 						{/* Toggle Switch - Only show for Login/SignUp */}
 						{(mode === "login" || mode === "signup") && (
-							<div className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/10">
+							<div
+								className="bg-gray-100 dark:bg-white/[0.05] p-1.5 rounded-2xl flex mb-12 relative border border-gray-200/50 dark:border-white/10"
+								role="tablist"
+								aria-label="Authentication mode"
+							>
 								<div
 									className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-white/[0.15] rounded-xl shadow-xl transition-all duration-500 ease-out ${
 										mode === "login" ? "left-1.5" : "left-[calc(50%+3px)]"
 									}`}
+									aria-hidden="true"
 								/>
 								<button
+									role="tab"
+									aria-selected={mode === "login"}
+									aria-controls="auth-panel"
 									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 										mode === "login"
 											? "text-indigo-600 dark:text-white"
@@ -115,6 +123,9 @@ export default function Auth() {
 									Sign In
 								</button>
 								<button
+									role="tab"
+									aria-selected={mode === "signup"}
+									aria-controls="auth-panel"
 									className={`flex-1 py-3.5 text-sm font-black relative z-10 transition-colors duration-300 cursor-pointer ${
 										mode === "signup"
 											? "text-indigo-600 dark:text-white"
@@ -127,7 +138,11 @@ export default function Auth() {
 							</div>
 						)}
 
-						<div className="transition-all duration-300 transform">
+						<div
+							id="auth-panel"
+							role="tabpanel"
+							className="transition-all duration-300 transform"
+						>
 							{mode === "login" && (
 								<Login onForgotPassword={() => setMode("forgot")} />
 							)}

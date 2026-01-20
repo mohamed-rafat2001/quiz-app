@@ -243,7 +243,7 @@ export default function AdminUsers() {
 													{user.profileImg?.secure_url ? (
 														<img
 															src={user.profileImg.secure_url}
-															alt={user.name}
+															alt={`Profile picture of ${user.name}`}
 															className="w-full h-full object-cover"
 															referrerPolicy="no-referrer"
 															loading="lazy"

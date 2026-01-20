@@ -16,37 +16,47 @@ const StatCard = ({
 	subtitle,
 	onClick,
 	isActive,
-}) => (
-	<div
-		onClick={onClick}
-		className={`bg-white dark:bg-gray-800/50 p-5 rounded-xl border transition-all duration-200 shadow-sm ${
-			onClick ? "cursor-pointer hover:shadow-md" : ""
-		} ${
-			isActive
-				? "border-indigo-500 ring-1 ring-indigo-500 dark:border-indigo-400 dark:ring-indigo-400"
-				: "border-gray-100 dark:border-gray-700"
-		}`}
-	>
-		<div className="flex items-center gap-3">
-			<div
-				className={`p-2.5 rounded-lg ${color} bg-opacity-10 dark:bg-opacity-20`}
-			>
-				<Icon className={`text-xl ${color.replace("bg-", "text-")}`} />
+}) => {
+	const CardWrapper = onClick ? "button" : "div";
+
+	return (
+		<CardWrapper
+			onClick={onClick}
+			type={onClick ? "button" : undefined}
+			className={`bg-white dark:bg-gray-800/50 p-5 rounded-xl border transition-all duration-200 shadow-sm text-left w-full ${
+				onClick ? "cursor-pointer hover:shadow-md focus:ring-2 focus:ring-indigo-500/40 outline-none" : ""
+			} ${
+				isActive
+					? "border-indigo-500 ring-1 ring-indigo-500 dark:border-indigo-400 dark:ring-indigo-400"
+					: "border-gray-100 dark:border-gray-700"
+			}`}
+		>
+			<div className="flex items-center gap-3">
+				<div
+					className={`p-2.5 rounded-lg ${color} bg-opacity-10 dark:bg-opacity-20`}
+				>
+					<Icon
+						className={`text-xl ${color.replace("bg-", "text-")}`}
+						aria-hidden="true"
+					/>
+				</div>
+				<div>
+					<p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+						{title}
+					</p>
+					<p className="text-xl font-black text-gray-900 dark:text-white">
+						{value}
+					</p>
+					{subtitle && (
+						<p className="text-xs text-gray-400 dark:text-gray-500">
+							{subtitle}
+						</p>
+					)}
+				</div>
 			</div>
-			<div>
-				<p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-					{title}
-				</p>
-				<p className="text-xl font-black text-gray-900 dark:text-white">
-					{value}
-				</p>
-				{subtitle && (
-					<p className="text-xs text-gray-400 dark:text-gray-500">{subtitle}</p>
-				)}
-			</div>
-		</div>
-	</div>
-);
+		</CardWrapper>
+	);
+};
 
 const StatsOverview = ({
 	quiz,

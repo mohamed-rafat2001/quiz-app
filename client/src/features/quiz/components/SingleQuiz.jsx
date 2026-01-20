@@ -164,7 +164,7 @@ const AnswerImageUpload = ({ index, control, setValue }) => {
 				<div className="relative inline-block group/img">
 					<img
 						src={image.secure_url}
-						alt="Answer proof"
+						alt={`Attached proof for question ${index + 1}`}
 						className="max-h-48 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
 						referrerPolicy="no-referrer"
 						loading="lazy"

@@ -231,7 +231,7 @@ const AnswerOptions = ({
 	);
 };
 
-const QuestionImageUpload = ({ index, control, setValue }) => {
+const QuestionImageUpload = ({ index, control, setValue, questionText }) => {
 	const image = useWatch({
 		control,
 		name: `questions.${index}.image`,
@@ -271,7 +271,7 @@ const QuestionImageUpload = ({ index, control, setValue }) => {
 				<div className="relative inline-block group/img">
 					<img
 						src={image.secure_url}
-						alt="Question"
+						alt={`Question ${index + 1} image: ${questionText || "Question image"}`}
 						className="w-full max-h-48 object-cover rounded-xl border border-gray-200 dark:border-gray-700"
 						referrerPolicy="no-referrer"
 						loading="lazy"
@@ -319,51 +319,58 @@ const QuestionCard = forwardRef(
 	(
 		{ index, field, register, errors, remove, control, setValue, getValues },
 		ref
-	) => (
-		<motion.div
-			ref={ref}
-			initial={{ opacity: 0, scale: 0.95 }}
-			animate={{ opacity: 1, scale: 1 }}
-			exit={{ opacity: 0, scale: 0.95 }}
-			className="bg-white dark:bg-gray-800/50 p-6 sm:p-8 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm space-y-6 relative group transition-colors duration-300"
-		>
-			{/* Delete Button */}
-			<button
-				type="button"
-				onClick={() => remove(index)}
-				className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all opacity-0 group-hover:opacity-100 active:scale-90"
-				title="Delete question"
-			>
-				<HiTrash className="text-lg" />
-			</button>
+	) => {
+		const questionText = useWatch({
+			control,
+			name: `questions.${index}.ques`,
+		});
 
-			{/* Question Header */}
-			<div className="flex gap-4 items-start pr-10">
-				<span className="shrink-0 w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black text-sm shadow-sm">
-					{index + 1}
-				</span>
-				<div className="grow space-y-2">
-					<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-						Question <span className="text-red-500">*</span>
-					</label>
-					<input
-						{...register(`questions.${index}.ques`)}
-						className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
-						placeholder="Enter your question here..."
-					/>
-					{errors.questions?.[index]?.ques && (
-						<p className="text-xs text-red-500 font-medium flex items-center gap-1">
-							<HiExclamationTriangle className="text-sm" />
-							{errors.questions[index].ques.message}
-						</p>
-					)}
-					<QuestionImageUpload
-						index={index}
-						control={control}
-						setValue={setValue}
-					/>
+		return (
+			<motion.div
+				ref={ref}
+				initial={{ opacity: 0, scale: 0.95 }}
+				animate={{ opacity: 1, scale: 1 }}
+				exit={{ opacity: 0, scale: 0.95 }}
+				className="bg-white dark:bg-gray-800/50 p-6 sm:p-8 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm space-y-6 relative group transition-colors duration-300"
+			>
+				{/* Delete Button */}
+				<button
+					type="button"
+					onClick={() => remove(index)}
+					className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all opacity-0 group-hover:opacity-100 active:scale-90"
+					title="Delete question"
+				>
+					<HiTrash className="text-lg" />
+				</button>
+
+				{/* Question Header */}
+				<div className="flex gap-4 items-start pr-10">
+					<span className="shrink-0 w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black text-sm shadow-sm">
+						{index + 1}
+					</span>
+					<div className="grow space-y-2">
+						<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+							Question <span className="text-red-500">*</span>
+						</label>
+						<input
+							{...register(`questions.${index}.ques`)}
+							className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+							placeholder="Enter your question here..."
+						/>
+						{errors.questions?.[index]?.ques && (
+							<p className="text-xs text-red-500 font-medium flex items-center gap-1">
+								<HiExclamationTriangle className="text-sm" />
+								{errors.questions[index].ques.message}
+							</p>
+						)}
+						<QuestionImageUpload
+							index={index}
+							control={control}
+							setValue={setValue}
+							questionText={questionText}
+						/>
+					</div>
 				</div>
-			</div>
 
 			{/* Answer Options */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-0 sm:ml-14">

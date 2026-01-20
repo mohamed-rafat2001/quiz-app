@@ -266,7 +266,7 @@ const Hero = () => {
 										<img
 											key={i}
 											src={`https://i.pravatar.cc/40?u=user${i}`}
-											alt=""
+											alt="Community member avatar"
 											className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
 											loading="eager"
 											width="36"

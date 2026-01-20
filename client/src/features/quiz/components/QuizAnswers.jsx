@@ -24,9 +24,12 @@ const QuizHeader = ({ quiz }) => (
 		<div>
 			<Link
 				to="/app/dashboard"
-				className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold hover:text-indigo-700 dark:hover:text-indigo-300 transition-all text-sm group mb-4"
+				className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold hover:text-indigo-700 dark:hover:text-indigo-300 transition-all text-sm group mb-4 focus:ring-2 focus:ring-indigo-500/40 outline-none rounded-md"
 			>
-				<HiArrowLeft className="text-lg group-hover:-translate-x-1 transition-transform" />
+				<HiArrowLeft
+					className="text-lg group-hover:-translate-x-1 transition-transform"
+					aria-hidden="true"
+				/>
 				Back to Dashboard
 			</Link>
 			<h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
@@ -63,13 +66,14 @@ const AnswerRow = ({ answer, index, maxScore }) => {
 			<td className="px-6 py-4">
 				<Link
 					to={`/app/users/${answer.studentId._id}`}
-					className="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 p-1 -m-1 rounded-lg transition-colors"
+					className="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 p-1 -m-1 rounded-lg transition-colors focus:ring-2 focus:ring-indigo-500/40 outline-none"
+					aria-label={`View profile of ${answer.studentId.name}`}
 				>
 					<div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
 						{answer.studentId.image ? (
 							<img
 								src={answer.studentId.image}
-								alt={answer.studentId.name}
+								alt=""
 								className="w-full h-full object-cover"
 								referrerPolicy="no-referrer"
 								loading="lazy"
@@ -115,18 +119,18 @@ const AnswerRow = ({ answer, index, maxScore }) => {
 				>
 					{answer.isPass ? (
 						<>
-							<HiCheckBadge /> Passed
+							<HiCheckBadge aria-hidden="true" /> Passed
 						</>
 					) : (
 						<>
-							<HiXCircle /> Failed
+							<HiXCircle aria-hidden="true" /> Failed
 						</>
 					)}
 				</span>
 			</td>
 			<td className="px-6 py-4">
 				<div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-					<HiClock className="text-gray-400" />
+					<HiClock className="text-gray-400" aria-hidden="true" />
 					{new Date(answer.createdAt).toLocaleDateString("en-US", {
 						month: "short",
 						day: "numeric",
@@ -139,10 +143,11 @@ const AnswerRow = ({ answer, index, maxScore }) => {
 			<td className="px-6 py-4 text-right">
 				<Link
 					to={`/app/my-submissions/${answer._id}`}
-					className="inline-flex items-center gap-1.5 px-3 py-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-all text-sm font-bold"
+					className="inline-flex items-center gap-1.5 px-3 py-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-all text-sm font-bold focus:ring-2 focus:ring-indigo-500/40 outline-none"
 					title="View Details"
+					aria-label={`View details for ${answer.studentId.name}'s submission`}
 				>
-					<HiEye />
+					<HiEye aria-hidden="true" />
 					View
 				</Link>
 			</td>
@@ -226,22 +231,40 @@ export default function QuizAnswers() {
 						<table className="w-full text-left">
 							<thead>
 								<tr className="bg-gray-50 dark:bg-gray-700/30 border-b border-gray-100 dark:border-gray-700">
-									<th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-16">
+									<th
+										scope="col"
+										className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-16"
+									>
 										#
 									</th>
-									<th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+									<th
+										scope="col"
+										className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+									>
 										Student
 									</th>
-									<th className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+									<th
+										scope="col"
+										className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+									>
 										Score
 									</th>
-									<th className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+									<th
+										scope="col"
+										className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+									>
 										Status
 									</th>
-									<th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+									<th
+										scope="col"
+										className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+									>
 										Date
 									</th>
-									<th className="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+									<th
+										scope="col"
+										className="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+									>
 										Actions
 									</th>
 								</tr>

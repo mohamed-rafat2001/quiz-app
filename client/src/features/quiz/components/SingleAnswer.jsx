@@ -141,7 +141,7 @@ const QuestionReviewItem = ({ ans, index }) => {
 						<div className="mb-6">
 							<img
 								src={question.image.secure_url}
-								alt="Question"
+								alt={`Question image: ${question.ques}`}
 								className="max-h-64 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
 								referrerPolicy="no-referrer"
 								loading="lazy"
