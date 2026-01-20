@@ -21,7 +21,7 @@ const DashBoard = () => {
 		return () => clearTimeout(timer);
 	}, [searchTerm]);
 
-	const { data: stats, isLoading } = useStats();
+	const { data: stats, isLoading, isError } = useStats();
 
 	const { data: response, isLoading: isLoadingQuizzes } = useTeacherQuizStats(
 		{
@@ -39,6 +39,20 @@ const DashBoard = () => {
 
 	if (isLoading) {
 		return <Loader />;
+	}
+
+	if (isError) {
+		return (
+			<div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+				<p className="text-red-500 font-bold">Failed to load dashboard statistics.</p>
+				<button 
+					onClick={() => window.location.reload()}
+					className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+				>
+					Retry
+				</button>
+			</div>
+		);
 	}
 
 	return (

@@ -27,7 +27,10 @@ const StudentDashboard = ({ stats }) => {
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		setIsMounted(true);
+		const timer = setTimeout(() => {
+			setIsMounted(true);
+		}, 100);
+		return () => clearTimeout(timer);
 	}, []);
 
 	if (!isMounted) return null;
