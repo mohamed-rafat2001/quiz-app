@@ -19,6 +19,7 @@ export const getStats = errorHandling(async (req, res, next) => {
 				UserModel.aggregate([
 					{
 						$match: {
+							role: { $in: ["student", "teacher"] },
 							createdAt: {
 								$gte: new Date(new Date().setMonth(new Date().getMonth() - 6)),
 							},
@@ -118,11 +119,32 @@ export const getStats = errorHandling(async (req, res, next) => {
 			]);
 
 		// Performance data for top 5 recent quizzes
-		const quizPerformance = quizzes.slice(0, 5).map(q => ({
-			name: q.quizName.length > 12 ? q.quizName.substring(0, 10) + '...' : q.quizName,
-			avgScore: Math.round(q.stats?.avgScore || 0),
-			attempts: q.stats?.totalAttempts || 0
-		}));
+		const quizPerformance = await Promise.all(
+			quizzes.slice(0, 5).map(async (q) => {
+				const results = await quizResultModel.aggregate([
+					{ $match: { quizId: q._id } },
+					{
+						$group: {
+							_id: null,
+							avgScore: { $avg: "$totalScore" },
+							totalAttempts: { $sum: 1 },
+						},
+					},
+				]);
+
+				const stats = results[0] || { avgScore: 0, totalAttempts: 0 };
+				return {
+					name:
+						q.quizName.length > 12
+							? q.quizName.substring(0, 10) + "..."
+							: q.quizName,
+					avgScore: Math.round(
+						q.quizScore > 0 ? (stats.avgScore / q.quizScore) * 100 : 0
+					),
+					attempts: stats.totalAttempts,
+				};
+			})
+		);
 
 		stats = {
 			totalQuizzes,
@@ -132,10 +154,18 @@ export const getStats = errorHandling(async (req, res, next) => {
 				? (aggregatedStats[0].passCount / aggregatedStats[0].total) * 100
 				: 0,
 			quizPerformance,
-			passFailData: aggregatedStats[0] ? [
-				{ name: "Passed", value: aggregatedStats[0].passCount },
-				{ name: "Failed", value: aggregatedStats[0].total - aggregatedStats[0].passCount },
-			] : [],
+			passFailData: aggregatedStats[0]
+				? [
+						{ name: "Passed", value: aggregatedStats[0].passCount },
+						{
+							name: "Failed",
+							value: aggregatedStats[0].total - aggregatedStats[0].passCount,
+						},
+				  ]
+				: [
+						{ name: "Passed", value: 0 },
+						{ name: "Failed", value: 0 },
+				  ],
 		};
 	} else if (role === "student") {
 		const studentId = req.user._id;
@@ -151,21 +181,37 @@ export const getStats = errorHandling(async (req, res, next) => {
 
 		const scoreTrend = results.map((r) => ({
 			name: r.quizId?.quizName?.substring(0, 10) || "Quiz",
-			score: r.totalScore,
-			fullScore: r.quizId?.quizScore || 100,
+			score: Math.round(
+				r.quizId?.quizScore > 0 ? (r.totalScore / r.quizId.quizScore) * 100 : 0
+			),
+			fullScore: 100,
 		}));
 
-		const totalScore = results.reduce((acc, curr) => acc + curr.totalScore, 0);
-		const totalPossible = results.reduce(
-			(acc, curr) => acc + (curr.quizId?.quizScore || 100),
-			0
-		);
+		const totalPercentage = results.reduce((acc, curr) => {
+			const percentage =
+				curr.quizId?.quizScore > 0
+					? (curr.totalScore / curr.quizId.quizScore) * 100
+					: 0;
+			return acc + percentage;
+		}, 0);
+
+		const bestScore = results.length
+			? Math.max(
+					...results.map((r) =>
+						r.quizId?.quizScore > 0
+							? (r.totalScore / r.quizId.quizScore) * 100
+							: 0
+					)
+			  )
+			: 0;
 
 		stats = {
-			totalTaken,
+			quizzesTaken: totalTaken,
 			passedCount,
 			failedCount: totalTaken - passedCount,
-			avgScore: totalPossible > 0 ? (totalScore / totalPossible) * 100 : 0,
+			avgScore: totalTaken > 0 ? totalPercentage / totalTaken : 0,
+			bestScore: Math.round(bestScore),
+			totalTimeSpent: totalTaken * 10, // Placeholder as time is not in model
 			scoreTrend,
 		};
 	}
