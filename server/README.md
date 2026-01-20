@@ -1,39 +1,39 @@
 # Quiz App - Backend ⚙️
 
-The backend of the Quiz App is a robust Node.js/Express application that provides a RESTful API for user management, quiz handling, and score tracking.
+The backend of the Quiz App is a robust Node.js/Express application providing a RESTful API with Role-Based Access Control (RBAC), secure authentication, and comprehensive quiz management.
 
 ## 🚀 Features
 
-- **RESTful API**: Clean and organized API endpoints.
-- **Security**: 
-  - Password hashing with `bcryptjs`.
-  - JWT for secure authentication.
-  - Protection against NoSQL injection (`express-mongo-sanitize`).
-  - XSS protection (`xss-clean`).
-  - Rate limiting for API protection.
-  - HTTP headers security with `helmet`.
-- **File Uploads**: Image handling via `multer` and `cloudinary`.
-- **Email Service**: Integration with `nodemailer` for transactional emails.
-- **Error Handling**: Centralized error management system.
+- **RBAC (Role-Based Access Control)**: Custom middleware to manage permissions for Admin, Teacher, and Student roles.
+- **Secure Authentication**: JWT-based auth with secure cookies, password hashing (bcryptjs), and password reset flows.
+- **Quiz Management**: Full CRUD operations for quizzes, questions, and answers with ownership checks.
+- **Advanced API Features**: Filtering, sorting, pagination, and field limiting using a reusable `APIFeatures` class.
+- **Security Suite**:
+  - Rate limiting to prevent DOS/Brute-force.
+  - Helmet for secure HTTP headers.
+  - Mongo-sanitize and XSS-clean for data sanitization.
+  - CORS configuration for frontend integration.
+- **File Management**: Integrated with Cloudinary for profile picture uploads via Multer.
+- **Global Error Handling**: Centralized error management with operational vs. programming error distinction.
 
 ## 🛠️ Tech Stack
 
-- **Node.js**: JavaScript runtime.
-- **Express**: Web framework for Node.js.
-- **MongoDB & Mongoose**: NoSQL database and object modeling.
-- **Cloudinary**: Cloud-based image management.
-- **Nodemailer**: Module for sending emails.
-- **Multer**: Middleware for handling `multipart/form-data`.
+- **Node.js**: Runtime environment.
+- **Express**: Web framework.
+- **MongoDB & Mongoose**: Database and ODM.
+- **Cloudinary**: Cloud image storage.
+- **Nodemailer**: Email delivery.
+- **Express Validator**: Request validation.
+- **Bcryptjs**: Password security.
+- **JSON Web Token**: Session management.
 
 ## 📂 Folder Structure
 
-- `src/controllers/`: Logic for handling API requests.
-- `src/db/`: Database connection configuration.
-- `src/middelwars/`: Custom middlewares for authentication and error handling.
-- `src/models/`: Mongoose schemas for Users, Quizzes, and Answers.
-- `src/routers/`: Express routes for different modules.
-- `src/utils/`: Helper utilities (Email, Cloudinary, Error handling).
-- `index.js`: Application entry point.
+- `src/controllers/`: Route handlers and business logic.
+- `src/models/`: Mongoose schemas (User, Quiz, QuizQuestion, QuizResult, QuestionAnswer).
+- `src/routers/`: API route definitions.
+- `src/middelwars/`: Authentication, RBAC, and error handling middlewares.
+- `src/utils/`: Helpers including validators, email service, and Cloudinary config.
 
 ## ⚙️ Setup & Installation
 
@@ -43,16 +43,15 @@ The backend of the Quiz App is a robust Node.js/Express application that provide
    ```
 2. Create a `.env` file with the following keys:
    ```env
-   PORT=3000
-   DATABASE_URL=
-   JWT_SECRET=
-   JWT_EXPIRES_IN=
-   CLOUD_NAME=
-   CLOUD_API_KEY=
-   CLOUD_API_SECRET=
-   MAILER_USER=
-   MAILER_PASS=
-   MAILER_PORT=
+   PORT=8080
+   DATABASE_URL=your_mongodb_connection_string
+   JWT_SECRET=your_super_secret_key
+   JWT_EXPIRES_IN=90d
+   CLOUD_NAME=your_cloudinary_name
+   CLOUD_API_KEY=your_cloudinary_key
+   CLOUD_API_SECRET=your_cloudinary_secret
+   MAILER_USER=your_smtp_user
+   MAILER_PASS=your_smtp_password
    ```
 3. Start the server:
    ```bash
@@ -62,4 +61,4 @@ The backend of the Quiz App is a robust Node.js/Express application that provide
 ## 📝 Scripts
 
 - `npm start`: Starts the server using `nodemon`.
-- `npm run debug`: Starts the server in debug mode using `ndb`.
+- `npm run debug`: Starts the server in debug mode.

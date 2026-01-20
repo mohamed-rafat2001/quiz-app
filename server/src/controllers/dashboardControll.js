@@ -220,10 +220,11 @@ export const getStats = errorHandling(async (req, res, next) => {
 });
 
 export const getTeacherQuizStats = errorHandling(async (req, res, next) => {
-	const teacherId = req.user._id;
-
 	// Build search query
-	let searchFilter = { teacherId };
+	let searchFilter = {};
+	if (req.user.role !== "admin") {
+		searchFilter.teacherId = req.user._id;
+	}
 	if (req.query.keyword) {
 		const keyword = req.query.keyword;
 		searchFilter.$or = [

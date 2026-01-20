@@ -1,33 +1,36 @@
 # Quiz App - Frontend 🌐
 
-The frontend of the Quiz App is a modern React application built with Vite, utilizing Redux for state management and React Query for efficient data handling.
+The frontend of the Quiz App is a modern React application built with **Vite**, utilizing **Tailwind CSS** for styling, **TanStack React Query** for data fetching, and **React Router** for navigation.
 
 ## 🚀 Features
 
-- **Responsive UI**: Built with Bootstrap for a seamless experience across devices.
-- **State Management**: Uses Redux Toolkit to manage user state and application data.
-- **Data Fetching**: Powered by TanStack React Query for caching, synchronization, and error handling.
-- **Form Handling**: Efficient form management using React Hook Form.
-- **Authentication**: Protected routes and secure login/signup flows.
-- **Dynamic Quiz Interface**: Interactive components for taking quizzes and viewing results.
+- **Role-Based UI**: Dynamic interfaces for Admins, Teachers, and Students.
+- **Responsive Design**: Built with Tailwind CSS for a seamless experience on all screen sizes.
+- **Data Synchronization**: Powered by TanStack React Query for efficient caching, background updates, and optimistic UI.
+- **Interactive Quizzes**: Smooth quiz-taking experience with Framer Motion animations.
+- **Form Management**: Robust form handling and validation using React Hook Form and Zod.
+- **Dark Mode**: Built-in dark mode support with context API.
+- **Protected Routes**: Secure client-side routing based on authentication and user roles.
 
 ## 🛠️ Tech Stack
 
-- **React**: Library for building the user interface.
-- **Vite**: Next-generation frontend tooling.
-- **Redux Toolkit**: Standard way to write Redux logic.
-- **React Query**: Hooks for fetching, caching, and updating asynchronous data.
-- **React Router**: Declarative routing for React.
-- **Bootstrap & Bootstrap Icons**: Styling and iconography.
-- **Axios**: Promise-based HTTP client for the browser.
+- **React (Vite)**: Core library and build tool.
+- **Tailwind CSS**: Utility-first styling.
+- **TanStack React Query**: Server state management.
+- **React Router Dom**: Navigation and routing.
+- **Framer Motion**: Animations.
+- **React Icons**: Icon library.
+- **React Hook Form**: Form handling.
+- **Zod**: Schema validation.
+- **Axios**: HTTP client.
 
 ## 📂 Folder Structure
 
-- `src/api/`: Base API configurations and local storage helpers.
-- `src/components/`: Reusable components (Home, Auth, Dashboard, Profile, Quiz).
-- `src/Hooks/`: Custom React hooks (e.g., `useProtect`).
-- `src/services/`: React Query service functions for interacting with the backend.
-- `src/ui/`: Layout components, loaders, and global styles.
+- `src/features/`: Feature-specific modules (Auth, Quiz, Dashboard, Admin, Profile).
+- `src/shared/`: Reusable components, hooks, context, and API configuration.
+- `src/providers/`: Application-wide context providers (QueryClient, Auth, DarkMode).
+- `src/pages/`: Main page components (Landing, Home).
+- `src/routes/`: Route definitions and lazy loading.
 
 ## ⚙️ Setup & Installation
 
@@ -35,11 +38,15 @@ The frontend of the Quiz App is a modern React application built with Vite, util
    ```bash
    npm install
    ```
-2. Start the development server:
+2. Create a `.env` file:
+   ```env
+   VITE_API_URL=http://localhost:8080/api/v1
+   ```
+3. Start the development server:
    ```bash
    npm start
    ```
-3. Build for production:
+4. Build for production:
    ```bash
    npm run build
    ```

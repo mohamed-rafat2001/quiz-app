@@ -1,7 +1,7 @@
 import UserModel from "../models/userModel.js";
 import errorHandling from "../middelwars/errorHandling.js";
 import appError from "../utils/appError.js";
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary, { streamUpload } from "../utils/cloudinary.js";
 import Email from "../utils/Email.js";
 import response from "../utils/handelResponse.js";
 import * as factory from "../utils/handlerFactory.js";
@@ -145,9 +145,9 @@ export const updateMe = errorHandling(async (req, res, next) => {
 		}
 
 		// upload img in cloudinary
-		const { public_id, secure_url } = await cloudinary.uploader.upload(
-			req.file.path,
-			{ folder: `quizApp/user/id_${req.user._id}/profileImg` }
+		const { public_id, secure_url } = await streamUpload(
+			req.file.buffer,
+			`quizApp/user/id_${req.user._id}/profileImg`
 		);
 		updates.profileImg = { public_id, secure_url };
 	}

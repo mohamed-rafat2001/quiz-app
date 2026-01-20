@@ -63,6 +63,9 @@ export const isLoggedIn = async (req, res, next) => {
 
 export const allowTo = (...roles) => {
 	return (req, res, next) => {
+		// Admin can access everything
+		if (req.user.role === "admin") return next();
+
 		if (!roles.includes(req.user.role))
 			return next(
 				new appError("you don't have permission to perform this action", 403)

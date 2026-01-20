@@ -73,7 +73,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 							{preview ? (
 								<img
 									src={preview}
-									alt="Profile picture preview"
+									alt="Preview"
 									className="w-full h-full object-cover"
 								/>
 							) : (

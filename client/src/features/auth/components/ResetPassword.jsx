@@ -29,7 +29,7 @@ function ResetPassword({ email, onBack }) {
 		<form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
 			<div className="text-center mb-8">
 				<p className="text-gray-600 dark:text-white/60 font-medium text-sm">
-					We've sent a 6-digit code to{" "}
+					We&apos;ve sent a 6-digit code to{" "}
 					<span className="text-indigo-600 dark:text-indigo-400 font-bold">
 						{email}
 					</span>

@@ -191,7 +191,12 @@ export const allQuizzesByAdmin = factory.getAll(quizModel, {}, "teacherId");
 export const deleteQuizByAdmin = factory.deleteOne(quizModel);
 // delete all quizs
 export const deleteQuizs = errorHandling(async (req, res, next) => {
-	const teacherId = req.user._id;
+	let teacherId = req.user._id;
+
+	// If admin and teacherId is provided in query, use that instead
+	if (req.user.role === "admin" && req.query.teacherId) {
+		teacherId = req.query.teacherId;
+	}
 
 	// Find all quizzes by this teacher
 	const quizzes = await quizModel.find({ teacherId });

@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Loader from "../shared/components/ui/Loader";
 
 // Lazy load components
+import Landing from "../pages/Landing";
 const Auth = lazy(() => import("../shared/components/ui/Auth"));
 const AppLayout = lazy(() => import("../shared/components/ui/AppLayout"));
 const Profile = lazy(() => import("../features/profile/components/Profile"));
@@ -26,7 +27,9 @@ const AdminUsers = lazy(() =>
 const AdminQuizzes = lazy(() =>
 	import("../features/admin/components/AdminQuizzes")
 );
-import Landing from "../pages/Landing";
+const ProtectedRoute = lazy(() =>
+	import("../shared/components/ui/ProtectedRoute")
+);
 const NotFound = lazy(() => import("../shared/components/ui/NotFound"));
 const ErrorElement = lazy(() =>
 	import("../shared/components/ui/NotFound").then((module) => ({
@@ -88,15 +91,27 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "home",
-				element: <Home />,
+				element: (
+					<ProtectedRoute allowedRoles={["student", "admin"]}>
+						<Home />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "admin/users",
-				element: <AdminUsers />,
+				element: (
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<AdminUsers />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "admin/quizzes",
-				element: <AdminQuizzes />,
+				element: (
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<AdminQuizzes />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "profile",
@@ -108,15 +123,27 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "my-submissions",
-				element: <Answers />,
+				element: (
+					<ProtectedRoute allowedRoles={["student", "admin"]}>
+						<Answers />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "my-submissions/:id",
-				element: <SingleAnswer />,
+				element: (
+					<ProtectedRoute allowedRoles={["student", "admin"]}>
+						<SingleAnswer />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "quizzes",
-				element: <Quizs />,
+				element: (
+					<ProtectedRoute allowedRoles={["teacher", "admin"]}>
+						<Quizs />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "quizzes/:id",
@@ -124,15 +151,27 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "quizzes/submissions/:id",
-				element: <QuizAnswers />,
+				element: (
+					<ProtectedRoute allowedRoles={["teacher", "admin"]}>
+						<QuizAnswers />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "quizzes/create",
-				element: <CreateQuiz />,
+				element: (
+					<ProtectedRoute allowedRoles={["teacher", "admin"]}>
+						<CreateQuiz />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: "quizzes/edit/:id",
-				element: <CreateQuiz />,
+				element: (
+					<ProtectedRoute allowedRoles={["teacher", "admin"]}>
+						<CreateQuiz />
+					</ProtectedRoute>
+				),
 			},
 		],
 	},

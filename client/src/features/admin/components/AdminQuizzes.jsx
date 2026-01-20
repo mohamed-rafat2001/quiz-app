@@ -7,7 +7,6 @@ import {
 	HiAcademicCap,
 	HiMagnifyingGlass,
 	HiClipboardDocumentList,
-	HiUsers,
 	HiChartBar,
 	HiArrowPath,
 	HiCheckBadge,
@@ -59,7 +58,7 @@ export default function AdminQuizzes() {
 			? Math.round(
 					quizzes.reduce((sum, q) => sum + (q.successRate || 0), 0) /
 						totalQuizzes
-			  )
+				)
 			: 0;
 
 	return (

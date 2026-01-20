@@ -28,7 +28,7 @@ function ForgotPassword({ onBack, onSuccess }) {
 		<form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
 			<div className="text-center mb-8">
 				<p className="text-gray-600 dark:text-white/60 font-medium text-sm">
-					Enter your email address and we'll send you a 6-digit code to reset
+					Enter your email address and we&apos;ll send you a 6-digit code to reset
 					your password.
 				</p>
 			</div>

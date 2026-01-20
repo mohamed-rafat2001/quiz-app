@@ -19,11 +19,9 @@ import Pagination from "../../../shared/components/ui/Pagination";
 import {
 	HiClipboardDocumentList,
 	HiUsers,
-	HiRocketLaunch,
 	HiPlus,
 	HiEye,
 	HiMagnifyingGlass,
-	HiChartBar,
 	HiChartPie,
 	HiCheckBadge,
 	HiArrowTrendingUp,

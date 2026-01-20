@@ -37,19 +37,19 @@ export const Logo = ({ size = "lg" }) => (
 const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
 	<NavLink
 		to={to}
-		end={to === "/app/quizzes" || to === "/app/home" || to === "/app/dashboard"}
+		end={to === "/app/quizzes" || to === "/app/home" || to === "/app/dashboard" || to === "/app/profile"}
 		className={({ isActive }) =>
 			mobile
 				? `flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 ${
 						isActive
 							? "text-indigo-600 bg-indigo-50/50 dark:bg-indigo-500/10"
-							: "text-gray-400 hover:text-gray-600 dark:text-white/40 dark:hover:text-gray-300"
-				  }`
+							: "text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-gray-200"
+					}`
 				: `flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group relative border-2 ${
 						isActive
 							? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 scale-[1.02] border-indigo-400/50"
 							: "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/[0.03] hover:text-indigo-600 dark:hover:text-white border-transparent hover:border-gray-200/50 dark:hover:border-white/5"
-				  }`
+					}`
 		}
 	>
 		{({ isActive }) => (
@@ -118,7 +118,7 @@ export const UserProfile = ({ user }) => {
 
 export default function SideBar() {
 	const { data: user } = useUser();
-	const logout = useLogout();
+	const { mutate: logout } = useLogout();
 
 	const getNavItems = () => {
 		const items = [
@@ -159,7 +159,7 @@ export default function SideBar() {
 	return (
 		<>
 			{/* Mobile Bottom Navigation */}
-			<nav 
+			<nav
 				className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/90 dark:bg-white/[0.03] backdrop-blur-xl border-t border-gray-100 dark:border-white/5 flex items-center justify-around px-4 pb-2 z-50 transition-colors duration-300"
 				aria-label="Mobile navigation"
 			>
@@ -183,6 +183,18 @@ export default function SideBar() {
 							</div>
 						</section>
 					</div>
+				</div>
+
+				{/* Sidebar Footer with Logout */}
+				<div className="p-8 border-t border-gray-100 dark:border-white/5 space-y-6">
+					<UserProfile user={user} />
+					<button
+						onClick={() => logout()}
+						className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-white/40 dark:hover:text-red-400 dark:hover:bg-red-500/10 transition-all duration-300 font-bold text-sm group"
+					>
+						<HiArrowRightOnRectangle className="text-xl transition-transform duration-300 group-hover:translate-x-1" />
+						Logout
+					</button>
 				</div>
 			</aside>
 		</>

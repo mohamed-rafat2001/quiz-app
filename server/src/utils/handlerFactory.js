@@ -84,15 +84,18 @@ export const getAll = (Model, filter = {}, popOptions) =>
 
 export const deleteOneOwner = (Model, ownerField) =>
 	errorHandling(async (req, res, next) => {
-		const doc = await Model.findOneAndDelete({
-			_id: req.params.id,
-			[ownerField]: req.user._id,
-		});
+		const filter = { _id: req.params.id };
+		// Only apply owner filter if user is not admin
+		if (req.user.role !== "admin") {
+			filter[ownerField] = req.user._id;
+		}
+
+		const doc = await Model.findOneAndDelete(filter);
 
 		if (!doc) {
 			return next(
 				new appError(
-					"No document found with that ID or you are not the owner",
+					"No document found with that ID or you are not authorized",
 					404
 				)
 			);
@@ -103,19 +106,21 @@ export const deleteOneOwner = (Model, ownerField) =>
 
 export const updateOneOwner = (Model, ownerField) =>
 	errorHandling(async (req, res, next) => {
-		const doc = await Model.findOneAndUpdate(
-			{ _id: req.params.id, [ownerField]: req.user._id },
-			req.body,
-			{
-				new: true,
-				runValidators: true,
-			}
-		);
+		const filter = { _id: req.params.id };
+		// Only apply owner filter if user is not admin
+		if (req.user.role !== "admin") {
+			filter[ownerField] = req.user._id;
+		}
+
+		const doc = await Model.findOneAndUpdate(filter, req.body, {
+			new: true,
+			runValidators: true,
+		});
 
 		if (!doc) {
 			return next(
 				new appError(
-					"No document found with that ID or you are not the owner",
+					"No document found with that ID or you are not authorized",
 					404
 				)
 			);
@@ -126,17 +131,20 @@ export const updateOneOwner = (Model, ownerField) =>
 
 export const getOneOwner = (Model, ownerField, popOptions) =>
 	errorHandling(async (req, res, next) => {
-		let query = Model.findOne({
-			_id: req.params.id,
-			[ownerField]: req.user._id,
-		});
+		const filter = { _id: req.params.id };
+		// Only apply owner filter if user is not admin
+		if (req.user.role !== "admin") {
+			filter[ownerField] = req.user._id;
+		}
+
+		let query = Model.findOne(filter);
 		if (popOptions) query = query.populate(popOptions);
 		const doc = await query;
 
 		if (!doc) {
 			return next(
 				new appError(
-					"No document found with that ID or you are not the owner",
+					"No document found with that ID or you are not authorized",
 					404
 				)
 			);
@@ -147,10 +155,13 @@ export const getOneOwner = (Model, ownerField, popOptions) =>
 
 export const getAllOwner = (Model, ownerField, popOptions) =>
 	errorHandling(async (req, res, next) => {
-		const features = new ApiFeatures(
-			Model.find({ [ownerField]: req.user._id }),
-			req.query
-		)
+		const filter = {};
+		// Only apply owner filter if user is not admin
+		if (req.user.role !== "admin") {
+			filter[ownerField] = req.user._id;
+		}
+
+		const features = new ApiFeatures(Model.find(filter), req.query)
 			.filter()
 			.sort()
 			.limitFields();

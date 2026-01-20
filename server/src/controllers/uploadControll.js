@@ -1,4 +1,4 @@
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary, { streamUpload } from "../utils/cloudinary.js";
 import errorHandling from "../middelwars/errorHandling.js";
 import response from "../utils/handelResponse.js";
 import appError from "../utils/appError.js";
@@ -6,9 +6,9 @@ import appError from "../utils/appError.js";
 export const uploadImage = errorHandling(async (req, res, next) => {
 	if (!req.file) return next(new appError("Please upload an image", 400));
 
-	const { public_id, secure_url } = await cloudinary.uploader.upload(
-		req.file.path,
-		{ folder: `quizApp/${req.user.role}/id_${req.user._id}/uploads` }
+	const { public_id, secure_url } = await streamUpload(
+		req.file.buffer,
+		`quizApp/${req.user.role}/id_${req.user._id}/uploads`
 	);
 
 	response({ public_id, secure_url }, 201, res);

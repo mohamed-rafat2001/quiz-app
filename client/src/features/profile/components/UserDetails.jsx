@@ -9,7 +9,6 @@ import {
 	HiMapPin,
 	HiGlobeAlt,
 	HiPhone,
-	HiUsers,
 } from "react-icons/hi2";
 
 const FormField = ({ label, id, icon: Icon, error, children }) => (

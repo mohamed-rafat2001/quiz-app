@@ -164,7 +164,7 @@ const EmptyState = () => (
 			No submissions yet
 		</h3>
 		<p className="text-gray-500 dark:text-gray-400 font-medium max-w-sm mx-auto">
-			Students haven't completed this quiz yet. Share the quiz ID with your
+			Students haven&apos;t completed this quiz yet. Share the quiz ID with your
 			students to get started.
 		</p>
 	</div>

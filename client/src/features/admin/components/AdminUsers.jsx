@@ -37,7 +37,7 @@ const UserAvatar = ({ user }) => {
 		return (
 			<img
 				src={user.profileImg.secure_url}
-				alt={`Profile picture of ${user.name}`}
+				alt={user.name}
 				className="w-full h-full object-cover"
 				referrerPolicy="no-referrer"
 				loading="lazy"

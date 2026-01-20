@@ -67,7 +67,7 @@ const Leaderboard = ({
 													{entry.studentId?.image ? (
 														<img
 															src={entry.studentId.image}
-															alt={`Profile picture of ${entry.studentId.name}`}
+															alt={entry.studentId.name}
 															className="w-full h-full object-cover"
 															referrerPolicy="no-referrer"
 															loading="lazy"

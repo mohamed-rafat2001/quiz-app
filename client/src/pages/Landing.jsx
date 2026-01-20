@@ -93,19 +93,6 @@ const TESTIMONIALS = [
 ];
 
 // Animation variants
-const fadeInUp = {
-	hidden: { opacity: 0, y: 60 },
-	visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-
-const staggerContainer = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.1 },
-	},
-};
-
 const Navbar = () => {
 	const { data: user } = useUser();
 	const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -471,7 +458,7 @@ const Testimonials = () => {
 							className={`bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-500 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
 						>
 							<p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-								"{testimonial.text}"
+								&quot;{testimonial.text}&quot;
 							</p>
 							<div className="flex items-center gap-4">
 								<img

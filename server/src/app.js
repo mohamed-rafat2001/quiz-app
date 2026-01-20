@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import dbConnect from "./db/dataBase.js";
+import { connectDB } from "./db/dataBase.js";
 
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -21,21 +21,35 @@ app.use((req, res, next) => {
 // share api with frontEnd
 app.use(
 	cors({
-		origin: "http://localhost:5173",
+		origin: process.env.CLIENT_URL || "http://localhost:5173",
 		credentials: true,
+		methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+		allowedHeaders: ["Content-Type", "Authorization"],
 	})
 );
 // set security HTTP headers
-// app.use(helmet());
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				defaultSrc: ["'self'"],
+				scriptSrc: ["'self'", "'unsafe-inline'"],
+				styleSrc: ["'self'", "'unsafe-inline'"],
+				imgSrc: ["'self'", "data:", "res.cloudinary.com"],
+				connectSrc: ["'self'", "res.cloudinary.com"],
+			},
+		},
+	})
+);
 
 // limit requests
 const limiter = rateLimit({
 	max: 1000,
 	windowMs: 60 * 60 * 1000,
-	message: "meny requests for this IP, please try again after one hour",
+	message: "many requests for this IP, please try again after one hour",
 });
-app.use("/api", limiter);
-// boody parser , reading data from body into req.body
+app.use("/api/v1", limiter);
+// body parser , reading data from body into req.body
 app.use(express.json());
 app.use(cookieParser());
 
@@ -53,12 +67,12 @@ import quizRouter from "./routers/quizRouter.js";
 import quizAnswerRouter from "./routers/quizAnswerRouter.js";
 import dashboardRouter from "./routers/dashboardRouter.js";
 import uploadRouter from "./routers/uploadRouter.js";
-app.use("/api/user", userRouter);
-app.use("/api/teacher", quizRouter);
-app.use("/api/answer", quizAnswerRouter);
-app.use("/api/dashboard", dashboardRouter);
-app.use("/api/upload", uploadRouter);
-// handeling routes not found in app
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/teacher", quizRouter);
+app.use("/api/v1/answer", quizAnswerRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/upload", uploadRouter);
+// handling routes not found in app
 app.all("*", (req, res, next) => {
 	res.status(404).json({
 		status: "fail",
@@ -71,4 +85,3 @@ app.all("*", (req, res, next) => {
 import globalError from "./controllers/errorControll.js";
 
 app.use(globalError);
-dbConnect();

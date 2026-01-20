@@ -2,27 +2,27 @@ import multer from "multer";
 import appError from "./appError.js";
 
 export default function fileUpload(validation) {
-	const multerStorag = multer.diskStorage({
-		filename: (req, file, cb) => {
-			const ext = file.mimetype.split("/")[1];
-			cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
-		},
-	});
+	const storage = multer.memoryStorage();
+	
 	const multerFilter = (req, file, cb) => {
-		if (!file.mimetype.startsWith(validation))
-			cb(
+		if (!file.mimetype.startsWith(validation)) {
+			return cb(
 				new appError(
-					`Not an ${validation} ! please enter only ${validation}`,
+					`Not an ${validation}! Please upload only ${validation}.`,
 					400
 				),
-				null
+				false
 			);
+		}
 		cb(null, true);
 	};
 
 	const upload = multer({
-		storage: multerStorag,
+		storage: storage,
 		fileFilter: multerFilter,
+		limits: {
+			fileSize: 5 * 1024 * 1024, // 5MB limit
+		},
 	});
 	return upload;
 }

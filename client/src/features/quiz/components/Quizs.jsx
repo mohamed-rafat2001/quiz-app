@@ -21,7 +21,6 @@ import {
 	HiInformationCircle,
 	HiClock,
 	HiMagnifyingGlass,
-	HiTrophy,
 } from "react-icons/hi2";
 
 const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
@@ -83,7 +82,6 @@ const QuizCard = forwardRef(
 			: 0;
 		const canTakeAgain = !isTeacher && attemptsLeft > 0;
 		const isStarted = new Date(quiz.startDate) <= new Date();
-		const isExpired = new Date(quiz.expireDate) <= new Date();
 
 		return (
 			<motion.div
@@ -436,10 +434,6 @@ export default function Quizs() {
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 	const [page, setPage] = useState(1);
 
-	if (user?.role === "student") {
-		return <Navigate to="/app/dashboard" replace />;
-	}
-
 	// Debounce search term and reset page
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -461,6 +455,10 @@ export default function Quizs() {
 	const meta = response?.meta || {};
 
 	const { mutate: deleteQuiz, isPending: isDeleting } = useDeleteQuiz();
+
+	if (user?.role === "student") {
+		return <Navigate to="/app/dashboard" replace />;
+	}
 
 	const handleDelete = (id) => {
 		if (

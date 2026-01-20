@@ -14,9 +14,9 @@ export const quesAnswer = errorHandling(async (req, res, next) => {
 	const _id = req.params.id;
 	const { questions } = req.body; // Array of { _id: questionId, answer: studentChoice }
 
-	// check if user is student
-	if (req.user.role !== "student")
-		return next(new appError("You are not a student", 403));
+	// check if user is student or admin
+	if (req.user.role !== "student" && req.user.role !== "admin")
+		return next(new appError("You are not authorized to perform this action", 403));
 
 	// find the quiz
 	const quiz = await quizModel.findById(_id).populate("questions");

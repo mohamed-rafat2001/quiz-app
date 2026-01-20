@@ -10,7 +10,6 @@ import {
 	HiMapPin,
 	HiGlobeAlt,
 	HiPhone,
-	HiUsers,
 	HiArrowLeft,
 	HiArrowRight,
 } from "react-icons/hi2";
