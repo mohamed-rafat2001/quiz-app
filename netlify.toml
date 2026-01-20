@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  publish = "../client/dist"
-  functions = "netlify/functions"
+  publish = "client/dist"
+  functions = "server/netlify/functions"
 
 [functions]
   node_bundler = "esbuild"

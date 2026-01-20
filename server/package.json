@@ -8,8 +8,8 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "nodemon index.js",
 		"debug": "ndb index.js",
-		"build": "cd ../client && npm install && npm run build && npm install",
-		"install-all": "npm install && cd ../client && npm install && npm install"
+		"build": "cd ../client && npm install --production=false && npm run build",
+		"install-all": "npm install && cd ../client && npm install --production=false"
 	},
 	"keywords": [],
 	"author": "",
