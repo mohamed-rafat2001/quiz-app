@@ -185,16 +185,9 @@ export default function SideBar() {
 					</div>
 				</div>
 
-				{/* Sidebar Footer with Logout */}
-				<div className="p-8 border-t border-gray-100 dark:border-white/5 space-y-6">
+				{/* Sidebar Footer */}
+				<div className="p-8 border-t border-gray-100 dark:border-white/5">
 					<UserProfile user={user} />
-					<button
-						onClick={() => logout()}
-						className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-white/40 dark:hover:text-red-400 dark:hover:bg-red-500/10 transition-all duration-300 font-bold text-sm group"
-					>
-						<HiArrowRightOnRectangle className="text-xl transition-transform duration-300 group-hover:translate-x-1" />
-						Logout
-					</button>
 				</div>
 			</aside>
 		</>
