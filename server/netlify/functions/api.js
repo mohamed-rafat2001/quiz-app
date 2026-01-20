@@ -6,11 +6,24 @@ import { connectDB } from "../../src/db/dataBase.js";
 let isConnected = false;
 
 const handler = async (event, context) => {
-	if (!isConnected) {
-		await connectDB();
-		isConnected = true;
+	try {
+		if (!isConnected) {
+			await connectDB();
+			isConnected = true;
+		}
+		
+		return await serverless(app)(event, context);
+	} catch (error) {
+		console.error("Netlify Function Error:", error);
+		return {
+			statusCode: 500,
+			body: JSON.stringify({
+				status: "error",
+				message: "Internal Server Error",
+				details: error.message
+			})
+		};
 	}
-	return serverless(app)(event, context);
 };
 
 export { handler };

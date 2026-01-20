@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const connectDB = async () => {
-	const dbUrl = process.env.DB_URL;
+	const dbUrl = process.env.DB_URL || process.env.DATABASE_URL;
 	const isDev = process.env.NODE_ENV === "development";
 
 	if (!dbUrl && !isDev) {
@@ -18,30 +18,13 @@ export const connectDB = async () => {
 		}
 
 		mongoose.set("strictQuery", false);
-		await mongoose.connect(finalUrl, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-		});
+		await mongoose.connect(finalUrl);
 		console.log("MongoDB Connected successfully");
 	} catch (error) {
 		console.error(`Error connecting to MongoDB: ${error.message}`);
 
-		// Fallback for local development only
-		if (isDev) {
-			try {
-				console.log("Attempting local fallback...");
-				await mongoose.connect("mongodb://127.0.0.1:27017/quiz-app", {
-					useNewUrlParser: true,
-					useUnifiedTopology: true,
-				});
-				console.log("Connected to local MongoDB");
-			} catch (fallbackError) {
-				console.error("Local fallback failed.");
-				process.exit(1);
-			}
-		} else {
-			process.exit(1);
-		}
+		// In serverless, we don't want to process.exit(1) as it kills the instance
+		// Instead, we throw the error so the function handler can catch it or Netlify can log it
+		throw error;
 	}
 };
