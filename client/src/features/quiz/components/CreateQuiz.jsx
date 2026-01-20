@@ -273,6 +273,12 @@ const QuestionImageUpload = ({ index, control, setValue }) => {
 						src={image.secure_url}
 						alt="Question"
 						className="w-full max-h-48 object-cover rounded-xl border border-gray-200 dark:border-gray-700"
+						referrerPolicy="no-referrer"
+						loading="lazy"
+						onError={(e) => {
+							e.target.onerror = null;
+							e.target.style.display = 'none';
+						}}
 					/>
 					<button
 						type="button"

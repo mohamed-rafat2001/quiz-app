@@ -66,11 +66,24 @@ const AnswerRow = ({ answer, index, maxScore }) => {
 					className="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 p-1 -m-1 rounded-lg transition-colors"
 				>
 					<div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-						<img
-							src={answer.studentId.image}
-							alt={answer.studentId.name}
-							className="w-full h-full object-cover"
-						/>
+						{answer.studentId.image ? (
+							<img
+								src={answer.studentId.image}
+								alt={answer.studentId.name}
+								className="w-full h-full object-cover"
+								referrerPolicy="no-referrer"
+								loading="lazy"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.style.display = 'none';
+									e.target.parentElement.innerHTML = `<span class="text-[10px] font-black text-gray-400 dark:text-white/40 flex items-center justify-center h-full">${answer.studentId.name.charAt(0).toUpperCase()}</span>`;
+								}}
+							/>
+						) : (
+							<div className="w-full h-full flex items-center justify-center text-[10px] font-black text-gray-400 dark:text-white/40">
+								{answer.studentId.name.charAt(0).toUpperCase()}
+							</div>
+						)}
 					</div>
 					<div>
 						<p className="font-bold text-gray-900 dark:text-white">

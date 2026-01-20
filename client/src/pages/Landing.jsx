@@ -480,6 +480,8 @@ const Testimonials = () => {
 									src={testimonial.avatar}
 									alt={testimonial.name}
 									className="w-12 h-12 rounded-full"
+									referrerPolicy="no-referrer"
+									loading="lazy"
 								/>
 								<div>
 									<p className="font-bold text-gray-900 dark:text-white">

@@ -29,7 +29,7 @@ const StudentDashboard = ({ stats }) => {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setIsMounted(true);
-		}, 100);
+		}, 500);
 		return () => clearTimeout(timer);
 	}, []);
 
@@ -81,8 +81,9 @@ const StudentDashboard = ({ stats }) => {
 					<HiArrowTrendingUp className="text-indigo-500" />
 					Your Performance Trend
 				</h3>
-				<div className="h-[300px] w-full relative">
-					<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
+				<div className="h-[300px] w-full relative min-h-[300px]">
+					{isMounted && (
+						<ResponsiveContainer width="100%" height="100%" debounce={100}>
 						<AreaChart data={stats?.scoreTrend || []}>
 							<defs>
 								<linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">
@@ -120,6 +121,7 @@ const StudentDashboard = ({ stats }) => {
 							/>
 						</AreaChart>
 					</ResponsiveContainer>
+					)}
 				</div>
 			</motion.div>
 		</div>

@@ -69,6 +69,13 @@ const Leaderboard = ({
 															src={entry.studentId.image}
 															alt={entry.studentId.name}
 															className="w-full h-full object-cover"
+															referrerPolicy="no-referrer"
+															loading="lazy"
+															onError={(e) => {
+																e.target.onerror = null;
+																e.target.style.display = 'none';
+																e.target.parentElement.innerHTML = `<span class="text-[10px] font-black text-gray-400 dark:text-white/40">${entry.studentId?.name?.charAt(0).toUpperCase()}</span>`;
+															}}
 														/>
 													) : (
 														<span className="text-[10px] font-black text-gray-400 dark:text-white/40">

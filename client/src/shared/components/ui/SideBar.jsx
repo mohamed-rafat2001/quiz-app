@@ -93,6 +93,13 @@ export const UserProfile = ({ user }) => (
 						src={user.profileImg.secure_url}
 						alt={user.name}
 						className="w-full h-full object-cover"
+						referrerPolicy="no-referrer"
+						loading="lazy"
+						onError={(e) => {
+							e.target.onerror = null;
+							e.target.style.display = 'none';
+							e.target.parentElement.innerHTML = user?.name?.charAt(0).toUpperCase() || '?';
+						}}
 					/>
 				) : (
 					user?.name?.charAt(0).toUpperCase()

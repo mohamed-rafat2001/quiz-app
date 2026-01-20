@@ -159,6 +159,13 @@ export default function ProfileAvatar({ user, isOwner }) {
 								src={user.profileImg.secure_url}
 								alt={user.name}
 								className="w-full h-full object-cover"
+								referrerPolicy="no-referrer"
+								loading="lazy"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.style.display = 'none';
+									e.target.parentElement.innerHTML = `<span class="text-indigo-600 dark:text-indigo-400 text-2xl sm:text-3xl font-black">${user?.name?.charAt(0).toUpperCase() || '?'}</span>`;
+								}}
 							/>
 						) : (
 							<span className="text-indigo-600 dark:text-indigo-400 text-2xl sm:text-3xl font-black">

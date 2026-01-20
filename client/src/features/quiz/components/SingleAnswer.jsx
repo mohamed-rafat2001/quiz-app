@@ -140,6 +140,12 @@ const QuestionReviewItem = ({ ans, index }) => {
 								src={question.image.secure_url}
 								alt="Question"
 								className="max-h-64 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
+								referrerPolicy="no-referrer"
+								loading="lazy"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.style.display = 'none';
+								}}
 							/>
 						</div>
 					)}
@@ -181,6 +187,12 @@ const QuestionReviewItem = ({ ans, index }) => {
 										src={ans.image.secure_url}
 										alt="Student work"
 										className="max-h-48 w-auto object-contain rounded-xl border border-black/5 dark:border-white/5"
+										referrerPolicy="no-referrer"
+										loading="lazy"
+										onError={(e) => {
+											e.target.onerror = null;
+											e.target.style.display = 'none';
+										}}
 									/>
 								</div>
 							)}

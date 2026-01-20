@@ -166,6 +166,12 @@ const AnswerImageUpload = ({ index, control, setValue }) => {
 						src={image.secure_url}
 						alt="Answer proof"
 						className="max-h-48 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
+						referrerPolicy="no-referrer"
+						loading="lazy"
+						onError={(e) => {
+							e.target.onerror = null;
+							e.target.style.display = 'none';
+						}}
 					/>
 					<button
 						type="button"
@@ -219,6 +225,12 @@ const QuestionItem = ({ el, index, register, error, control, setValue }) => (
 							src={el.image.secure_url}
 							alt="Question"
 							className="max-h-80 w-auto object-contain rounded-2xl border border-gray-100 dark:border-white/10"
+							referrerPolicy="no-referrer"
+							loading="lazy"
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.style.display = 'none';
+							}}
 						/>
 					</div>
 				)}
