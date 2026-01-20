@@ -41,10 +41,14 @@ const QuizBasicInfo = ({ register, errors }) => (
 		</h3>
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div className="space-y-2">
-				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+				<label
+					htmlFor="quizName"
+					className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1"
+				>
 					Quiz Name <span className="text-red-500">*</span>
 				</label>
 				<input
+					id="quizName"
 					{...register("quizName")}
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
 					placeholder="e.g. Mathematics Midterm"
@@ -57,11 +61,15 @@ const QuizBasicInfo = ({ register, errors }) => (
 				)}
 			</div>
 			<div className="space-y-2">
-				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+				<label
+					htmlFor="expire"
+					className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1"
+				>
 					Time Limit <span className="text-red-500">*</span>
 				</label>
 				<div className="flex gap-2">
 					<input
+						id="expire"
 						type="number"
 						{...register("expire", {
 							valueAsNumber: true,
@@ -71,6 +79,7 @@ const QuizBasicInfo = ({ register, errors }) => (
 					/>
 					<select
 						{...register("expireUnit")}
+						aria-label="Time unit"
 						className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all cursor-pointer"
 					>
 						<option value="minutes">Minutes</option>
@@ -85,10 +94,14 @@ const QuizBasicInfo = ({ register, errors }) => (
 				)}
 			</div>
 			<div className="space-y-2">
-				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+				<label
+					htmlFor="startDate"
+					className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1"
+				>
 					Quiz Start Date <span className="text-red-500">*</span>
 				</label>
 				<input
+					id="startDate"
 					type="datetime-local"
 					{...register("startDate")}
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
@@ -101,10 +114,14 @@ const QuizBasicInfo = ({ register, errors }) => (
 				)}
 			</div>
 			<div className="space-y-2">
-				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+				<label
+					htmlFor="expireDate"
+					className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1"
+				>
 					Quiz Deadline <span className="text-red-500">*</span>
 				</label>
 				<input
+					id="expireDate"
 					type="datetime-local"
 					{...register("expireDate")}
 					className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
@@ -117,10 +134,14 @@ const QuizBasicInfo = ({ register, errors }) => (
 				)}
 			</div>
 			<div className="space-y-2">
-				<label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+				<label
+					htmlFor="tries"
+					className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1"
+				>
 					Allowed Attempts
 				</label>
 				<input
+					id="tries"
 					type="number"
 					{...register("tries", {
 						valueAsNumber: true,
@@ -170,10 +191,10 @@ const AnswerOptions = ({
 
 	return (
 		<div className="space-y-3">
-			<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1 flex items-center gap-2">
+			<p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1 flex items-center gap-2">
 				<HiCheckCircle className="text-green-500" />
 				Select Correct Answer <span className="text-red-500">*</span>
-			</label>
+			</p>
 
 			{validAnswers.length === 0 ? (
 				<div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
@@ -289,7 +310,10 @@ const QuestionImageUpload = ({ index, control, setValue, questionText }) => {
 					</button>
 				</div>
 			) : (
-				<label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all group">
+				<label
+					htmlFor={`question-${index}-image`}
+					className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all group"
+				>
 					<div className="flex flex-col items-center justify-center py-4">
 						{isUploading ? (
 							<div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
@@ -303,6 +327,7 @@ const QuestionImageUpload = ({ index, control, setValue, questionText }) => {
 						)}
 					</div>
 					<input
+						id={`question-${index}-image`}
 						type="file"
 						className="hidden"
 						accept="image/*"
@@ -349,10 +374,14 @@ const QuestionCard = forwardRef(
 						{index + 1}
 					</span>
 					<div className="grow space-y-2">
-						<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+						<label
+							htmlFor={`question-${index}`}
+							className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider"
+						>
 							Question <span className="text-red-500">*</span>
 						</label>
 						<input
+							id={`question-${index}`}
 							{...register(`questions.${index}.ques`)}
 							className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
 							placeholder="Type your question here..."
@@ -376,16 +405,21 @@ const QuestionCard = forwardRef(
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-0 sm:ml-14">
 				{/* Left: Answer Choices */}
 				<div className="space-y-3">
-					<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1">
+					<p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1">
 						Answer Choices <span className="text-red-500">*</span>
-					</label>
+					</p>
 					<div className="space-y-2">
 						{[0, 1, 2, 3].map((choiceIndex) => (
 							<div key={choiceIndex} className="relative">
-								<span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 dark:text-gray-500">
+								<label
+									htmlFor={`question-${index}-choice-${choiceIndex}`}
+									className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 dark:text-gray-500 cursor-text"
+								>
 									{String.fromCharCode(65 + choiceIndex)}.
-								</span>
+								</label>
 								<input
+									id={`question-${index}-choice-${choiceIndex}`}
+									aria-label={`Choice ${String.fromCharCode(65 + choiceIndex)}`}
 									{...register(`questions.${index}.answers.${choiceIndex}`)}
 									className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white font-medium focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500"
 									placeholder={`Option ${choiceIndex + 1}`}
@@ -407,10 +441,14 @@ const QuestionCard = forwardRef(
 					/>
 
 					<div className="space-y-2">
-						<label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1">
+						<label
+							htmlFor={`question-${index}-points`}
+							className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider ml-1"
+						>
 							Points
 						</label>
 						<input
+							id={`question-${index}-points`}
 							type="number"
 							{...register(`questions.${index}.Score`, {
 								valueAsNumber: true,
@@ -423,7 +461,8 @@ const QuestionCard = forwardRef(
 				</div>
 			</div>
 		</motion.div>
-	)
+	);
+	}
 );
 
 QuestionCard.displayName = "QuestionCard";

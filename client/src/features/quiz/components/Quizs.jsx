@@ -39,14 +39,17 @@ const QuizHeader = ({ isTeacher, searchTerm, onSearchChange }) => (
 
 		<div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
 			<div className="relative w-full sm:w-80">
+				<label htmlFor="quiz-search" className="sr-only">
+					Search quizzes by name or ID
+				</label>
 				<HiMagnifyingGlass
 					className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40 text-lg"
 					aria-hidden="true"
 				/>
 				<input
+					id="quiz-search"
 					type="text"
 					placeholder="Search quiz name or ID..."
-					aria-label="Search quizzes by name or ID"
 					value={searchTerm}
 					onChange={(e) => onSearchChange(e.target.value)}
 					className="w-full pl-12 pr-6 py-3.5 bg-white dark:bg-white/[0.05] border border-gray-200/60 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30"

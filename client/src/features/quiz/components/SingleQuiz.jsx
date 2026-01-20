@@ -182,7 +182,10 @@ const AnswerImageUpload = ({ index, control, setValue }) => {
 					</button>
 				</div>
 			) : (
-				<label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/[0.08] transition-all group">
+				<label
+					htmlFor={`answer-image-${index}`}
+					className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/[0.08] transition-all group"
+				>
 					{isUploading ? (
 						<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
 					) : (
@@ -192,6 +195,7 @@ const AnswerImageUpload = ({ index, control, setValue }) => {
 						{isUploading ? "Uploading..." : "Attach proof/work (optional)"}
 					</span>
 					<input
+						id={`answer-image-${index}`}
 						type="file"
 						className="hidden"
 						accept="image/*"
@@ -242,7 +246,7 @@ const QuestionItem = ({ el, index, register, error, control, setValue }) => (
 				<div key={i} className="relative group/option">
 					<input
 						type="radio"
-						id={answer + index}
+						id={`question-${index}-answer-${i}`}
 						className="peer hidden"
 						{...register(`answer[${index}]`)}
 						value={JSON.stringify({
@@ -252,7 +256,7 @@ const QuestionItem = ({ el, index, register, error, control, setValue }) => (
 						})}
 					/>
 					<label
-						htmlFor={answer + index}
+						htmlFor={`question-${index}-answer-${i}`}
 						className="flex items-center px-8 py-5 rounded-3xl border-2 border-gray-50 dark:border-white/5 cursor-pointer transition-all peer-checked:border-blue-600 dark:peer-checked:border-blue-500 peer-checked:bg-blue-50/50 dark:peer-checked:bg-blue-500/10 hover:bg-gray-50/50 dark:hover:bg-white/[0.05] text-gray-600 dark:text-white/40 peer-checked:text-blue-700 dark:peer-checked:text-blue-300 font-black group-hover/option:border-blue-100 dark:group-hover/option:border-white/10 peer-checked:[&>div]:border-blue-600 dark:peer-checked:[&>div]:border-blue-500 peer-checked:[&>div>div]:scale-100"
 					>
 						<div className="w-6 h-6 rounded-full border-2 border-gray-200 dark:border-white/10 mr-5 flex items-center justify-center bg-white dark:bg-white/[0.05] transition-all shrink-0">

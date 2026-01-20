@@ -64,9 +64,11 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 							Update Profile Picture
 						</h3>
 
-						<div
+						<button
+							type="button"
 							onClick={() => fileInputRef.current?.click()}
-							className="relative aspect-square w-48 mx-auto mb-8 rounded-3xl border-4 border-dashed border-gray-100 dark:border-white/10 hover:border-indigo-500 dark:hover:border-indigo-400 transition-colors cursor-pointer group overflow-hidden"
+							className="relative aspect-square w-48 mx-auto mb-8 rounded-3xl border-4 border-dashed border-gray-100 dark:border-white/10 hover:border-indigo-500 dark:hover:border-indigo-400 transition-colors cursor-pointer group overflow-hidden block"
+							aria-label="Choose profile photo"
 						>
 							{preview ? (
 								<img
@@ -85,7 +87,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 							<div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
 								<HiCamera className="w-8 h-8 text-white" />
 							</div>
-						</div>
+						</button>
 
 						<input
 							type="file"
@@ -93,6 +95,7 @@ const ImageUploadModal = ({ isOpen, onClose }) => {
 							onChange={handleFileChange}
 							accept="image/*"
 							className="hidden"
+							aria-hidden="true"
 						/>
 
 						{progress > 0 && (

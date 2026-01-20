@@ -215,8 +215,12 @@ const TeacherDashboard = ({
 					Recent Quizzes
 				</h3>
 				<div className="relative">
+					<label htmlFor="teacher-search-quizzes" className="sr-only">
+						Search quizzes
+					</label>
 					<HiMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
 					<input
+						id="teacher-search-quizzes"
 						type="text"
 						placeholder="Search quizzes..."
 						value={searchTerm}

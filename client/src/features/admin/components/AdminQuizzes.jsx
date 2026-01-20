@@ -125,8 +125,12 @@ export default function AdminQuizzes() {
 				animate={{ opacity: 1, y: 0 }}
 			>
 				<div className="relative">
+					<label htmlFor="admin-search-quizzes" className="sr-only">
+						Search quizzes by name or teacher
+					</label>
 					<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 					<input
+						id="admin-search-quizzes"
 						type="text"
 						placeholder="Search quizzes by name or teacher..."
 						value={searchTerm}

@@ -12,9 +12,12 @@ import {
 	HiUsers,
 } from "react-icons/hi2";
 
-const FormField = ({ label, icon: Icon, error, children }) => (
+const FormField = ({ label, id, icon: Icon, error, children }) => (
 	<div className="space-y-1.5">
-		<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+		<label
+			htmlFor={id}
+			className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+		>
 			{label}
 		</label>
 		<div className="relative group">
@@ -24,7 +27,10 @@ const FormField = ({ label, icon: Icon, error, children }) => (
 			{children}
 		</div>
 		{error && (
-			<p className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake">
+			<p
+				id={`${id}-error`}
+				className="text-xs text-red-600 dark:text-red-500 ml-1 font-black animate-shake"
+			>
 				{error.message}
 			</p>
 		)}
@@ -32,32 +38,40 @@ const FormField = ({ label, icon: Icon, error, children }) => (
 );
 
 const GenderSelector = ({ register, error, disabled }) => (
-	<div className="space-y-2">
-		<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1 block">
+	<fieldset className="space-y-2">
+		<legend className="text-sm font-black text-gray-900 dark:text-white/70 ml-1 block">
 			Gender
-		</label>
+		</legend>
 		<div className={`flex gap-4 ${disabled ? "opacity-70" : ""}`}>
-			<label className={`flex-1 ${disabled ? "cursor-default" : "cursor-pointer"}`}>
+			<label
+				htmlFor="gender-male"
+				className={`flex-1 ${disabled ? "cursor-default" : "cursor-pointer"}`}
+			>
 				<input
 					type="radio"
 					value="male"
-					className="peer hidden"
+					id="gender-male"
+					className="peer sr-only"
 					disabled={disabled}
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500">
 					Male
 				</div>
 			</label>
-			<label className={`flex-1 ${disabled ? "cursor-default" : "cursor-pointer"}`}>
+			<label
+				htmlFor="gender-female"
+				className={`flex-1 ${disabled ? "cursor-default" : "cursor-pointer"}`}
+			>
 				<input
 					type="radio"
 					value="female"
-					className="peer hidden"
+					id="gender-female"
+					className="peer sr-only"
 					disabled={disabled}
 					{...register("gender")}
 				/>
-				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+				<div className="w-full text-center py-2.5 px-4 rounded-xl border-2 border-gray-100 dark:border-white/5 text-gray-500 dark:text-white/50 font-black transition-all peer-checked:border-indigo-600 dark:peer-checked:border-indigo-50 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-500/10 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 hover:bg-gray-50 dark:hover:bg-white/[0.03] peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500">
 					Female
 				</div>
 			</label>
@@ -67,7 +81,7 @@ const GenderSelector = ({ register, error, disabled }) => (
 				{error.message}
 			</p>
 		)}
-	</div>
+	</fieldset>
 );
 
 export default function UserDetails({ user }) {
@@ -133,8 +147,14 @@ export default function UserDetails({ user }) {
 
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<FormField label="Full Name" icon={HiUser} error={errors.name}>
+					<FormField
+						label="Full Name"
+						id="name"
+						icon={HiUser}
+						error={errors.name}
+					>
 						<input
+							id="name"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.name
@@ -149,10 +169,12 @@ export default function UserDetails({ user }) {
 
 					<FormField
 						label="Email Address"
+						id="email"
 						icon={HiEnvelope}
 						error={errors.email}
 					>
 						<input
+							id="email"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.email
@@ -165,8 +187,9 @@ export default function UserDetails({ user }) {
 						/>
 					</FormField>
 
-					<FormField label="City" icon={HiMapPin} error={errors.city}>
+					<FormField label="City" id="city" icon={HiMapPin} error={errors.city}>
 						<input
+							id="city"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.city
@@ -179,8 +202,14 @@ export default function UserDetails({ user }) {
 						/>
 					</FormField>
 
-					<FormField label="Country" icon={HiGlobeAlt} error={errors.country}>
+					<FormField
+						label="Country"
+						id="country"
+						icon={HiGlobeAlt}
+						error={errors.country}
+					>
 						<input
+							id="country"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.country
@@ -195,10 +224,12 @@ export default function UserDetails({ user }) {
 
 					<FormField
 						label="Phone Number"
+						id="phoneNumber"
 						icon={HiPhone}
 						error={errors.phoneNumber}
 					>
 						<input
+							id="phoneNumber"
 							disabled={!isOwner}
 							className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.03] focus:bg-white dark:focus:bg-white/[0.05] text-gray-900 dark:text-white font-black placeholder:text-gray-400 dark:placeholder:text-white/30 disabled:opacity-70 disabled:cursor-default ${
 								errors.phoneNumber

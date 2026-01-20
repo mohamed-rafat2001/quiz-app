@@ -195,8 +195,12 @@ export default function AdminUsers() {
 				className="flex flex-col sm:flex-row gap-4"
 			>
 				<div className="relative flex-1">
+					<label htmlFor="admin-search-users" className="sr-only">
+						Search users by name or email
+					</label>
 					<HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 					<input
+						id="admin-search-users"
 						type="text"
 						placeholder="Search users by name or email..."
 						value={searchTerm}
@@ -205,8 +209,12 @@ export default function AdminUsers() {
 					/>
 				</div>
 				<div className="flex items-center gap-2 relative">
+					<label htmlFor="admin-filter-role" className="sr-only">
+						Filter by role
+					</label>
 					<HiFunnel className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10" />
 					<select
+						id="admin-filter-role"
 						value={roleFilter}
 						onChange={(e) => setRoleFilter(e.target.value)}
 						className="appearance-none pl-11 pr-10 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-gray-900 dark:text-white font-black cursor-pointer transition-all hover:border-gray-300 dark:hover:border-gray-600"
@@ -432,10 +440,11 @@ export default function AdminUsers() {
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 									{/* Name */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-name" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Full Name
 										</label>
 										<input
+											id="admin-create-name"
 											{...register("name")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 											placeholder="John Doe"
@@ -449,10 +458,11 @@ export default function AdminUsers() {
 
 									{/* Email */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-email" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Email Address
 										</label>
 										<input
+											id="admin-create-email"
 											{...register("email")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 											placeholder="john@example.com"
@@ -466,10 +476,11 @@ export default function AdminUsers() {
 
 									{/* Password */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-password" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Password
 										</label>
 										<input
+											id="admin-create-password"
 											type="password"
 											{...register("password")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
@@ -484,10 +495,11 @@ export default function AdminUsers() {
 
 									{/* Confirm Password */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-confirmPass" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Confirm Password
 										</label>
 										<input
+											id="admin-create-confirmPass"
 											type="password"
 											{...register("confirmPass")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
@@ -502,10 +514,11 @@ export default function AdminUsers() {
 
 									{/* Role */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-role" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Role
 										</label>
 										<select
+											id="admin-create-role"
 											{...register("role")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 										>
@@ -516,10 +529,11 @@ export default function AdminUsers() {
 
 									{/* Gender */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-gender" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Gender
 										</label>
 										<select
+											id="admin-create-gender"
 											{...register("gender")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 										>
@@ -530,10 +544,11 @@ export default function AdminUsers() {
 
 									{/* City */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-city" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											City
 										</label>
 										<input
+											id="admin-create-city"
 											{...register("city")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 											placeholder="New York"
@@ -542,10 +557,11 @@ export default function AdminUsers() {
 
 									{/* Country */}
 									<div className="space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-country" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Country
 										</label>
 										<input
+											id="admin-create-country"
 											{...register("country")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 											placeholder="USA"
@@ -554,10 +570,11 @@ export default function AdminUsers() {
 
 									{/* Phone */}
 									<div className="col-span-full space-y-2">
-										<label className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
+										<label htmlFor="admin-create-phone" className="text-sm font-black text-gray-700 dark:text-white/70 ml-1">
 											Phone Number
 										</label>
 										<input
+											id="admin-create-phone"
 											{...register("phoneNumber")}
 											className="w-full px-5 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all dark:text-white"
 											placeholder="+1 234 567 890"

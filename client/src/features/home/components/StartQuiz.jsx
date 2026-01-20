@@ -38,10 +38,14 @@ export default function StartQuiz() {
 
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 					<div className="space-y-2">
-						<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+						<label
+							htmlFor="start-quiz-id"
+							className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+						>
 							Quiz ID
 						</label>
 						<input
+							id="start-quiz-id"
 							className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.quizId
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"
@@ -63,10 +67,14 @@ export default function StartQuiz() {
 					</div>
 
 					<div className="space-y-2">
-						<label className="text-sm font-black text-gray-900 dark:text-white/70 ml-1">
+						<label
+							htmlFor="start-quiz-pass"
+							className="text-sm font-black text-gray-900 dark:text-white/70 ml-1"
+						>
 							Access Password
 						</label>
 						<input
+							id="start-quiz-pass"
 							className={`w-full px-5 py-3.5 rounded-2xl border transition-all duration-300 outline-none bg-gray-50/50 dark:bg-white/[0.05] focus:bg-white dark:focus:bg-white/[0.08] text-gray-900 dark:text-white font-bold placeholder:text-gray-400 dark:placeholder:text-white/30 ${
 								errors.quizPassword
 									? "border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-500/20"

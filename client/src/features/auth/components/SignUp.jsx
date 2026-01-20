@@ -41,10 +41,11 @@ const RoleSelector = ({ register, error }) => (
 			I am a:
 		</legend>
 		<div className="flex gap-4">
-			<label className="flex-1 cursor-pointer">
+			<label htmlFor="role-student" className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="student"
+					id="role-student"
 					className="sr-only peer"
 					{...register("role")}
 				/>
@@ -52,10 +53,11 @@ const RoleSelector = ({ register, error }) => (
 					Student
 				</div>
 			</label>
-			<label className="flex-1 cursor-pointer">
+			<label htmlFor="role-teacher" className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="teacher"
+					id="role-teacher"
 					className="sr-only peer"
 					{...register("role")}
 				/>
@@ -78,10 +80,11 @@ const GenderSelector = ({ register, error }) => (
 			Gender:
 		</legend>
 		<div className="flex gap-4">
-			<label className="flex-1 cursor-pointer">
+			<label htmlFor="gender-male" className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="male"
+					id="gender-male"
 					className="sr-only peer"
 					{...register("gender")}
 				/>
@@ -89,10 +92,11 @@ const GenderSelector = ({ register, error }) => (
 					Male
 				</div>
 			</label>
-			<label className="flex-1 cursor-pointer">
+			<label htmlFor="gender-female" className="flex-1 cursor-pointer">
 				<input
 					type="radio"
 					value="female"
+					id="gender-female"
 					className="sr-only peer"
 					{...register("gender")}
 				/>
