@@ -64,17 +64,23 @@ app.use(xss());
 app.use(hpp());
 
 // Routers
-
 import userRouter from "./routers/userRouter.js";
 import quizRouter from "./routers/quizRouter.js";
 import quizAnswerRouter from "./routers/quizAnswerRouter.js";
 import dashboardRouter from "./routers/dashboardRouter.js";
 import uploadRouter from "./routers/uploadRouter.js";
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/teacher", quizRouter);
-app.use("/api/v1/answer", quizAnswerRouter);
-app.use("/api/v1/dashboard", dashboardRouter);
-app.use("/api/v1/upload", uploadRouter);
+
+// Support both /api/v1 and root paths for flexibility
+const mountRoutes = (path) => {
+	app.use(`${path}/user`, userRouter);
+	app.use(`${path}/teacher`, quizRouter);
+	app.use(`${path}/answer`, quizAnswerRouter);
+	app.use(`${path}/dashboard`, dashboardRouter);
+	app.use(`${path}/upload`, uploadRouter);
+};
+
+mountRoutes("/api/v1");
+mountRoutes(""); // Fallback for requests without /api/v1 prefix
 
 // handling routes not found in app
 app.all("*", (req, res, next) => {
