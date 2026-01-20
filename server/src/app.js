@@ -11,6 +11,8 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 dotenv.config();
 export const app = express();
+app.enable("trust proxy");
+
 app.use((req, res, next) => {
 	console.log(`${req.method} ${req.url}`);
 	res.on("finish", () => {

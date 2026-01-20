@@ -8,12 +8,24 @@ import * as factory from "../utils/handlerFactory.js";
 import ApiFeatures from "../utils/apiFeatures.js";
 
 // generate cookies
-const cookiesOptions = {
-	expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-	httpOnly: true,
+const getCookieOptions = () => {
+	const options = {
+		expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+		httpOnly: true,
+		path: "/",
+	};
+
+	// For cross-site cookies in production (Netlify)
+	if (process.env.NODE_ENV === "production") {
+		options.secure = true;
+		options.sameSite = "none";
+	}
+
+	return options;
 };
+
 const cookies = (token, res) => {
-	res.cookie("jwt", token, cookiesOptions);
+	res.cookie("jwt", token, getCookieOptions());
 };
 // create new user func
 export const createUser = errorHandling(async (req, res, next) => {
@@ -57,7 +69,6 @@ export const createUser = errorHandling(async (req, res, next) => {
 	// Only generate token and set cookie if not created by an admin
 	if (!isAdminCreating) {
 		const token = user.createToken();
-		if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 		cookies(token, res);
 		// await new Email(user).sendWelcome();
 		response({ user, token }, 201, res);
@@ -81,7 +92,6 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 	//create token
 	const token = user.createToken();
 	// send cookie
-	if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 	cookies(token, res);
 	//send response
 	response({ user, token }, 200, res);
@@ -89,10 +99,7 @@ export const loginFunc = errorHandling(async (req, res, next) => {
 
 // logout func
 export const logout = (req, res) => {
-	res.cookie("jwt", "loggedout", {
-		expires: new Date(Date.now() + 10 * 1000),
-		httpOnly: true,
-	});
+	res.cookie("jwt", "loggedout", getCookieOptions());
 	res.status(200).json({ status: "success" });
 };
 
